@@ -742,6 +742,9 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 	//Use actual time instead of prediction frame time because that time value breaks anything that uses absolute time values.
 	gpGlobals->time = gEngfuncs.GetClientTime(); //time;
 
+	//Lets weapons code use frametime to decrement timers and stuff.
+	gpGlobals->frametime = cmd->msec / 1000.0f;
+
 	// Fill in data based on selected weapon
 	// FIXME, make this a method in each weapon?  where you pass in an entity_state_t *?
 	if (from->client.m_iId > 0 && from->client.m_iId < MAX_WEAPONS)
