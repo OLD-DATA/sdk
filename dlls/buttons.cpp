@@ -1139,8 +1139,9 @@ void CBaseButton::ButtonBackHome( void )
 	else
 		SetTouch(&CBaseButton:: ButtonTouch );
 
-// reset think for a sparking button
-	if ( FBitSet ( pev->spawnflags, SF_BUTTON_SPARK_IF_OFF ) )
+	// reset think for a sparking button
+	//func_rot_button's X Axis spawnflag overlaps with this one so don't use it here.
+	if (!FClassnameIs(pev, "func_rot_button") && FBitSet(pev->spawnflags, SF_BUTTON_SPARK_IF_OFF))
 	{
 		SetThink(&CBaseButton:: ButtonSpark );
 		SetNextThink( 0.5 );// no hurry.
