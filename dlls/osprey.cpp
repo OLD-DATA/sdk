@@ -421,16 +421,19 @@ void COsprey::FlyThink( void )
 		{
 			if (m_pGoalEnt->pev->speed == 0)
 			{
-				SetThink(&COsprey::DeployThink);
-			}
+				int loopbreaker = 100; //LRC - <slap> don't loop indefinitely!
+				if (m_pGoalEnt->pev->speed == 0)
+				{
+					SetThink(&COsprey::DeployThink);
+				}
+				do
+				{
+					m_pGoalEnt = Instance(FIND_ENTITY_BY_TARGETNAME(NULL, STRING(m_pGoalEnt->pev->target)));
+					loopbreaker--; //LRC
+				} while (m_pGoalEnt->pev->speed < 400 && !HasDead());
 
-			int loopbreaker = 100; //LRC - <slap> don't loop indefinitely!
-			do {
-				m_pGoalEnt = CBaseEntity::Instance(FIND_ENTITY_BY_TARGETNAME(NULL, STRING(m_pGoalEnt->pev->target)));
-				loopbreaker--; //LRC
-			} while (m_pGoalEnt->pev->speed < 400 && !HasDead() && loopbreaker > 0);
-			
-			UpdateGoal();
+				UpdateGoal();
+			}
 		}
 	}
 
@@ -446,15 +449,20 @@ void COsprey::Flight( )
 	//Only update if delta time is non-zero. It's zero if we're not moving at all (usually because we have no target).
 	if (m_dTime != 0)
 	{
-		float scale = 1.0 / m_dTime;
-		float f = UTIL_SplineFraction(t * scale, 1.0);
-		
-		Vector pos = (m_pos1 + m_vel1 * t) * (1.0 - f) + (m_pos2 - m_vel2 * (m_dTime - t)) * f;
-		Vector ang = (m_ang1) * (1.0 - f) + (m_ang2)*f;
-		m_velocity = m_vel1 * (1.0 - f) + m_vel2 * f;
+		//Only update if delta time is non-zero. It's zero if we're not moving at all (usually because we have no target).
+		if (m_dTime != 0)
+		{
+			float scale = 1.0 / m_dTime;
 
-		UTIL_SetOrigin(this, pos);
-		pev->angles = ang;
+			float f = UTIL_SplineFraction(t * scale, 1.0);
+
+			Vector pos = (m_pos1 + m_vel1 * t) * (1.0 - f) + (m_pos2 - m_vel2 * (m_dTime - t)) * f;
+			Vector ang = (m_ang1) * (1.0 - f) + (m_ang2)*f;
+			m_velocity = m_vel1 * (1.0 - f) + m_vel2 * f;
+
+			UTIL_SetOrigin(this, pos);
+			pev->angles = ang;
+		}
 	}
 
 	UTIL_MakeAimVectors( pev->angles );
@@ -489,9 +497,7 @@ void COsprey::Flight( )
 	}
 	else
 	{
-		CBaseEntity *pPlayer = NULL;
-
-		pPlayer = UTIL_FindEntityByClassname( NULL, "player" );
+		const CBaseEntity* pPlayer = UTIL_FindEntityByClassname(NULL, "player");
 		// UNDONE: this needs to send different sounds to every player for multiplayer.	
 		if (pPlayer)
 		{
