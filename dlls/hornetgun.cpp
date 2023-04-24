@@ -141,7 +141,7 @@ void CHgun::PrimaryAttack()
 {
 	Reload( );
 
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+	if (m_pPlayer->ammo_hornets <= 0)
 	{
 		return;
 	}
@@ -170,8 +170,6 @@ void CHgun::PrimaryAttack()
 
 	PLAYBACK_EVENT_FULL( flags, m_pPlayer->edict(), m_usHornetFire, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, 0.0, 0.0, FIREMODE_TRACK, 0, 0, 0 );
 
-	
-
 	// player "shoot" animation
 	m_pPlayer->SetAnimation( PLAYER_ATTACK1 );
 
@@ -191,7 +189,7 @@ void CHgun::SecondaryAttack( void )
 {
 	Reload();
 
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+	if (m_pPlayer->ammo_hornets <= 0)
 	{
 		return;
 	}
@@ -265,21 +263,25 @@ void CHgun::SecondaryAttack( void )
 		// player "shoot" animation
 	m_pPlayer->SetAnimation( PLAYER_ATTACK1 );
 
-	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.1;
+	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.1f;
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat( m_pPlayer->random_seed, 10, 15 );
 }
 
 
 void CHgun::Reload( void )
 {
+#ifndef CLIENT_DLL
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] >= HORNET_MAX_CARRY)
 		return;
 
 	while (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] < HORNET_MAX_CARRY && m_flRechargeTime < gpGlobals->time)
 	{
 		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]++;
-		m_flRechargeTime += 0.5;
+		m_flRechargeTime += 0.5f;
 	}
+	
+	m_pPlayer->TabulateAmmo();
+#endif
 }
 
 
