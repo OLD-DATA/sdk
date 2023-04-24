@@ -188,8 +188,13 @@ public:
 
 	// path corners
 	CBaseEntity			*m_pGoalEnt;// path corner we are heading towards
-	CBaseEntity			*m_pLink;// used for temporary link-list operations. 
-
+	CBaseEntity			*m_pLink;// used for temporary link-list operations.
+	
+	/**
+		*	@brief Entity flags sent to the client in ::AddToFullPack
+		*/
+	byte m_EFlags = 0;
+	
 	CBaseEntity			*m_pMoveWith; // LRC- the entity I move with.
 	int					m_MoveWith;	//LRC- Name of that entity
 	CBaseEntity			*m_pChildMoveWith;	//LRC- one of the entities that's moving with me.
@@ -200,7 +205,7 @@ public:
 	Vector				m_vecPostAssistVel; // LRC
 	Vector				m_vecPostAssistAVel; // LRC
 	float				m_fNextThink; // LRC - for SetNextThink and SetPhysThink. Marks the time when a think will be performed - not necessarily the same as pev->nextthink!
-	float				m_fPevNextThink; // LRC - always set equal to pev->nextthink, so that we can tell when the latter gets changed by the @#$^¬! engine.
+	float				m_fPevNextThink; // LRC - always set equal to pev->nextthink, so that we can tell when the latter gets changed by the @#$^Â¬! engine.
 	int					m_iLFlags; // LRC- a new set of flags. (pev->spawnflags and pev->flags are full...)
 	virtual void		DesiredAction( void ) {}; // LRC - for postponing stuff until PostThink time, not as a think.
 	int					m_iStyle; // LRC - almost anything can have a lightstyle these days...
