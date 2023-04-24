@@ -93,6 +93,9 @@ BOOL CHandGrenade::CanHolster( void )
 
 void CHandGrenade::Holster( int skiplocal /* = 0 */ )
 {
+	//Stop any throw that was in process so players don't blow themselves or somebody else up when the weapon is deployed again.
+	m_flStartThrow = 0;
+	
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 
 	if ( m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] )
