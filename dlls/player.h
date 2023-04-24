@@ -337,6 +337,11 @@ public:
 	float m_flNextChatTime;
 
 	void SetPrefsFromUserinfo(char* infobuffer);
+	
+	/**
+	*	@brief Equips an appropriate weapon for the player if they don't have one equipped already.
+	*/
+	void EquipWeapon();
 
 	int m_iAutoWepSwitch;
 

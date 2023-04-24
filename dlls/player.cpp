@@ -4797,7 +4797,7 @@ void CBasePlayer::DropPlayerItem ( char *pszItemName )
 		// item we want to drop and hit a BREAK;  pWeapon is the item.
 		if ( pWeapon )
 		{
-			if ( !g_pGameRules->GetNextBestWeapon( this, pWeapon ) )
+			if ( !g_pGameRules->GetNextBestWeapon( this, pWeapon, FALSE ) )
 				return; // can't drop the item they asked for, may be our last item or something we can't holster
 
 			UTIL_MakeVectors ( pev->angles ); 
@@ -4904,6 +4904,27 @@ BOOL CBasePlayer :: SwitchWeapon( CBasePlayerItem *pWeapon )
 	pWeapon->Deploy( );
 
 	return TRUE;
+}
+
+void CBasePlayer::EquipWeapon()
+{
+	if (m_pActiveItem && (!FStringNull(pev->viewmodel) || !FStringNull(pev->weaponmodel)))
+	{
+		if ((!FStringNull(pev->viewmodel) || !FStringNull(pev->weaponmodel)))
+		{
+			//Already have a weapon equipped and deployed.
+			return;
+		}
+
+		//Have a weapon equipped, but not deployed.
+		if (m_pActiveItem->CanDeploy() && m_pActiveItem->Deploy())
+		{
+			return;
+		}
+	}
+
+	//No weapon equipped or couldn't deploy it, find a suitable alternative.
+	g_pGameRules->GetNextBestWeapon(this, m_pActiveItem, true);
 }
 
 void CBasePlayer::SetPrefsFromUserinfo(char* infobuffer)

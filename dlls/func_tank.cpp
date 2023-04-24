@@ -1656,10 +1656,7 @@ void CFuncTankControls :: Use( CBaseEntity *pActivator, CBaseEntity *pCaller, US
 //		if (!m_pController)
 //			return;
 
-		// bring back player's weapons
-		if ( m_pController->m_pActiveItem )
-			m_pController->m_pActiveItem->Deploy();
-
+		m_pController->EquipWeapon();
 		m_pController->m_iHideHUD &= ~ (HIDEHUD_CUSTOMCROSSHAIR | HIDEHUD_WEAPONS);
 		m_pController->m_pTank = NULL;				
 

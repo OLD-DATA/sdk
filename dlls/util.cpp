@@ -363,7 +363,7 @@ DBG_AssertFunction(
 
 BOOL UTIL_GetNextBestWeapon( CBasePlayer *pPlayer, CBasePlayerItem *pCurrentWeapon )
 {
-	return g_pGameRules->GetNextBestWeapon( pPlayer, pCurrentWeapon );
+	return g_pGameRules->GetNextBestWeapon( pPlayer, pCurrentWeapon, FALSE );
 }
 
 // ripped this out of the engine
