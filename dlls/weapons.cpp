@@ -820,6 +820,14 @@ int CBasePlayerWeapon::AddDuplicate( CBasePlayerItem *pOriginal )
 
 int CBasePlayerWeapon::AddToPlayer( CBasePlayer *pPlayer )
 {
+	if ((iFlags() & ITEM_FLAG_EXHAUSTIBLE) != 0 && m_iDefaultAmmo == 0 && m_iClip <= 0)
+	{
+		//This is an exhaustible weapon that has no ammo left. Don't add it, queue it up for destruction instead.
+		SetThink(&CSatchel::DestroyItem);
+		SetNextThink(0.1f);
+		return FALSE;
+	}
+	
 	int bResult = CBasePlayerItem::AddToPlayer( pPlayer );
 
 	pPlayer->pev->weapons |= (1<<m_iId);
@@ -831,7 +839,7 @@ int CBasePlayerWeapon::AddToPlayer( CBasePlayer *pPlayer )
 	}
 
 	if (!bResult || !AddWeapon())
-		return false;
+		return FALSE;
 
 	//Immediately update the ammo HUD so weapon pickup isn't sometimes red because the HUD doesn't know about regenerating/free ammo yet.
 	if (-1 != m_iPrimaryAmmoType)
@@ -852,7 +860,7 @@ int CBasePlayerWeapon::AddToPlayer( CBasePlayer *pPlayer )
 		MESSAGE_END();
 	}
 
-	return true;
+	return TRUE;
 }
 
 int CBasePlayerWeapon::UpdateClientData( CBasePlayer *pPlayer )
