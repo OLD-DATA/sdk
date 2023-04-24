@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
+//========= Copyright ï¿½ 1996-2002, Valve LLC, All rights reserved. ============
 //
 // Purpose: 
 //
@@ -64,8 +64,6 @@ static bool m_bRawInput = false;
 static bool m_bMouseThread = false;
 bool g_bIsMouseRelative = false;
 #endif
-
-extern globalvars_t *gpGlobals;
 
 // mouse variables
 cvar_t		*m_filter;
@@ -638,9 +636,10 @@ void IN_GetMouseDelta( int *piOutX, int *piOutY )
 
 #ifdef _WIN32
 		// update m_bRawInput occasionally: 
-		if ( gpGlobals && gpGlobals->time - s_flRawInputUpdateTime > 1.0f )
+		const float currentTime = gEngfuncs.GetClientTime();
+		if ((currentTime - s_flRawInputUpdateTime) > 1.0f || s_flRawInputUpdateTime == 0.0f)
 		{
-			s_flRawInputUpdateTime = gpGlobals->time;
+			s_flRawInputUpdateTime = currentTime;
 
 			bool bLockEntered = MouseThread_ActiveLock_Enter();
 
