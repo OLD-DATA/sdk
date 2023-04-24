@@ -304,8 +304,8 @@ public:
 	virtual void SetNextThink( float delay ); //LRC
 	
 	// generic weapon versions of CBasePlayerItem calls
-	virtual int AddToPlayer( CBasePlayer *pPlayer );
-	virtual int AddDuplicate( CBasePlayerItem *pItem );
+	int AddToPlayer( CBasePlayer *pPlayer ) override;
+	int AddDuplicate( CBasePlayerItem *pItem ) override;
 
 	virtual int ExtractAmmo( CBasePlayerWeapon *pWeapon ); //{ return TRUE; };			// Return TRUE if you can add ammo to yourself when picked up
 	virtual int ExtractClipAmmo( CBasePlayerWeapon *pWeapon );// { return TRUE; };			// Return TRUE if you can add ammo to yourself when picked up
@@ -611,7 +611,6 @@ public:
 	void Precache( void );
 	int iItemSlot( void ) { return 2; }
 	int GetItemInfo(ItemInfo *p);
-	int AddToPlayer( CBasePlayer *pPlayer );
 	void PrimaryAttack( void );
 	void SecondaryAttack( void );
 	BOOL Deploy( void );
@@ -642,7 +641,6 @@ public:
 	void Precache( void );
 	int iItemSlot( void ) { return 3; }
 	int GetItemInfo(ItemInfo *p);
-	int AddToPlayer( CBasePlayer *pPlayer );
 
 	void PrimaryAttack( void );
 	void SecondaryAttack( void );
@@ -681,7 +679,6 @@ public:
 	void FireSniperBolt( void );
 	void PrimaryAttack( void );
 	void SecondaryAttack( void );
-	int AddToPlayer( CBasePlayer *pPlayer );
 	BOOL Deploy( );
 	void Holster( int skiplocal = 0 );
 	void Reload( void );
@@ -718,8 +715,7 @@ public:
 	void Precache( void );
 	int iItemSlot( ) { return 3; }
 	int GetItemInfo(ItemInfo *p);
-	int AddToPlayer( CBasePlayer *pPlayer );
-
+	
 	void PrimaryAttack( void );
 	void SecondaryAttack( void );
 	BOOL Deploy( );
@@ -775,7 +771,6 @@ public:
 	void Reload( void );
 	int iItemSlot( void ) { return 4; }
 	int GetItemInfo(ItemInfo *p);
-	int AddToPlayer( CBasePlayer *pPlayer );
 
 	BOOL Deploy( void );
 	BOOL CanHolster( void );
@@ -838,7 +833,6 @@ public:
 	void Precache( void );
 	int iItemSlot( void ) { return 4; }
 	int GetItemInfo(ItemInfo *p);
-	int AddToPlayer( CBasePlayer *pPlayer );
 
 	BOOL Deploy( void );
 	void Holster( int skiplocal = 0  );
@@ -888,7 +882,6 @@ public:
 	void Precache( void );
 	int iItemSlot( void ) { return 4; }
 	int GetItemInfo(ItemInfo *p);
-	int AddToPlayer( CBasePlayer *pPlayer );
 
 	BOOL Deploy( void );
 	void Holster( int skiplocal = 0 );
@@ -948,7 +941,7 @@ public:
 	void Precache( void );
 	int iItemSlot( void ) { return 4; }
 	int GetItemInfo(ItemInfo *p);
-	int AddToPlayer( CBasePlayer *pPlayer );
+	int AddToPlayer( CBasePlayer *pPlayer ) override;
 
 #ifndef CLIENT_DLL
 	int		Save(CSave& save);
@@ -1021,7 +1014,7 @@ public:
 	void Precache( void );
 	int iItemSlot( void ) { return 5; }
 	int GetItemInfo(ItemInfo *p);
-	int AddToPlayer( CBasePlayer *pPlayer );
+	int AddToPlayer( CBasePlayer *pPlayer ) override;
 	void PrimaryAttack( void );
 	void SecondaryAttack( void );
 	int AddDuplicate( CBasePlayerItem *pOriginal );

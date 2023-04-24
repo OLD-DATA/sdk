@@ -82,23 +82,14 @@ void CHgun::Precache( void )
 
 int CHgun::AddToPlayer( CBasePlayer *pPlayer )
 {
-	if ( CBasePlayerWeapon::AddToPlayer( pPlayer ) )
-	{
-
 #ifndef CLIENT_DLL
-		if ( g_pGameRules->IsMultiplayer() )
-		{
-			// in multiplayer, all hivehands come full. 
-			pPlayer->m_rgAmmo[ PrimaryAmmoIndex() ] = HORNET_MAX_CARRY;
-		}
-#endif
-
-		MESSAGE_BEGIN( MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev );
-			WRITE_BYTE( m_iId );
-		MESSAGE_END();
-		return TRUE;
+	if (g_pGameRules->IsMultiplayer())
+	{
+		// in multiplayer, all hivehands come full.
+		m_iDefaultAmmo = HORNET_MAX_CARRY;
 	}
-	return FALSE;
+#endif
+	return CBasePlayerWeapon::AddToPlayer(pPlayer);
 }
 
 int CHgun::GetItemInfo(ItemInfo *p)

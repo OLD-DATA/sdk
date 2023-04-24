@@ -593,5 +593,23 @@ constexpr bool UTIL_IsServer()
 #endif
 }
 
+/**
+*	@brief Helper type to run a function when the helper is destroyed.
+*	Useful for running cleanup on scope exit and function return.
+*/
+template<typename Func> struct CallOnDestroy
+{
+	const Func Function;
+
+	CallOnDestroy(Func&& function)
+		: Function(function){
+	}
+
+	~CallOnDestroy()
+	{
+		Function();
+	}
+};
+
 // LRC- for aliases and groups
 CBaseEntity* UTIL_FollowReference( CBaseEntity* pStartEntity, const char* szName );

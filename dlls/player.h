@@ -334,6 +334,9 @@ public:
 	void SetPrefsFromUserinfo(char* infobuffer);
 
 	int m_iAutoWepSwitch;
+
+	//True if the player is currently spawning.
+	bool m_bIsSpawning = false;
 };
 
 #define AUTOAIM_2DEGREES  0.0348994967025
