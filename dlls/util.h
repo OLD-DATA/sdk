@@ -597,12 +597,14 @@ constexpr bool UTIL_IsServer()
 *	@brief Helper type to run a function when the helper is destroyed.
 *	Useful for running cleanup on scope exit and function return.
 */
-template<typename Func> struct CallOnDestroy
+template <typename Func>
+struct CallOnDestroy
 {
 	const Func Function;
 
-	CallOnDestroy(Func&& function)
-		: Function(function){
+	explicit CallOnDestroy(Func&& function)
+		: Function(function)
+	{
 	}
 
 	~CallOnDestroy()

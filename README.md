@@ -1,5 +1,3 @@
-https://github.com/SamVanheer/halflife-updated/commits/master?after=bc7d6e3c0782f94553dd692351e7659903c0fa05+174&branch=master&qualified_name=refs%2Fheads%2Fmaster
-
 # Admer's SoHL 1.2 for VS2019
   
 Based on [Solokiller's updated SDK](https://github.com/Solokiller/halflife-updated) and [Spirit of Half-Life 1.2](https://www.moddb.com/mods/spirit-of-half-life/downloads/sohl-v12-with-source-code). Also contains some new entities, new functionality and small bugfixes.   

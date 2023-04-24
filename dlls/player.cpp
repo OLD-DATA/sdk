@@ -3047,11 +3047,11 @@ void CBasePlayer::Spawn( void )
 	m_bIsSpawning = true;
 	
 	//Make sure this gets reset even if somebody adds an early return or throws an exception.
-	const CallOnDestroy resetIsSpawning{[this](){
+	const CallOnDestroy resetIsSpawning{[this]()
+	{
 		//Done spawning; reset.
 		m_bIsSpawning = false;
-		}
-	};
+	}};
 	
 	pev->classname		= MAKE_STRING("player");
 	pev->health			= 100;
