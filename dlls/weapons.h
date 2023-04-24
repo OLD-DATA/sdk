@@ -850,6 +850,7 @@ public:
 	void StartFire( void );
 	void Fire( Vector vecOrigSrc, Vector vecDirShooting, float flDamage );
 	float GetFullChargeTime( void );
+	
 	int m_iBalls;
 	int m_iGlow;
 	int m_iBeam;
@@ -859,7 +860,7 @@ public:
 	// we need to know so we can pick the right set of effects. 
 	BOOL m_fPrimaryFire;
 
-	virtual BOOL UseDecrement( void )
+	BOOL UseDecrement( void ) override
 	{ 
 #if defined( CLIENT_WEAPONS )
 		return TRUE;
@@ -869,8 +870,9 @@ public:
 	}
 
 private:
-	unsigned short m_usGaussFire;
-	unsigned short m_usGaussSpin;
+	void SendStopEvent(bool sendToHost) const;
+	unsigned short m_usGaussFire = 0;
+	unsigned short m_usGaussSpin = 0;
 };
 
 class CEgon : public CBasePlayerWeapon
