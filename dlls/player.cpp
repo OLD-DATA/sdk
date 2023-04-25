@@ -3393,7 +3393,17 @@ void CBasePlayer::SelectLastItem(void)
 	CBasePlayerItem *pTemp = m_pActiveItem;
 	m_pActiveItem = m_pLastItem;
 	m_pLastItem = pTemp;
+
+	auto weapon = static_cast<CBasePlayerWeapon*>(m_pActiveItem->GetWeaponPtr());
+
+	if (weapon)
+		weapon->m_ForceSendAnimations = true;
+	
 	m_pActiveItem->Deploy( );
+
+	if (weapon)
+		weapon->m_ForceSendAnimations = false;
+	
 	m_pActiveItem->UpdateItemInfo( );
 }
 
