@@ -1228,8 +1228,20 @@ int CBasePlayerWeapon::ExtractClipAmmo( CBasePlayerWeapon *pWeapon )
 //=========================================================
 // RetireWeapon - no more ammo for this gun, put it away.
 //=========================================================
-void CBasePlayerWeapon::RetireWeapon( void )
+void CBasePlayerWeapon::RetireWeapon()
 {
+	SetThink(&CBasePlayerWeapon::CallDoRetireWeapon);
+	SetNextThink(0.01f);
+}
+
+void CBasePlayerWeapon::DoRetireWeapon()
+{
+	if (!m_pPlayer || m_pPlayer->m_pActiveItem != this)
+	{
+		// Already retired?
+		return;
+	}
+	
 	// first, no viewmodel at all.
 	m_pPlayer->pev->viewmodel = iStringNull;
 	m_pPlayer->pev->weaponmodel = iStringNull;

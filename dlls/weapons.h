@@ -340,7 +340,15 @@ public:
 	virtual void Reload( void ) { return; }						// do "+RELOAD"
 	virtual void WeaponIdle( void ) { return; }					// called when no buttons pressed
 	virtual int UpdateClientData( CBasePlayer *pPlayer );		// sends hud info to client dll, if things have changed
-	virtual void RetireWeapon( void );
+	void RetireWeapon();
+
+	// Can't use virtual functions as think functions so this wrapper is needed.
+	void EXPORT CallDoRetireWeapon()
+	{
+		DoRetireWeapon();
+	}
+
+	virtual void DoRetireWeapon();
 	virtual BOOL ShouldWeaponIdle( void ) {return FALSE; };
 	virtual void Holster( int skiplocal = 0 );
 	virtual BOOL UseDecrement( void ) { return FALSE; };
