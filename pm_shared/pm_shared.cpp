@@ -165,6 +165,20 @@ static char grgchTextureType[CTEXTURESMAX];
 
 int g_onladder = 0;
 
+static void PM_InitTrace(trace_t* trace, const vec3_t& end)
+{
+	memset(trace, 0, sizeof(*trace));
+	VectorCopy(end, trace->endpos);
+	trace->allsolid = 1;
+	trace->fraction = 1.0f;
+}
+
+static void PM_TraceModel(physent_t* pEnt, const vec3_t& start, const vec3_t& end, trace_t* trace)
+{
+	PM_InitTrace(trace, end);
+	pmove->PM_TraceModel(pEnt, start, end, trace);
+}
+
 /*
 	While I was investigating a hilarious ladder movement glitch,
 	I wrote this function. May it be useful to you in the future!
@@ -2245,7 +2259,7 @@ void PM_LadderMove( physent_t* pLadder )
 		onFloor = false;
 
 	pmove->gravity = 0;
-	pmove->PM_TraceModel( pLadder, pmove->origin, ladderCenter, &trace );
+	PM_TraceModel(pLadder, pmove->origin, ladderCenter, &trace);
 
 	// I have commented out this huge portion of code, as it's no longer necessary
 	// But it'll be handy to keep around, in case ladders break again! - Admer
