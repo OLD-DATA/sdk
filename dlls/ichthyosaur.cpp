@@ -647,16 +647,17 @@ void CIchthyosaur::StartTask(Task_t *pTask)
 		break;
 
 	case TASK_ICHTHYOSAUR_FLOAT:
-		const int sequenceIndex = LookupSequence("bellyup");
-
-		//Don't restart the animation if we're restoring.
-		if (pev->sequence != sequenceIndex)
 		{
-			pev->skin = EYE_BASE;
-			SetSequenceByName("bellyup");
+			const int sequenceIndex = LookupSequence("bellyup");
+
+			//Don't restart the animation if we're restoring.
+			if (pev->sequence != sequenceIndex)
+			{
+				pev->skin = EYE_BASE;
+				SetSequenceByName("bellyup");
+			}
 		}
 		break;
-
 	default:
 		CFlyingMonster::StartTask(pTask);
 		break;
