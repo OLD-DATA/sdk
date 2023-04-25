@@ -21,6 +21,7 @@
 #include "weaponinfo.h"
 
 class CBasePlayer;
+class CBasePlayerWeapon;
 extern int gmsgWeapPickup;
 
 void DeactivateSatchels( CBasePlayer *pOwner );
@@ -260,7 +261,7 @@ public:
 
 	virtual int UpdateClientData( CBasePlayer *pPlayer ) { return 0; }
 
-	virtual CBasePlayerItem *GetWeaponPtr( void ) { return NULL; }
+	virtual CBasePlayerWeapon *GetWeaponPtr( void ) { return NULL; }
 
 	virtual void GetWeaponData(weapon_data_t& data) {}
 
@@ -309,9 +310,7 @@ public:
 
 	virtual int ExtractAmmo( CBasePlayerWeapon *pWeapon ); //{ return TRUE; };			// Return TRUE if you can add ammo to yourself when picked up
 	virtual int ExtractClipAmmo( CBasePlayerWeapon *pWeapon );// { return TRUE; };			// Return TRUE if you can add ammo to yourself when picked up
-
-	virtual int AddWeapon( void ) { ExtractAmmo( this ); return TRUE; };	// Return TRUE if you want to add yourself to the player
-
+	
 	// generic "shared" ammo handlers
 	BOOL AddPrimaryAmmo( int iCount, char *szName, int iMaxClip, int iMaxCarry );
 	BOOL AddSecondaryAmmo( int iCount, char *szName, int iMaxCarry );
@@ -351,7 +350,7 @@ public:
 
 	void PrintState( void );
 
-	virtual CBasePlayerItem *GetWeaponPtr( void ) { return (CBasePlayerItem *)this; };
+	CBasePlayerWeapon *GetWeaponPtr( ) override { return this; }
 	float GetNextAttackDelay( float delay );
 
 	float m_flPumpTime;

@@ -488,18 +488,36 @@ void CBasePlayer::SelectLastItem(void)
 		return;
 	}
 
-	if ( m_pActiveItem && !m_pActiveItem->CanHolster() )
+	if (m_pActiveItem && !m_pActiveItem->CanHolster())
 	{
 		return;
 	}
 
+	ResetAutoaim();
+
+	// FIX, this needs to queue them up and delay
 	if (m_pActiveItem)
-		m_pActiveItem->Holster( );
-	
-	CBasePlayerItem *pTemp = m_pActiveItem;
+		m_pActiveItem->Holster();
+
+	CBasePlayerItem* pTemp = m_pActiveItem;
 	m_pActiveItem = m_pLastItem;
 	m_pLastItem = pTemp;
-	m_pActiveItem->Deploy( );
+
+	auto weapon = m_pActiveItem->GetWeaponPtr();
+
+	if (weapon)
+	{
+		weapon->m_ForceSendAnimations = true;
+	}
+
+	m_pActiveItem->Deploy();
+
+	if (weapon)
+	{
+		weapon->m_ForceSendAnimations = false;
+	}
+
+	m_pActiveItem->UpdateItemInfo();
 }
 
 /*
