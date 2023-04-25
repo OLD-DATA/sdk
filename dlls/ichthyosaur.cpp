@@ -80,6 +80,7 @@ public:
 
 	float ChangeYaw( int speed );
 	Activity GetStoppedActivity( void );
+	void SetActivity(Activity NewActivity) override;
 
 	void  Move( float flInterval );
 	void  MoveExecute( CBaseEntity *pTargetEnt, const Vector &vecDir, float flInterval );
@@ -298,7 +299,6 @@ Task_t tlTwitchDie[] =
 	{ TASK_STOP_MOVING,			0		 },
 	{ TASK_SOUND_DIE,			(float)0 },
 	{ TASK_DIE,					(float)0 },
-	{ TASK_ICHTHYOSAUR_FLOAT,	(float)0 },
 };
 
 Schedule_t slTwitchDie[] =
@@ -312,6 +312,19 @@ Schedule_t slTwitchDie[] =
 	},
 };
 
+Task_t tlFloat[] =
+	{
+	{TASK_ICHTHYOSAUR_FLOAT, (float)0},
+};
+
+Schedule_t slFloat[] =
+	{
+	{tlFloat,
+		ARRAYSIZE(tlFloat),
+		0,
+		0,
+		"Float"},
+};
 
 DEFINE_CUSTOM_SCHEDULES(CIchthyosaur)
 {
@@ -319,6 +332,7 @@ DEFINE_CUSTOM_SCHEDULES(CIchthyosaur)
 	slSwimAgitated,
 	slCircleEnemy,
 	slTwitchDie,
+	slFloat,
 };
 IMPLEMENT_CUSTOM_SCHEDULES(CIchthyosaur, CFlyingMonster);
 
@@ -590,6 +604,12 @@ Schedule_t* CIchthyosaur :: GetScheduleOfType ( int Type )
 	case SCHED_FAIL:
 		return slSwimAgitated;
 	case SCHED_DIE:
+		if (pev->deadflag == DEAD_DEAD)
+		{
+			//Already dead, immediately switch to float.
+			return slFloat;
+		}
+		
 		return slTwitchDie;
 	case SCHED_CHASE_ENEMY:
 		AttackSound( );
@@ -627,13 +647,33 @@ void CIchthyosaur::StartTask(Task_t *pTask)
 		break;
 
 	case TASK_ICHTHYOSAUR_FLOAT:
-		pev->skin = EYE_BASE;
-		SetSequenceByName( "bellyup" );
+		const int sequenceIndex = LookupSequence("bellyup");
+
+		//Don't restart the animation if we're restoring.
+		if (pev->sequence != sequenceIndex)
+		{
+			pev->skin = EYE_BASE;
+			SetSequenceByName("bellyup");
+		}
 		break;
 
 	default:
 		CFlyingMonster::StartTask(pTask);
 		break;
+	}
+}
+
+void CIchthyosaur::SetActivity(Activity NewActivity)
+{
+	const float frame = pev->frame;
+
+	CFlyingMonster::SetActivity(NewActivity);
+
+	//Restore belly up state.
+	if (pev->deadflag == DEAD_DEAD)
+	{
+		SetSequenceByName("bellyup");
+		pev->frame = frame;
 	}
 }
 
