@@ -1148,7 +1148,8 @@ class CMomentaryDoor : public CBaseToggle
 public:
 	void	Spawn( void );
 	void Precache( void );
-	void EXPORT MomentaryMoveDone( void );
+	void EXPORT MomentaryMoveDone();
+	void EXPORT StopMoveSound();
 
 	void	KeyValue( KeyValueData *pkvd );
 	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
@@ -1334,8 +1335,18 @@ void CMomentaryDoor::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYP
 	}
 }
 
-void CMomentaryDoor::MomentaryMoveDone( void )
+void CMomentaryDoor::MomentaryMoveDone()
+{
+	// Stop sounds at the next think, rather than here as another
+	// Use call might immediately follow the end of this move
+	//This think function will be replaced by LinearMove if that happens.
+	SetThink(&CMomentaryDoor::StopMoveSound);
+	SetNextThink(0.1f);
+}
+
+void CMomentaryDoor::StopMoveSound()
 {
 	m_iState = STATE_OFF;
 	STOP_SOUND(ENT(pev), CHAN_STATIC, (char*)STRING(pev->noiseMoving));
+	EMIT_SOUND(ENT(pev), CHAN_STATIC, (char*)STRING(pev->noiseArrived), 1, ATTN_NORM);
 }
