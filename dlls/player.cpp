@@ -4932,7 +4932,12 @@ BOOL CBasePlayer :: SwitchWeapon( CBasePlayerItem *pWeapon )
 	}
 
 	m_pActiveItem = pWeapon;
-	pWeapon->Deploy( );
+	if (pWeapon)
+	{
+		pWeapon->m_ForceSendAnimations = true;
+		pWeapon->Deploy();
+		pWeapon->m_ForceSendAnimations = false;
+	}
 
 	return TRUE;
 }
