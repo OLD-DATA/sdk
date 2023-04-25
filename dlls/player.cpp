@@ -3229,8 +3229,9 @@ int CBasePlayer::Restore( CRestore &restore )
 	pev->v_angle.z = 0;	// Clear out roll
 	pev->angles = pev->v_angle;
 
-	pev->fixangle = TRUE;           // turn this way immediately
-
+	pev->fixangle = 1; // turn this way immediately
+	m_iClientFOV = -1; // Make sure the client gets the right FOV value.
+	
 // Copied from spawn() for now
 	m_bloodColor	= BLOOD_COLOR_RED;
 
