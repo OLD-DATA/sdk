@@ -3365,6 +3365,11 @@ void CChangeLevel :: Spawn( void )
 	if ( FStrEq( m_szLandmarkName, "" ) )
 		ALERT( at_console, "trigger_changelevel to %s doesn't have a landmark", m_szMapName );
 
+	if (!stricmp(m_szMapName, STRING(gpGlobals->mapname)))
+	{
+		ALERT(at_error, "trigger_changelevel points to the current map (%s), which does not work\n", STRING(gpGlobals->mapname));
+	}
+	
 	if (!FStringNull ( pev->targetname ) )
 	{
 		SetUse ( &CChangeLevel::UseChangeLevel );
