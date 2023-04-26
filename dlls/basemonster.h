@@ -199,7 +199,13 @@ public:
 		virtual int CanPlaySequence( int interruptFlags );
 //		virtual int CanPlaySequence( BOOL fDisregardState, int interruptLevel );
 		virtual int CanPlaySentence( BOOL fDisregardState ) { return IsAlive(); }
-		virtual void PlaySentence( const char *pszSentence, float duration, float volume, float attenuation );
+		virtual bool CanPlaySentence(bool fDisregardState) { return IsAlive() && pev->deadflag == DEAD_NO; }
+		void PlaySentence(const char* pszSentence, float duration, float volume, float attenuation);
+
+	protected:
+		virtual void PlaySentenceCore(const char* pszSentence, float duration, float volume, float attenuation);
+
+	public:
 		virtual void PlayScriptedSentence( const char *pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity *pListener );
 
 		virtual void SentenceStop( void );
