@@ -3016,6 +3016,10 @@ void CBaseMonster :: KeyValue( KeyValueData *pkvd )
 		m_iPlayerReact = atoi( pkvd->szValue );
 		pkvd->fHandled = TRUE;
 	}
+	else if (FStrEq(pkvd->szKeyName, "allow_item_dropping"))
+	{
+		m_AllowItemDropping = atoi(pkvd->szValue) != 0;
+	}
 	else
 	{
 		CBaseToggle::KeyValue( pkvd );
@@ -3478,9 +3482,14 @@ CBaseEntity* CBaseMonster :: DropItem ( const char *pszItemName, const Vector &v
 	if ( !pszItemName )
 	{
 		ALERT ( at_console, "DropItem() - No item name!\n" );
-		return NULL;
+		return nullptr;
 	}
-
+	
+	if (!m_AllowItemDropping)
+	{
+		return nullptr;
+	}
+	
 	CBaseEntity *pItem = CBaseEntity::Create( pszItemName, vecPos, vecAng, edict() );
 
 	if ( pItem )

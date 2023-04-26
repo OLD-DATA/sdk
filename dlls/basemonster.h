@@ -46,6 +46,7 @@ public:
 		float				m_flWaitFinished;// if we're told to wait, this is the time that the wait will be over.
 		float				m_flMoveWaitFinished;
 		float				m_flLastYawTime;
+		bool				m_AllowItemDropping = true;
 
 		Activity			m_Activity;// what the monster is doing (animation)
 		Activity			m_IdealActivity;// monster should switch to this activity
@@ -339,10 +340,13 @@ public:
 	BOOL ExitScriptedSequence( );
 	BOOL CineCleanup( );
 
-	CBaseEntity* DropItem ( const char *pszItemName, const Vector &vecPos, const Vector &vecAng );// drop an item.
+	/**
+	*	@brief Drop an item.
+	*	Will return @c nullptr if item dropping is disabled for this NPC.
+	*/
+	CBaseEntity* DropItem(const char* pszItemName, const Vector& vecPos, const Vector& vecAng);
+	
 	void StartPatrol( CBaseEntity *path );
-
-	CBaseEntity* DropItem ( char *pszItemName, const Vector &vecPos, const Vector &vecAng );// drop an item.
 
 	//LRC
 	float	CalcRatio( CBaseEntity *pLocus )
