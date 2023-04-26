@@ -119,10 +119,13 @@ public:
 	int					m_afButtonLast;
 	int					m_afButtonPressed;
 	int					m_afButtonReleased;
+
+	string_t			m_MapName; // Map the save game was made for, to detect level changes.
 	
 	EHANDLE				m_SndLast; // last sound entity to modify player room type
-	int					m_SndRoomtype;	// last roomtype set by sound entity
 	float				m_flSndRange;	// dist from player to sound entity
+	int					m_SndRoomtype = 0;	// last roomtype set by sound entity. Defaults to 0 on new maps to disable it by default.
+	int					m_ClientSndRoomtype;
 
 	float				m_flFallVelocity;
 	

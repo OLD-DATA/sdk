@@ -122,15 +122,17 @@ TYPEDESCRIPTION	CBasePlayer::m_playerSaveData[] =
 	DEFINE_FIELD( CBasePlayer, m_hViewEntity, FIELD_EHANDLE ),
 	DEFINE_FIELD( CBasePlayer, m_iHideHUD, FIELD_INTEGER ),
 	DEFINE_FIELD( CBasePlayer, m_iFOV, FIELD_INTEGER ),
+	DEFINE_FIELD( CBasePlayer, m_MapName, FIELD_STRING),
+
+	DEFINE_FIELD( CBasePlayer, m_SndLast, FIELD_EHANDLE),
+	DEFINE_FIELD( CBasePlayer, m_SndRoomtype, FIELD_INTEGER),
+	DEFINE_FIELD( CBasePlayer, m_flSndRange, FIELD_FLOAT),
 	
 	//DEFINE_FIELD( CBasePlayer, m_fDeadTime, FIELD_FLOAT ), // only used in multiplayer games
 	//DEFINE_FIELD( CBasePlayer, m_fGameHUDInitialized, FIELD_INTEGER ), // only used in multiplayer games
 	//DEFINE_FIELD( CBasePlayer, m_flStopExtraSoundTime, FIELD_TIME ),
 	//DEFINE_FIELD( CBasePlayer, m_fKnownItem, FIELD_INTEGER ), // reset to zero on load
 	//DEFINE_FIELD( CBasePlayer, m_iPlayerSound, FIELD_INTEGER ),	// Don't restore, set in Precache()
-	//DEFINE_FIELD( CBasePlayer, m_SndLast, FIELD_EHANDLE ),	// Don't restore, client needs reset
-	//DEFINE_FIELD( CBasePlayer, m_SndRoomtype, FIELD_INTEGER ),	// Don't restore, client needs reset
-	//DEFINE_FIELD( CBasePlayer, m_flSndRange, FIELD_FLOAT ),	// Don't restore, client needs reset
 	//DEFINE_FIELD( CBasePlayer, m_fNewAmmo, FIELD_INTEGER ), // Don't restore, client needs reset
 	//DEFINE_FIELD( CBasePlayer, m_flgeigerRange, FIELD_FLOAT ),	// Don't restore, reset in Precache()
 	//DEFINE_FIELD( CBasePlayer, m_flgeigerDelay, FIELD_FLOAT ),	// Don't restore, reset in Precache()
@@ -3079,6 +3081,7 @@ void CBasePlayer::Spawn( void )
 
 	pev->fov = m_iFOV				= 0;// init field of view.
 	m_iClientFOV		= -1; // make sure fov reset is sent
+	m_ClientSndRoomtype = -1;
 
 	m_flNextDecalTime	= 0;// let this player decal as soon as he spawns.
 
@@ -3193,6 +3196,8 @@ int CBasePlayer::Save( CSave &save )
 	if ( !CBaseMonster::Save(save) )
 		return 0;
 
+	m_MapName = ALLOC_STRING(STRING(gpGlobals->mapname));
+
 	return save.WriteFields( "PLAYER", this, m_playerSaveData, ARRAYSIZE(m_playerSaveData) );
 }
 
@@ -3229,6 +3234,16 @@ int CBasePlayer::Restore( CRestore &restore )
 
 	pev->fixangle = 1; // turn this way immediately
 	m_iClientFOV = -1; // Make sure the client gets the right FOV value.
+
+	m_ClientSndRoomtype = -1;
+
+	// Reset room type on level change.
+	if (!FStrEq(STRING(m_MapName), STRING(gpGlobals->mapname)))
+	{
+		m_SndRoomtype = 0;
+
+		m_MapName = ALLOC_STRING(STRING(gpGlobals->mapname));
+	}
 	
 // Copied from spawn() for now
 	m_bloodColor	= BLOOD_COLOR_RED;
@@ -3612,10 +3627,21 @@ void CBasePlayer :: ForceClientDllUpdate( void )
 	m_iClientBattery = -1;
 	m_iClientHideHUD = -1;
 	m_iClientFOV = -1;
-
+	m_ClientSndRoomtype = -1;
+	
 	for (int i = 0; i < MAX_AMMO_SLOTS; ++i)
 	{
 		m_rgAmmoLast[i] = 0;
+	}
+	
+	// Send new room type to client.
+	if (m_ClientSndRoomtype != m_SndRoomtype)
+	{
+		m_ClientSndRoomtype = m_SndRoomtype;
+
+		MESSAGE_BEGIN(MSG_ONE, SVC_ROOMTYPE, nullptr, edict());
+		WRITE_SHORT((short)m_SndRoomtype); // sequence number
+		MESSAGE_END();
 	}
 	
 	m_iTrain |= TRAIN_NEW;  // Force new train message.
