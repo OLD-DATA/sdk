@@ -3508,9 +3508,7 @@ CBaseEntity* CBaseMonster :: DropItem ( const char *pszItemName, const Vector &v
 		ALERT ( at_console, "DropItem() - Didn't create!\n" );
 		return FALSE;
 	}
-
 }
-
 
 BOOL CBaseMonster :: ShouldFadeOnDeath( void )
 {
