@@ -1430,7 +1430,7 @@ float CBaseMonster :: OpenDoorAndWait( entvars_t *pevDoor )
 				if (!pTarget)
 					break;
 
-				if ( VARS( pTarget->pev ) != pcbeDoor->pev &&
+				if ( pTarget->pev != pcbeDoor->pev &&
 						FClassnameIs ( pTarget->pev, STRING(pcbeDoor->pev->classname) ) )
 				{
 					pTarget->Use(this, this, USE_ON, 0.0);

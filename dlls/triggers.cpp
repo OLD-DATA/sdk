@@ -2688,10 +2688,10 @@ void CTriggerCDAudio::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TY
 
 void PlayCDTrack( int iTrack )
 {
-	edict_t *pClient;
+	CBaseEntity* pClient = UTIL_GetLocalPlayer();
 	
 	// manually find the single player. 
-	pClient = g_engfuncs.pfnPEntityOfEntIndex( 1 );
+	CLIENT_COMMAND(pClient->edict(), "cd stop\n");
 	
 	// Can't play if the client is not connected!
 	if ( !pClient )
@@ -2705,14 +2705,14 @@ void PlayCDTrack( int iTrack )
 
 	if ( iTrack == -1 )
 	{
-		CLIENT_COMMAND ( pClient, "cd pause\n");
+		CLIENT_COMMAND ( pClient->edict(), "cd pause\n");
 	}
 	else
 	{
 		char string [ 64 ];
 
 		sprintf( string, "cd play %3d\n", iTrack );
-		CLIENT_COMMAND ( pClient, string);
+		CLIENT_COMMAND(pClient->edict(), string);
 	}
 }
 
@@ -2769,10 +2769,8 @@ void CTargetCDAudio::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYP
 // only plays for ONE client, so only use in single play!
 void CTargetCDAudio::Think( void )
 {
-	edict_t *pClient;
-	
 	// manually find the single player. 
-	pClient = g_engfuncs.pfnPEntityOfEntIndex( 1 );
+	edict_t* pClient = UTIL_GetLocalPlayer()->edict();
 	
 	// Can't play if the client is not connected!
 	if ( !pClient )
@@ -3278,7 +3276,6 @@ public:
 	void Spawn( void );
 	void KeyValue( KeyValueData *pkvd );
 	void EXPORT UseChangeLevel ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-	void EXPORT TriggerChangeLevel( void );
 	void EXPORT ExecuteChangeLevel( void );
 	void EXPORT TouchChangeLevel( CBaseEntity *pOther );
 	void ChangeLevelNow( CBaseEntity *pActivator );
@@ -3427,7 +3424,6 @@ void CChangeLevel :: UseChangeLevel ( CBaseEntity *pActivator, CBaseEntity *pCal
 void CChangeLevel :: ChangeLevelNow( CBaseEntity *pActivator )
 {
 	edict_t	*pentLandmark;
-	LEVELLIST	levels[16];
 
 	ASSERT(!FStrEq(m_szMapName, ""));
 
@@ -3440,9 +3436,8 @@ void CChangeLevel :: ChangeLevelNow( CBaseEntity *pActivator )
 		return;
 
 	pev->dmgtime = gpGlobals->time;
-
-
-	CBaseEntity *pPlayer = CBaseEntity::Instance( g_engfuncs.pfnPEntityOfEntIndex( 1 ) );
+	
+	CBaseEntity* pPlayer = UTIL_GetLocalPlayer();
 	if ( !InTransitionVolume( pPlayer, m_szLandmarkName ) )
 	{
 		ALERT( at_aiconsole, "Player isn't in the transition volume %s, aborting\n", m_szLandmarkName );
@@ -5186,7 +5181,12 @@ void CTriggerCamera::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYP
 	}
 	if ( !pActivator || !pActivator->IsPlayer() )
 	{
-		pActivator = CBaseEntity::Instance(g_engfuncs.pfnPEntityOfEntIndex( 1 ));
+		pActivator = UTIL_GetLocalPlayer();
+
+		if (!pActivator)
+		{
+			return;
+		}
 	}
 
 	auto player = static_cast<CBasePlayer*>(pActivator);

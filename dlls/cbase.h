@@ -396,16 +396,8 @@ public:
 	int		IsDormant( void );
 	BOOL    IsLockedByMaster( void ) { return FALSE; }
 
-	static CBaseEntity *Instance( edict_t *pent )
-	{ 
-		if ( !pent )
-			pent = ENT(0);
-		CBaseEntity *pEnt = (CBaseEntity *)GET_PRIVATE(pent); 
-		return pEnt; 
-	}
-
-	static CBaseEntity *Instance( entvars_t *pev ) { return Instance( ENT( pev ) ); }
-	static CBaseEntity *Instance( int eoffset) { return Instance( ENT( eoffset) ); }
+	static CBaseEntity* Instance(edict_t* pent);
+	static CBaseEntity* Instance(entvars_t* pev);
 
 	CBaseMonster *GetMonsterPointer( entvars_t *pevMonster ) 
 	{ 
@@ -421,8 +413,6 @@ public:
 			return pEntity->MyMonsterPointer();
 		return NULL;
 	}
-
-
 	
 	// Ugly code to lookup all functions to make sure they are exported when set.
 #ifdef _DEBUG
@@ -1010,11 +1000,33 @@ public:
 class CWorld : public CBaseEntity
 {
 public:
+	CWorld();
+	~CWorld();
+	
 	void Spawn( void );
 	void Precache( void );
 	void KeyValue( KeyValueData *pkvd );
 
+	static inline CWorld* Instance = nullptr;
+	
 	CBaseAlias *m_pFirstAlias;
 };
+
+inline DLL_GLOBAL edict_t* g_pBodyQueueHead = nullptr;
+
+inline CBaseEntity* CBaseEntity::Instance(edict_t* pent)
+{
+	if (!pent)
+		return CWorld::Instance;
+	return (CBaseEntity*)GET_PRIVATE(pent);
+}
+
+inline CBaseEntity* CBaseEntity::Instance(entvars_t* pev)
+{
+	if (!pev)
+		return CWorld::Instance;
+
+	return Instance(ENT(pev));
+}
 
 extern CWorld *g_pWorld;

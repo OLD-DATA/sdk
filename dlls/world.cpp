@@ -39,7 +39,6 @@ extern CGraph WorldGraph;
 extern CSoundEnt *pSoundEnt;
 
 extern CBaseEntity				*g_pLastSpawn;
-DLL_GLOBAL edict_t				*g_pBodyQueueHead;
 CGlobalState					gGlobalState;
 extern DLL_GLOBAL	int			gDisplayTitle;
 
@@ -472,6 +471,27 @@ float g_flWeaponCheat;
 
 BOOL g_startSuit; //LRC
 
+CWorld::CWorld()
+{
+	if (Instance)
+	{
+		ALERT(at_error, "Do not create multiple instances of worldspawn\n");
+		return;
+	}
+
+	Instance = this;
+}
+
+CWorld::~CWorld()
+{
+	if (Instance != this)
+	{
+		return;
+	}
+
+	Instance = nullptr;
+}
+
 void CWorld :: Spawn( void )
 {
 	g_fGameOver = FALSE;
@@ -481,6 +501,13 @@ void CWorld :: Spawn( void )
 
 void CWorld :: Precache( void )
 {
+	// Flag this entity for removal if it's not the actual world entity.
+	if (Instance != this)
+	{
+		UTIL_Remove(this);
+		return;
+	}
+	
 	//LRC - set up the world lists
 	g_pWorld = this;
 	m_pAssistLink = NULL;

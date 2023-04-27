@@ -28,6 +28,8 @@ inline void MESSAGE_BEGIN( int msg_dest, int msg_type, const float *pOrigin, ent
 
 extern globalvars_t				*gpGlobals;
 
+class CBaseEntity;
+
 // Use this instead of ALLOC_STRING on constant strings
 #define STRING(offset)		((const char *)(gpGlobals->pStringBase + (unsigned int)(offset)))
 #define MAKE_STRING(str)	((uint64)(str) - (uint64)(STRING(0)))
@@ -95,6 +97,16 @@ typedef int BOOL;
 	extern "C" DLLEXPORT void mapClassName( entvars_t *pev ); \
 	void mapClassName( entvars_t *pev ) { GetClassPtr( (DLLClassName *)pev ); }
 
+	/**
+	*	@brief Gets the list of entities.
+	*	Will return @c nullptr if there is no map loaded.
+	*/
+	edict_t* UTIL_GetEntityList();
+
+	/**
+	*	@brief Gets the local player in singleplayer, or @c nullptr in multiplayer.
+	*/
+	CBaseEntity* UTIL_GetLocalPlayer();
 
 //
 // Conversion among the three types of "entity", including identity-conversions.
@@ -107,7 +119,6 @@ typedef int BOOL;
 #endif
 inline edict_t *ENT(edict_t *pent)		{ return pent; }
 inline edict_t *ENT(EOFFSET eoffset)			{ return (*g_engfuncs.pfnPEntityOfEntOffset)(eoffset); }
-inline EOFFSET OFFSET(EOFFSET eoffset)			{ return eoffset; }
 inline EOFFSET OFFSET(const edict_t *pent)	
 { 
 #if _DEBUG
@@ -124,7 +135,6 @@ inline EOFFSET OFFSET(entvars_t *pev)
 #endif
 	return OFFSET(ENT(pev)); 
 }
-inline entvars_t *VARS(entvars_t *pev)					{ return pev; }
 
 inline entvars_t *VARS(edict_t *pent)			
 { 
@@ -134,7 +144,6 @@ inline entvars_t *VARS(edict_t *pent)
 	return &pent->v; 
 }
 
-inline entvars_t* VARS(EOFFSET eoffset)				{ return VARS(ENT(eoffset)); }
 inline int	  ENTINDEX(edict_t *pEdict)			{ return (*g_engfuncs.pfnIndexOfEdict)(pEdict); }
 inline edict_t* INDEXENT( int iEdictNum )		{ return (*g_engfuncs.pfnPEntityOfEntIndex)(iEdictNum); }
 inline void MESSAGE_BEGIN( int msg_dest, int msg_type, const float *pOrigin, entvars_t *ent ) {

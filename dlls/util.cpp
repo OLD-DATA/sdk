@@ -453,7 +453,7 @@ void UTIL_MoveToOrigin( edict_t *pent, const Vector &vecGoal, float flDist, int 
 
 int UTIL_EntitiesInBox( CBaseEntity **pList, int listMax, const Vector &mins, const Vector &maxs, int flagMask )
 {
-	edict_t		*pEdict = g_engfuncs.pfnPEntityOfEntIndex( 1 );
+	edict_t* pEdict = UTIL_GetEntityList();
 	CBaseEntity *pEntity;
 	int			count;
 
@@ -461,6 +461,9 @@ int UTIL_EntitiesInBox( CBaseEntity **pList, int listMax, const Vector &mins, co
 
 	if ( !pEdict )
 		return count;
+	
+	// Ignore world.
+	++pEdict;
 
 	for ( int i = 1; i < gpGlobals->maxEntities; i++, pEdict++ )
 	{
@@ -495,7 +498,7 @@ int UTIL_EntitiesInBox( CBaseEntity **pList, int listMax, const Vector &mins, co
 
 int UTIL_MonstersInSphere( CBaseEntity **pList, int listMax, const Vector &center, float radius )
 {
-	edict_t		*pEdict = g_engfuncs.pfnPEntityOfEntIndex( 1 );
+	edict_t* pEdict = UTIL_GetEntityList();
 	CBaseEntity *pEntity;
 	int			count;
 	float		distance, delta;
@@ -505,6 +508,9 @@ int UTIL_MonstersInSphere( CBaseEntity **pList, int listMax, const Vector &cente
 
 	if ( !pEdict )
 		return count;
+
+	// Ignore world.
+	++pEdict;
 
 	for ( int i = 1; i < gpGlobals->maxEntities; i++, pEdict++ )
 	{
@@ -1270,6 +1276,15 @@ TraceResult UTIL_GetGlobalTrace( )
 	return tr;
 }
 
+edict_t* UTIL_GetEntityList()
+{
+	return g_engfuncs.pfnPEntityOfEntOffset(0);
+}
+
+CBaseEntity* UTIL_GetLocalPlayer()
+{
+	return UTIL_PlayerByIndex(1);
+}
 	
 void UTIL_SetSize( entvars_t *pev, const Vector &vecMin, const Vector &vecMax )
 {
