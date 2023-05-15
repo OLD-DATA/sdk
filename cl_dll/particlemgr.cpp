@@ -9,36 +9,36 @@
 #include "particlemgr.h"
 #include "particlesys.h"
 
-ParticleSystemManager*	g_pParticleSystems = NULL;
+ParticleSystemManager* g_pParticleSystems = NULL;
 
-ParticleSystemManager::ParticleSystemManager( void )
+ParticleSystemManager::ParticleSystemManager(void)
 {
-	m_pFirstSystem = NULL;
-	//systemio = NULL;
+    m_pFirstSystem = NULL;
+    //systemio = NULL;
 }
 
-ParticleSystemManager::~ParticleSystemManager( void )
+ParticleSystemManager::~ParticleSystemManager(void)
 {
-	ClearSystems();
+    ClearSystems();
 }
 
-void ParticleSystemManager::AddSystem( ParticleSystem* pNewSystem )
+void ParticleSystemManager::AddSystem(ParticleSystem* pNewSystem)
 {
-	pNewSystem->m_pNextSystem = m_pFirstSystem;
-	m_pFirstSystem = pNewSystem;
+    pNewSystem->m_pNextSystem = m_pFirstSystem;
+    m_pFirstSystem = pNewSystem;
 }
 
-ParticleSystem *ParticleSystemManager::FindSystem( cl_entity_t* pEntity )
+ParticleSystem* ParticleSystemManager::FindSystem(cl_entity_t* pEntity)
 {
-	for (ParticleSystem *pSys = m_pFirstSystem; pSys; pSys = pSys->m_pNextSystem)
-	{
-		if (pEntity->index == pSys->m_iEntIndex)
-//		if (pEntity == pSys->GetEntity())
-		{
-			return pSys;
-		}
-	}
-	return NULL;
+    for (ParticleSystem* pSys = m_pFirstSystem; pSys; pSys = pSys->m_pNextSystem)
+    {
+        if (pEntity->index == pSys->m_iEntIndex)
+        //		if (pEntity == pSys->GetEntity())
+        {
+            return pSys;
+        }
+    }
+    return NULL;
 }
 
 // blended particles don't use the z-buffer, so we need to sort them before drawing.
@@ -46,118 +46,118 @@ ParticleSystem *ParticleSystemManager::FindSystem( cl_entity_t* pEntity )
 // (this should actually make things look better - no ugly popping when one particle passes through another.)
 void ParticleSystemManager::SortSystems()
 {
-	ParticleSystem* pSystem;
-	ParticleSystem* pLast;
-	ParticleSystem* pBeforeCompare, *pCompare;
-	
-	if (!m_pFirstSystem) return;
+    ParticleSystem* pSystem;
+    ParticleSystem* pLast;
+    ParticleSystem *pBeforeCompare, *pCompare;
 
-	// calculate how far away each system is from the viewer
-	for( pSystem = m_pFirstSystem; pSystem; pSystem = pSystem->m_pNextSystem )
-		pSystem->CalculateDistance();
+    if (!m_pFirstSystem) return;
 
-	// do an insertion sort on the systems
-	pLast = m_pFirstSystem;
-	pSystem = pLast->m_pNextSystem;
-	while (pSystem)
-	{
-		if (pLast->m_fViewerDist < pSystem->m_fViewerDist)
-		{
-			// pSystem is in the wrong place! First, let's unlink it from the list
-			pLast->m_pNextSystem = pSystem->m_pNextSystem;
+    // calculate how far away each system is from the viewer
+    for (pSystem = m_pFirstSystem; pSystem; pSystem = pSystem->m_pNextSystem)
+        pSystem->CalculateDistance();
 
-			// then find somewhere to insert it
-			if (m_pFirstSystem == pLast || m_pFirstSystem->m_fViewerDist < pSystem->m_fViewerDist)
-			{
-				// pSystem comes before the first system, insert it there
-				pSystem->m_pNextSystem = m_pFirstSystem;
-				m_pFirstSystem = pSystem;
-			}
-			else
-			{
-				// insert pSystem somewhere within the sorted part of the list
-				pBeforeCompare = m_pFirstSystem;
-				pCompare = pBeforeCompare->m_pNextSystem;
-				while (pCompare != pLast)
-				{
-					if (pCompare->m_fViewerDist < pSystem->m_fViewerDist)
-					{
-						// pSystem comes before pCompare. We've found where it belongs.
-						break;
-					}
+    // do an insertion sort on the systems
+    pLast = m_pFirstSystem;
+    pSystem = pLast->m_pNextSystem;
+    while (pSystem)
+    {
+        if (pLast->m_fViewerDist < pSystem->m_fViewerDist)
+        {
+            // pSystem is in the wrong place! First, let's unlink it from the list
+            pLast->m_pNextSystem = pSystem->m_pNextSystem;
 
-					pBeforeCompare = pCompare;
-					pCompare = pBeforeCompare->m_pNextSystem;
-				}
+            // then find somewhere to insert it
+            if (m_pFirstSystem == pLast || m_pFirstSystem->m_fViewerDist < pSystem->m_fViewerDist)
+            {
+                // pSystem comes before the first system, insert it there
+                pSystem->m_pNextSystem = m_pFirstSystem;
+                m_pFirstSystem = pSystem;
+            }
+            else
+            {
+                // insert pSystem somewhere within the sorted part of the list
+                pBeforeCompare = m_pFirstSystem;
+                pCompare = pBeforeCompare->m_pNextSystem;
+                while (pCompare != pLast)
+                {
+                    if (pCompare->m_fViewerDist < pSystem->m_fViewerDist)
+                    {
+                        // pSystem comes before pCompare. We've found where it belongs.
+                        break;
+                    }
 
-				// we've found where pSystem belongs. Insert it between pBeforeCompare and pCompare.
-				pBeforeCompare->m_pNextSystem = pSystem;
-				pSystem->m_pNextSystem = pCompare;
-			}
-		}
-		else
-		{
-			//pSystem is in the right place, move on
-			pLast = pSystem;
-		}
-		pSystem = pLast->m_pNextSystem;
-	}
+                    pBeforeCompare = pCompare;
+                    pCompare = pBeforeCompare->m_pNextSystem;
+                }
+
+                // we've found where pSystem belongs. Insert it between pBeforeCompare and pCompare.
+                pBeforeCompare->m_pNextSystem = pSystem;
+                pSystem->m_pNextSystem = pCompare;
+            }
+        }
+        else
+        {
+            //pSystem is in the right place, move on
+            pLast = pSystem;
+        }
+        pSystem = pLast->m_pNextSystem;
+    }
 }
 
-void ParticleSystemManager::UpdateSystems( float frametime ) //LRC - now with added time!
+void ParticleSystemManager::UpdateSystems(float frametime) //LRC - now with added time!
 {
-//	gEngfuncs.pTriAPI->RenderMode(kRenderTransAdd);
-//	gEngfuncs.pTriAPI->RenderMode(kRenderTransAlpha);
-	ParticleSystem* pSystem;
-	ParticleSystem* pLast = NULL;
-	ParticleSystem*pLastSorted = NULL;
-	cl_entity_t *localPlayer = gEngfuncs.GetLocalPlayer();
-//	vec3_t normal, forward, right, up;
+    //	gEngfuncs.pTriAPI->RenderMode(kRenderTransAdd);
+    //	gEngfuncs.pTriAPI->RenderMode(kRenderTransAlpha);
+    ParticleSystem* pSystem;
+    ParticleSystem* pLast = NULL;
+    ParticleSystem* pLastSorted = NULL;
+    cl_entity_t* localPlayer = gEngfuncs.GetLocalPlayer();
+    //	vec3_t normal, forward, right, up;
 
-//	gEngfuncs.GetViewAngles((float*)normal);
-//	AngleVectors(normal,forward,right,up);
+    //	gEngfuncs.GetViewAngles((float*)normal);
+    //	AngleVectors(normal,forward,right,up);
 
-	//SortSystems();
+    //SortSystems();
 
-	pSystem = m_pFirstSystem;
-	while( pSystem )
-	{
-		if(	pSystem->UpdateSystem(frametime, /*right, up,*/ localPlayer->curstate.messagenum) )
-		{
-			pSystem->DrawSystem();
-			pLast = pSystem;
-			pSystem = pSystem->m_pNextSystem;
-		}
-		else // delete this system
-		{
-			if (pLast)
-			{
-				pLast->m_pNextSystem = pSystem->m_pNextSystem;
-				delete pSystem;
-				pSystem = pLast->m_pNextSystem;
-			}
-			else // deleting the first system
-			{
-				m_pFirstSystem = pSystem->m_pNextSystem;
-				delete pSystem;
-				pSystem = m_pFirstSystem;
-			}
-		}
-	}
-	gEngfuncs.pTriAPI->RenderMode(kRenderNormal);
+    pSystem = m_pFirstSystem;
+    while (pSystem)
+    {
+        if (pSystem->UpdateSystem(frametime, /*right, up,*/ localPlayer->curstate.messagenum))
+        {
+            pSystem->DrawSystem();
+            pLast = pSystem;
+            pSystem = pSystem->m_pNextSystem;
+        }
+        else // delete this system
+        {
+            if (pLast)
+            {
+                pLast->m_pNextSystem = pSystem->m_pNextSystem;
+                delete pSystem;
+                pSystem = pLast->m_pNextSystem;
+            }
+            else // deleting the first system
+            {
+                m_pFirstSystem = pSystem->m_pNextSystem;
+                delete pSystem;
+                pSystem = m_pFirstSystem;
+            }
+        }
+    }
+    gEngfuncs.pTriAPI->RenderMode(kRenderNormal);
 }
 
-void ParticleSystemManager::ClearSystems( void )
+void ParticleSystemManager::ClearSystems(void)
 {
-	ParticleSystem* pSystem = m_pFirstSystem;
-	ParticleSystem* pTemp;
+    ParticleSystem* pSystem = m_pFirstSystem;
+    ParticleSystem* pTemp;
 
-	while( pSystem )
-	{
-		pTemp = pSystem->m_pNextSystem;
-		delete pSystem;
-		pSystem = pTemp;
-	}
+    while (pSystem)
+    {
+        pTemp = pSystem->m_pNextSystem;
+        delete pSystem;
+        pSystem = pTemp;
+    }
 
-	m_pFirstSystem = NULL;
+    m_pFirstSystem = NULL;
 }

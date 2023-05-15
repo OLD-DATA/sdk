@@ -23,44 +23,41 @@
 
 #define ASSERT( x )
 //--------------------------------------------------------------------------------------------------------------
-void BEGIN_READ( void *buf, int size );
-int READ_CHAR( void );
-int READ_BYTE( void );
-int READ_SHORT( void );
-int READ_WORD( void );
-int READ_LONG( void );
-float READ_FLOAT( void );
-char* READ_STRING( void );
-float READ_COORD( void );
-float READ_ANGLE( void );
-float READ_HIRESANGLE( void );
-int READ_OK( void );
+void BEGIN_READ(void* buf, int size);
+int READ_CHAR(void);
+int READ_BYTE(void);
+int READ_SHORT(void);
+int READ_WORD(void);
+int READ_LONG(void);
+float READ_FLOAT(void);
+char* READ_STRING(void);
+float READ_COORD(void);
+float READ_ANGLE(void);
+float READ_HIRESANGLE(void);
+int READ_OK(void);
 
 //--------------------------------------------------------------------------------------------------------------
 class BufferWriter
 {
 public:
-	BufferWriter();
-	BufferWriter( unsigned char *buffer, int bufferLen );
-	void Init( unsigned char *buffer, int bufferLen );
+    BufferWriter();
+    BufferWriter(unsigned char* buffer, int bufferLen);
+    void Init(unsigned char* buffer, int bufferLen);
 
-	void WriteByte( unsigned char data );
-	void WriteLong( int data );
-	void WriteString( const char *str );
+    void WriteByte(unsigned char data);
+    void WriteLong(int data);
+    void WriteString(const char* str);
 
-	bool HasOverflowed();
-	int GetSpaceUsed();
+    bool HasOverflowed();
+    int GetSpaceUsed();
 
 protected:
-	unsigned char *m_buffer;
-	int m_remaining;
-	bool m_overflow;
-	int m_overallLength;
+    unsigned char* m_buffer;
+    int m_remaining;
+    bool m_overflow;
+    int m_overallLength;
 };
 
 //--------------------------------------------------------------------------------------------------------------
 
 #endif // PARSEMSG_H
-
-
-

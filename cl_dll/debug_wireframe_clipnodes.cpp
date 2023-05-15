@@ -17,6 +17,6 @@ model_t* world;
 
 void RenderDebugWireframe_Clipnodes()
 {
-	// TODO: Figure out how to actually get 
-	// render data from fucking clipnodes
+    // TODO: Figure out how to actually get 
+    // render data from fucking clipnodes
 }
