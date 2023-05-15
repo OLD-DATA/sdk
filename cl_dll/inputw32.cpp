@@ -35,6 +35,11 @@
 // Use IN_SetVisibleMouse to set this
 int g_iVisibleMouse = 0;
 
+/**
+*	@brief Tells the input code to reset the mouse position to center.
+*/
+bool g_ResetMousePosition = false;
+
 extern cl_enginefunc_t gEngfuncs;
 extern int iMouseInUse;
 
@@ -1221,6 +1226,12 @@ IN_Move
 */
 void IN_Move ( float frametime, usercmd_t *cmd)
 {
+	if (g_ResetMousePosition)
+	{
+		IN_ResetMouse();
+		g_ResetMousePosition = false;
+	}
+	
 	if ( !iMouseInUse && mouseactive )
 	{
 		IN_MouseMove ( frametime, cmd);

@@ -39,6 +39,8 @@
 #include "vgui_TeamFortressViewport.h"
 #include "../public/interface.h"
 
+extern bool g_ResetMousePosition;
+
 cl_enginefunc_t gEngfuncs;
 CHud gHUD;
 TeamFortressViewport *gViewPort = NULL;
@@ -181,6 +183,10 @@ int DLLEXPORT HUD_VidInit( void )
 	gHUD.VidInit();
 
 	VGui_Startup();
+
+	// Reset mouse position the first time the engine asks for an update so
+	// movement during map load doesn't impact in-game angles.
+	g_ResetMousePosition = true;
 
 	return 1;
 }
