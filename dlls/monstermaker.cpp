@@ -36,20 +36,20 @@
 class CMonsterMaker : public CBaseMonster
 {
 public:
-    void Spawn(void);
-    void Precache(void);
-    void KeyValue(KeyValueData* pkvd);
+    void Spawn(void) override;
+    void Precache(void) override;
+    void KeyValue(KeyValueData* pkvd) override;
     void EXPORT ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
     void EXPORT CyclicUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
     void EXPORT MakerThink(void);
     void EXPORT MakeMonsterThink(void);
-    void DeathNotice(entvars_t* pevChild);
+    void DeathNotice(entvars_t* pevChild) override;
     // monster maker children use this to tell the monster maker that they have died.
     void TryMakeMonster(void); //LRC - to allow for a spawndelay
     CBaseMonster* MakeMonster(void); //LRC - actually make a monster (and return the new creation)
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
 
     static TYPEDESCRIPTION m_SaveData[];
 

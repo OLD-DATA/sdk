@@ -132,7 +132,7 @@ int CHudSayText::Draw(float flTime)
             if (*g_szLineBuffer[i] == 2 && g_pflNameColors[i])
             {
                 // it's a saytext string
-                char* buf = static_cast<char*>(_alloca(strlen(g_szLineBuffer[i])));
+                auto buf = static_cast<char*>(_alloca(strlen(g_szLineBuffer[i])));
                 if (buf)
                 {
                     //char buf[MAX_PLAYER_NAME_LENGTH+32];

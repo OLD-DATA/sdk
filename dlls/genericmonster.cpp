@@ -38,19 +38,19 @@
 class CGenericMonster : public CBaseMonster
 {
 public:
-    void Spawn(void);
-    void Precache(void);
-    void SetYawSpeed(void);
-    int Classify(void);
-    void HandleAnimEvent(MonsterEvent_t* pEvent);
-    int ISoundMask(void);
-    void KeyValue(KeyValueData* pkvd);
+    void Spawn(void) override;
+    void Precache(void) override;
+    void SetYawSpeed(void) override;
+    int Classify(void) override;
+    void HandleAnimEvent(MonsterEvent_t* pEvent) override;
+    int ISoundMask(void) override;
+    void KeyValue(KeyValueData* pkvd) override;
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
-    virtual int HasCustomGibs(void) { return m_iszGibModel; }
+    int HasCustomGibs(void) override { return m_iszGibModel; }
 
     int m_iszGibModel;
 };
@@ -214,16 +214,16 @@ void CGenericMonster::Precache()
 class CDeadGenericMonster : public CBaseMonster
 {
 public:
-    void Spawn(void);
-    void Precache(void);
-    int Classify(void) { return CLASS_PLAYER_ALLY; }
-    void KeyValue(KeyValueData* pkvd);
+    void Spawn(void) override;
+    void Precache(void) override;
+    int Classify(void) override { return CLASS_PLAYER_ALLY; }
+    void KeyValue(KeyValueData* pkvd) override;
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
-    virtual int HasCustomGibs(void) { return m_iszGibModel; }
+    int HasCustomGibs(void) override { return m_iszGibModel; }
 
     int m_iszGibModel;
 };

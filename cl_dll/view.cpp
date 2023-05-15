@@ -235,13 +235,13 @@ float V_CalcRoll(vec3_t angles, vec3_t velocity, float rollangle, float rollspee
     return side * sign;
 }
 
-typedef struct pitchdrift_s
+using pitchdrift_t = struct pitchdrift_s
 {
     float pitchvel;
     int nodrift;
     float driftmove;
     double laststop;
-} pitchdrift_t;
+};
 
 static pitchdrift_t pd;
 
@@ -468,7 +468,7 @@ void V_CalcIntermissionRefdef(struct ref_params_s* pparams)
 #define ORIGIN_BACKUP 64
 #define ORIGIN_MASK ( ORIGIN_BACKUP - 1 )
 
-typedef struct
+using viewinterp_t = struct
 {
     float Origins[ORIGIN_BACKUP][3];
     float OriginTime[ORIGIN_BACKUP];
@@ -478,7 +478,7 @@ typedef struct
 
     int CurrentOrigin;
     int CurrentAngle;
-} viewinterp_t;
+};
 
 /*
 ==================

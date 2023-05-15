@@ -43,22 +43,22 @@ enum tripmine_e
 
 class CTripmineGrenade : public CGrenade
 {
-    void Spawn(void);
-    void Precache(void);
+    void Spawn(void) override;
+    void Precache(void) override;
     void UpdateOnRemove() override;
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
 
     static TYPEDESCRIPTION m_SaveData[];
 
-    int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+    int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
     void EXPORT WarningThink(void);
     void EXPORT PowerupThink(void);
     void EXPORT BeamBreakThink(void);
     void EXPORT DelayDeathThink(void);
-    void Killed(entvars_t* pevAttacker, int iGib);
+    void Killed(entvars_t* pevAttacker, int iGib) override;
 
     void MakeBeam(void);
     void KillBeam(void);

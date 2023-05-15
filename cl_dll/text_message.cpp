@@ -47,7 +47,7 @@ int CHudTextMessage::Init(void)
 char* CHudTextMessage::LocaliseTextString(const char* msg, char* dst_buffer, int buffer_size)
 {
     char* dst = dst_buffer;
-    for (char* src = (char*)msg; *src != 0 && buffer_size > 0; buffer_size--)
+    for (auto src = (char*)msg; *src != 0 && buffer_size > 0; buffer_size--)
     {
         if (*src == '#')
         {
@@ -71,7 +71,7 @@ char* CHudTextMessage::LocaliseTextString(const char* msg, char* dst_buffer, int
             }
 
             // copy string into message over the msg name
-            for (char* wsrc = (char*)clmsg->pMessage; *wsrc != 0; wsrc++, dst++)
+            for (auto wsrc = (char*)clmsg->pMessage; *wsrc != 0; wsrc++, dst++)
             {
                 *dst = *wsrc;
             }

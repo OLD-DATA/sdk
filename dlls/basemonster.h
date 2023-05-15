@@ -25,7 +25,7 @@ private:
     int m_afConditions;
 
 public:
-    typedef enum
+    using SCRIPTSTATE = enum
     {
         SCRIPT_PLAYING = 0,
         // Playing the sequence
@@ -35,7 +35,7 @@ public:
         // Cancelling the script / cleaning up
         SCRIPT_WALK_TO_MARK,
         SCRIPT_RUN_TO_MARK,
-    } SCRIPTSTATE;
+    };
 
 
     // these fields have been added in the process of reworking the state machine. (sjb)
@@ -113,12 +113,12 @@ public:
     SCRIPTSTATE m_scriptState; // internal cinematic state
     CCineMonster* m_pCine;
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
 
     static TYPEDESCRIPTION m_SaveData[];
 
-    void KeyValue(KeyValueData* pkvd);
+    void KeyValue(KeyValueData* pkvd) override;
 
     // monster use function
     void EXPORT MonsterUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
@@ -129,16 +129,16 @@ public:
     // LRC- to allow level-designers to change monster allegiances
     int m_iClass;
     int m_iPlayerReact;
-    virtual int Classify(void) { return m_iClass ? m_iClass : CLASS_NONE; }
+    int Classify(void) override { return m_iClass ? m_iClass : CLASS_NONE; }
 
-    virtual int BloodColor(void) { return m_bloodColor; }
+    int BloodColor(void) override { return m_bloodColor; }
 
-    virtual CBaseMonster* MyMonsterPointer(void) { return this; }
+    CBaseMonster* MyMonsterPointer(void) override { return this; }
     virtual void Look(int iDistance); // basic sight function for monsters
     virtual void RunAI(void); // core ai function!	
     void Listen(void);
 
-    virtual BOOL IsAlive(void) { return (pev->deadflag != DEAD_DEAD); }
+    BOOL IsAlive(void) override { return (pev->deadflag != DEAD_DEAD); }
     virtual BOOL ShouldFadeOnDeath(void);
 
     // Basic Monster AI functions
@@ -162,7 +162,7 @@ public:
     virtual CBaseEntity* BestVisibleEnemy(void); // finds best visible enemy for attack
     virtual BOOL FInViewCone(CBaseEntity* pEntity); // see if pEntity is in monster's view cone
     virtual BOOL FInViewCone(Vector* pOrigin); // see if given location is in monster's view cone
-    virtual void HandleAnimEvent(MonsterEvent_t* pEvent);
+    void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
     virtual int CheckLocalMove(const Vector& vecStart, const Vector& vecEnd, CBaseEntity* pTarget, float* pflDist);
     // check validity of a straight move through space
@@ -303,7 +303,7 @@ public:
     virtual CSound* PBestScent(void);
     virtual float HearingSensitivity(void) { return 1.0; };
 
-    BOOL FBecomeProne(void);
+    BOOL FBecomeProne(void) override;
     virtual void BarnacleVictimBitten(entvars_t* pevBarnacle);
     virtual void BarnacleVictimReleased(void);
 
@@ -325,13 +325,14 @@ public:
 
     BOOL GetEnemy(void);
     void MakeDamageBloodDecal(int cCount, float flNoise, TraceResult* ptr, const Vector& vecDir);
-    void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType);
+    void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr,
+                     int bitsDamageType) override;
 
     // combat functions
     float UpdateTarget(entvars_t* pevTarget);
     virtual Activity GetDeathActivity(void);
     Activity GetSmallFlinchActivity(void);
-    virtual void Killed(entvars_t* pevAttacker, int iGib);
+    void Killed(entvars_t* pevAttacker, int iGib) override;
     virtual void GibMonster(void);
     BOOL ShouldGibMonster(int iGib);
     void CallGibMonster(void);
@@ -341,20 +342,20 @@ public:
     virtual void FadeMonster(void); // Called instead of GibMonster() when gibs are disabled
 
     Vector ShootAtEnemy(const Vector& shootOrigin);
-    virtual Vector BodyTarget(const Vector& posSrc) { return Center() * 0.75 + EyePosition() * 0.25; };
+    Vector BodyTarget(const Vector& posSrc) override { return Center() * 0.75 + EyePosition() * 0.25; };
     // position to shoot at
 
     virtual Vector GetGunPosition(void);
 
-    virtual int TakeHealth(float flHealth, int bitsDamageType);
-    virtual int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+    int TakeHealth(float flHealth, int bitsDamageType) override;
+    int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
     int DeadTakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
 
     void RadiusDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int iClassIgnore,
                       int bitsDamageType);
     void RadiusDamage(Vector vecSrc, entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int iClassIgnore,
                       int bitsDamageType);
-    virtual int IsMoving(void) { return m_movementGoal != MOVEGOAL_NONE; }
+    int IsMoving(void) override { return m_movementGoal != MOVEGOAL_NONE; }
 
     void RouteClear(void);
     void RouteNew(void);
@@ -395,7 +396,7 @@ public:
     void StartPatrol(CBaseEntity* path);
 
     //LRC
-    float CalcRatio(CBaseEntity* pLocus)
+    float CalcRatio(CBaseEntity* pLocus) override
     {
         /*ALERT(at_console, "monster CR: %f/%f = %f\n", pev->health, pev->max_health, pev->health / pev->max_health);*/
         return pev->health / pev->max_health;

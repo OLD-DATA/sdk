@@ -1480,7 +1480,7 @@ class CTestHull : public CBaseMonster
 {
 public:
     void Spawn(entvars_t* pevMasterNode);
-    virtual int ObjectCaps(void) { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+    int ObjectCaps(void) override { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
     void EXPORT CallBuildNodeGraph(void);
     void BuildNodeGraph(void);
     void EXPORT ShowBadNode(void);
@@ -3111,11 +3111,11 @@ void CGraph::ComputeStaticRoutingTables(void)
 {
     int nRoutes = m_cNodes * m_cNodes;
 #define FROM_TO(x,y) ((x)*m_cNodes+(y))
-    short* Routes = new short[nRoutes];
+    auto Routes = new short[nRoutes];
 
-    int* pMyPath = new int[m_cNodes];
-    unsigned short* BestNextNodes = new unsigned short[m_cNodes];
-    signed char* pRoute = new signed char[m_cNodes * 2];
+    auto pMyPath = new int[m_cNodes];
+    auto BestNextNodes = new unsigned short[m_cNodes];
+    auto pRoute = new signed char[m_cNodes * 2];
 
 
     if (Routes && pMyPath && BestNextNodes && pRoute)
@@ -3371,7 +3371,7 @@ void CGraph::ComputeStaticRoutingTables(void)
                         }
                         else
                         {
-                            signed char* Tmp = (signed char*)calloc(sizeof(signed char), (m_nRouteInfo + nRoute));
+                            auto Tmp = (signed char*)calloc(sizeof(signed char), (m_nRouteInfo + nRoute));
                             memcpy(Tmp, m_pRouteInfo, m_nRouteInfo);
                             free(m_pRouteInfo);
                             m_pRouteInfo = Tmp;
@@ -3413,8 +3413,8 @@ void CGraph::ComputeStaticRoutingTables(void)
 //
 void CGraph::TestRoutingTables(void)
 {
-    int* pMyPath = new int[m_cNodes];
-    int* pMyPath2 = new int[m_cNodes];
+    auto pMyPath = new int[m_cNodes];
+    auto pMyPath2 = new int[m_cNodes];
     if (pMyPath && pMyPath2)
     {
         for (int iHull = 0; iHull < MAX_NODE_HULLS; iHull++)
@@ -3545,7 +3545,7 @@ EnoughSaid:
 class CNodeViewer : public CBaseEntity
 {
 public:
-    void Spawn(void);
+    void Spawn(void) override;
 
     int m_iBaseNode;
     int m_iDraw;

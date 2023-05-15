@@ -895,18 +895,18 @@ BOOL CBaseMonster::CineCleanup()
 class CScriptedSentence : public CBaseToggle
 {
 public:
-    void Spawn(void);
-    void KeyValue(KeyValueData* pkvd);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+    void Spawn(void) override;
+    void KeyValue(KeyValueData* pkvd) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
     void EXPORT FindThink(void);
     void EXPORT DelayThink(void);
     void EXPORT DurationThink(void);
-    int ObjectCaps(void) { return (CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
+    int ObjectCaps(void) override { return (CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 
-    STATE GetState() { return m_playing ? STATE_ON : STATE_OFF; }
+    STATE GetState() override { return m_playing ? STATE_ON : STATE_OFF; }
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
 
     static TYPEDESCRIPTION m_SaveData[];
 
@@ -1053,7 +1053,7 @@ void CScriptedSentence::FindThink(void)
 {
     if (!m_iszEntity) //LRC- no target monster given: speak through HEV
     {
-        CBasePlayer* pPlayer = (CBasePlayer*)UTIL_FindEntityByClassname(NULL, "player");
+        auto pPlayer = (CBasePlayer*)UTIL_FindEntityByClassname(NULL, "player");
         if (pPlayer)
         {
             m_playing = TRUE;
@@ -1210,10 +1210,10 @@ BOOL CScriptedSentence::StartSentence(CBaseMonster* pTarget)
 class CFurniture : public CBaseMonster
 {
 public:
-    void Spawn(void);
+    void Spawn(void) override;
     void Die(void);
-    int Classify(void);
-    virtual int ObjectCaps(void) { return (CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
+    int Classify(void) override;
+    int ObjectCaps(void) override { return (CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 };
 
 

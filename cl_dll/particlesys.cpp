@@ -172,7 +172,7 @@ ParticleSystem::ParticleSystem(int iEntIndex, char* szFilename)
         c_bCosTableInit = true;
     }
 
-    char* szFile = (char*)gEngfuncs.COM_LoadFile(szFilename, 5, NULL);
+    auto szFile = (char*)gEngfuncs.COM_LoadFile(szFilename, 5, NULL);
     char szToken[1024];
 
     if (!szFile)
@@ -270,7 +270,7 @@ ParticleType* ParticleSystem::AddPlaceholderType(const char* szName)
 // NB: this changes the value of szFile.
 ParticleType* ParticleSystem::ParseType(char*& szFile)
 {
-    ParticleType* pType = new ParticleType();
+    auto pType = new ParticleType();
 
     // parse the .aur file
     char szToken[1024];

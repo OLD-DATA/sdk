@@ -52,43 +52,43 @@ namespace
             m_pBrowser = pBrowser;
         }
 
-        virtual void cursorMoved(int x, int y, Panel* panel)
+        void cursorMoved(int x, int y, Panel* panel) override
         {
         };
 
-        virtual void cursorEntered(Panel* panel)
+        void cursorEntered(Panel* panel) override
         {
         };
 
-        virtual void cursorExited(Panel* Panel)
+        void cursorExited(Panel* Panel) override
         {
         };
 
-        virtual void mousePressed(MouseCode code, Panel* panel);
+        void mousePressed(MouseCode code, Panel* panel) override;
 
-        virtual void mouseDoublePressed(MouseCode code, Panel* panel);
+        void mouseDoublePressed(MouseCode code, Panel* panel) override;
 
-        virtual void mouseReleased(MouseCode code, Panel* panel)
+        void mouseReleased(MouseCode code, Panel* panel) override
         {
         };
 
-        virtual void mouseWheeled(int delta, Panel* panel)
+        void mouseWheeled(int delta, Panel* panel) override
         {
         };
 
-        virtual void keyPressed(KeyCode code, Panel* panel)
+        void keyPressed(KeyCode code, Panel* panel) override
         {
         };
 
-        virtual void keyTyped(KeyCode code, Panel* panel)
+        void keyTyped(KeyCode code, Panel* panel) override
         {
         };
 
-        virtual void keyReleased(KeyCode code, Panel* panel)
+        void keyReleased(KeyCode code, Panel* panel) override
         {
         };
 
-        virtual void keyFocusTicked(Panel* panel)
+        void keyFocusTicked(Panel* panel) override
         {
         };
     };
@@ -171,7 +171,7 @@ namespace
             ServerPlayers(0);
         }
 
-        virtual int getRowCount()
+        int getRowCount() override
         {
             int rowcount;
             int height, width;
@@ -187,12 +187,12 @@ namespace
             return rowcount;
         }
 
-        virtual int getCellTall(int row)
+        int getCellTall(int row) override
         {
             return CELL_HEIGHT - 2;
         }
 
-        virtual Panel* getCellRenderer(int column, int row, bool columnSelected, bool rowSelected, bool cellSelected)
+        Panel* getCellRenderer(int column, int row, bool columnSelected, bool rowSelected, bool cellSelected) override
         {
             const char* info;
             const char *val, *val2;
@@ -294,7 +294,7 @@ namespace
             return m_pLabel;
         }
 
-        virtual Panel* startCellEditing(int column, int row)
+        Panel* startCellEditing(int column, int row) override
         {
             return null;
         }
@@ -311,7 +311,7 @@ namespace
             m_pBrowser = browser;
         }
 
-        virtual void actionPerformed(Panel* panel)
+        void actionPerformed(Panel* panel) override
         {
             m_pBrowser->DoConnect();
         }
@@ -328,7 +328,7 @@ namespace
             m_pBrowser = browser;
         }
 
-        virtual void actionPerformed(Panel* panel)
+        void actionPerformed(Panel* panel) override
         {
             m_pBrowser->DoRefresh();
         }
@@ -345,7 +345,7 @@ namespace
             m_pBrowser = browser;
         }
 
-        virtual void actionPerformed(Panel* panel)
+        void actionPerformed(Panel* panel) override
         {
             m_pBrowser->DoBroadcastRefresh();
         }
@@ -362,7 +362,7 @@ namespace
             m_pBrowser = browser;
         }
 
-        virtual void actionPerformed(Panel* panel)
+        void actionPerformed(Panel* panel) override
         {
             m_pBrowser->DoStop();
         }
@@ -379,7 +379,7 @@ namespace
             m_pBrowser = browser;
         }
 
-        virtual void actionPerformed(Panel* panel)
+        void actionPerformed(Panel* panel) override
         {
             m_pBrowser->DoCancel();
         }
@@ -396,7 +396,7 @@ namespace
             m_pBrowser = browser;
         }
 
-        virtual void actionPerformed(Panel* panel)
+        void actionPerformed(Panel* panel) override
         {
             m_pBrowser->DoPing();
         }
@@ -413,7 +413,7 @@ namespace
             m_pBrowser = browser;
         }
 
-        virtual void actionPerformed(Panel* panel)
+        void actionPerformed(Panel* panel) override
         {
             m_pBrowser->DoSort("map");
         }
@@ -433,49 +433,49 @@ public:
         strcpy(m_szSortKey, name);
     }
 
-    virtual void cursorMoved(int x, int y, Panel* panel)
+    void cursorMoved(int x, int y, Panel* panel) override
     {
     };
 
-    virtual void cursorEntered(Panel* panel)
+    void cursorEntered(Panel* panel) override
     {
     };
 
-    virtual void cursorExited(Panel* Panel)
+    void cursorExited(Panel* Panel) override
     {
     };
 
-    virtual void mousePressed(MouseCode code, Panel* panel)
+    void mousePressed(MouseCode code, Panel* panel) override
     {
         m_pBrowser->DoSort(m_szSortKey);
     }
 
-    virtual void mouseDoublePressed(MouseCode code, Panel* panel)
+    void mouseDoublePressed(MouseCode code, Panel* panel) override
     {
         m_pBrowser->DoSort(m_szSortKey);
     }
 
-    virtual void mouseReleased(MouseCode code, Panel* panel)
+    void mouseReleased(MouseCode code, Panel* panel) override
     {
     };
 
-    virtual void mouseWheeled(int delta, Panel* panel)
+    void mouseWheeled(int delta, Panel* panel) override
     {
     };
 
-    virtual void keyPressed(KeyCode code, Panel* panel)
+    void keyPressed(KeyCode code, Panel* panel) override
     {
     };
 
-    virtual void keyTyped(KeyCode code, Panel* panel)
+    void keyTyped(KeyCode code, Panel* panel) override
     {
     };
 
-    virtual void keyReleased(KeyCode code, Panel* panel)
+    void keyReleased(KeyCode code, Panel* panel) override
     {
     };
 
-    virtual void keyFocusTicked(Panel* panel)
+    void keyFocusTicked(Panel* panel) override
     {
     };
 };

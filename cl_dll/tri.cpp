@@ -74,7 +74,7 @@ void CShinySurface::DrawAll(const vec3_t& org)
     gEngfuncs.pTriAPI->RenderMode(kRenderTransAdd); //kRenderTransTexture );
     gEngfuncs.pTriAPI->CullFace(TRI_NONE);
 
-    for (CShinySurface* pCurrent = this; pCurrent; pCurrent = pCurrent->m_pNext)
+    for (auto pCurrent = this; pCurrent; pCurrent = pCurrent->m_pNext)
     {
         pCurrent->Draw(org);
     }

@@ -41,7 +41,7 @@ extern Vector VecBModelOrigin(entvars_t* pevBModel);
 #define TURRET_MAXSPIN	5		// seconds turret barrel will spin w/o a target
 #define TURRET_MACHINE_VOLUME	0.5
 
-typedef enum
+using TURRET_ANIM = enum
 {
     TURRET_ANIM_NONE = 0,
     TURRET_ANIM_FIRE,
@@ -49,25 +49,25 @@ typedef enum
     TURRET_ANIM_DEPLOY,
     TURRET_ANIM_RETIRE,
     TURRET_ANIM_DIE,
-} TURRET_ANIM;
+};
 
 class CBaseTurret : public CBaseMonster
 {
 public:
-    void Spawn(void);
-    virtual void Precache(void);
+    void Spawn(void) override;
+    void Precache(void) override;
     void UpdateOnRemove() override;
-    void KeyValue(KeyValueData* pkvd);
+    void KeyValue(KeyValueData* pkvd) override;
     void EXPORT TurretUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
-    virtual void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr,
-                             int bitsDamageType);
-    virtual int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-    virtual int Classify(void);
+    void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr,
+                     int bitsDamageType) override;
+    int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+    int Classify(void) override;
 
-    int BloodColor(void) { return DONT_BLEED; }
+    int BloodColor(void) override { return DONT_BLEED; }
 
-    void GibMonster(void)
+    void GibMonster(void) override
     {
     } // UNDONE: Throw turret gibs?
 
@@ -96,8 +96,8 @@ public:
     virtual void EyeOn(void);
     virtual void EyeOff(void);
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
 
     static TYPEDESCRIPTION m_SaveData[];
 
@@ -187,19 +187,19 @@ IMPLEMENT_SAVERESTORE(CBaseTurret, CBaseMonster);
 class CTurret : public CBaseTurret
 {
 public:
-    void Spawn(void);
-    void Precache(void);
+    void Spawn(void) override;
+    void Precache(void) override;
     // Think functions
-    void SpinUpCall(void);
-    void SpinDownCall(void);
+    void SpinUpCall(void) override;
+    void SpinDownCall(void) override;
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
 
     static TYPEDESCRIPTION m_SaveData[];
 
     // other functions
-    void Shoot(Vector& vecSrc, Vector& vecDirToEnemy);
+    void Shoot(Vector& vecSrc, Vector& vecDirToEnemy) override;
 
 private:
     int m_iStartSpin;
@@ -216,10 +216,10 @@ IMPLEMENT_SAVERESTORE(CTurret, CBaseTurret);
 class CMiniTurret : public CBaseTurret
 {
 public:
-    void Spawn();
-    void Precache(void);
+    void Spawn() override;
+    void Precache(void) override;
     // other functions
-    void Shoot(Vector& vecSrc, Vector& vecDirToEnemy);
+    void Shoot(Vector& vecSrc, Vector& vecDirToEnemy) override;
 };
 
 
@@ -1007,8 +1007,8 @@ void CBaseTurret::TurretDeath(void)
 
     if (pev->dmgtime + RANDOM_FLOAT(0, 5) > gpGlobals->time)
     {
-        Vector vecSrc = Vector(RANDOM_FLOAT(pev->absmin.x, pev->absmax.x), RANDOM_FLOAT(pev->absmin.y, pev->absmax.y),
-                               0);
+        auto vecSrc = Vector(RANDOM_FLOAT(pev->absmin.x, pev->absmax.x), RANDOM_FLOAT(pev->absmin.y, pev->absmax.y),
+                             0);
         if (m_iOrientation == 0)
             vecSrc = vecSrc + Vector(0, 0, RANDOM_FLOAT(pev->origin.z, pev->absmax.z));
         else
@@ -1185,11 +1185,11 @@ int CBaseTurret::Classify(void)
 class CSentry : public CBaseTurret
 {
 public:
-    void Spawn();
-    void Precache(void);
+    void Spawn() override;
+    void Precache(void) override;
     // other functions
-    void Shoot(Vector& vecSrc, Vector& vecDirToEnemy);
-    int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+    void Shoot(Vector& vecSrc, Vector& vecDirToEnemy) override;
+    int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
     void EXPORT SentryTouch(CBaseEntity* pOther);
     void EXPORT SentryDeath(void);
 };

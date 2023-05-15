@@ -50,7 +50,7 @@ static CBasePlayer* FindPlayerByName(const char* pTestName)
         CBaseEntity* pEnt = UTIL_PlayerByIndex(i);
         if (pEnt && pEnt->IsPlayer())
         {
-            const char* pNetName = STRING(pEnt->pev->netname);
+            auto pNetName = STRING(pEnt->pev->netname);
             if (stricmp(pNetName, pTestName) == 0)
             {
                 return (CBasePlayer*)pEnt;
@@ -61,7 +61,7 @@ static CBasePlayer* FindPlayerByName(const char* pTestName)
     return NULL;
 }
 
-static void VoiceServerDebug(char const* pFmt, ...)
+static void VoiceServerDebug(const char* pFmt, ...)
 {
     char msg[4096];
     va_list marker;
@@ -226,7 +226,7 @@ void CVoiceGameMgr::UpdateMasks()
             MESSAGE_END();
         }
 
-        CBasePlayer* pPlayer = (CBasePlayer*)pEnt;
+        auto pPlayer = (CBasePlayer*)pEnt;
 
         CPlayerBitVec gameRulesMask;
         if (g_PlayerModEnable[iClient])

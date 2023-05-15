@@ -43,7 +43,7 @@
 #endif
 
 // physent_t
-typedef struct physent_s
+using physent_t = struct physent_s
 {
     char name[32]; // Name of model, or "player" or "world".
     int player;
@@ -83,10 +83,10 @@ typedef struct physent_s
     vec3_t vuser2;
     vec3_t vuser3;
     vec3_t vuser4;
-} physent_t;
+};
 
 
-typedef struct playermove_s
+using playermove_t = struct playermove_s
 {
     int player_index; // So we don't try to run the PM_CheckStuck nudging too quickly.
     qboolean server; // For debugging, are we running physics code on server side?
@@ -221,6 +221,6 @@ typedef struct playermove_s
     int (*PM_TestPlayerPositionEx)(float* pos, pmtrace_t* ptrace, int (*pfnIgnore)(physent_t* pe));
     struct pmtrace_s*(*PM_TraceLineEx)(float* start, float* end, int flags, int usehulll,
                                        int (*pfnIgnore)(physent_t* pe));
-} playermove_t;
+};
 
 #endif

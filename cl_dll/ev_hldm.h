@@ -9,7 +9,7 @@
 #define EV_HLDMH
 
 // bullet types
-typedef enum
+using Bullet = enum
 {
     BULLET_NONE = 0,
     BULLET_PLAYER_9MM,
@@ -26,7 +26,7 @@ typedef enum
     BULLET_MONSTER_9MM,
     BULLET_MONSTER_MP5,
     BULLET_MONSTER_12MM,
-} Bullet;
+};
 
 enum glock_e
 {

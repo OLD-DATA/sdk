@@ -90,17 +90,17 @@ public:
 };
 
 
-typedef struct
+using DIST_INFO = struct
 {
     int m_SortedBy[3];
     int m_CheckedEvent;
-} DIST_INFO;
+};
 
-typedef struct
+using CACHE_ENTRY = struct
 {
     Vector v;
     short n; // Nearest node or -1 if no node found.
-} CACHE_ENTRY;
+};
 
 //=========================================================
 // CGraph 
@@ -263,9 +263,9 @@ public:
 //=========================================================
 class CNodeEnt : public CBaseEntity
 {
-    void Spawn(void);
-    void KeyValue(KeyValueData* pkvd);
-    virtual int ObjectCaps(void) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+    void Spawn(void) override;
+    void KeyValue(KeyValueData* pkvd) override;
+    int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
     short m_sHintType;
     short m_sHintActivity;

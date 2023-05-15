@@ -182,7 +182,7 @@ void ClientKill(edict_t* pEntity)
 {
     entvars_t* pev = &pEntity->v;
 
-    CBasePlayer* pl = (CBasePlayer*)CBasePlayer::Instance(pev);
+    auto pl = (CBasePlayer*)CBasePlayer::Instance(pev);
 
     if (pl->m_fNextSuicideTime > gpGlobals->time)
         return; // prevent suiciding too ofter
@@ -229,8 +229,8 @@ extern CVoiceGameMgr g_VoiceGameMgr;
 
 
 #if defined( _MSC_VER ) || defined( WIN32 )
-typedef wchar_t uchar16;
-typedef unsigned int uchar32;
+using uchar16 = wchar_t;
+using uchar32 = unsigned int;
 #else
 typedef unsigned short uchar16;
 typedef wchar_t uchar32;
@@ -252,7 +252,7 @@ bool Q_IsValidUChar32(uchar32 uVal)
 // as a single character, as if they were a correctly-encoded 4-byte UTF-8 sequence.
 int Q_UTF8ToUChar32(const char* pUTF8_, uchar32& uValueOut, bool& bErrorOut)
 {
-    const uint8* pUTF8 = (const uint8*)pUTF8_;
+    auto pUTF8 = (const uint8*)pUTF8_;
 
     int nBytes = 1;
     uint32 uValue = pUTF8[0];
@@ -354,8 +354,8 @@ void Host_Say(edict_t* pEntity, int teamonly)
     char* p;
     char text[128];
     char szTemp[256];
-    const char* cpSay = "say";
-    const char* cpSayTeam = "say_team";
+    auto cpSay = "say";
+    auto cpSayTeam = "say_team";
     const char* pcmd = CMD_ARGV(0);
 
     // We can get a raw string now, without the "say " prepended
@@ -801,7 +801,7 @@ Called every frame before physics are run
 void PlayerPreThink(edict_t* pEntity)
 {
     entvars_t* pev = &pEntity->v;
-    CBasePlayer* pPlayer = (CBasePlayer*)GET_PRIVATE(pEntity);
+    auto pPlayer = (CBasePlayer*)GET_PRIVATE(pEntity);
 
     if (pPlayer)
         pPlayer->PreThink();
@@ -819,7 +819,7 @@ Called every frame after physics are run
 void PlayerPostThink(edict_t* pEntity)
 {
     entvars_t* pev = &pEntity->v;
-    CBasePlayer* pPlayer = (CBasePlayer*)GET_PRIVATE(pEntity);
+    auto pPlayer = (CBasePlayer*)GET_PRIVATE(pEntity);
 
     if (pPlayer)
         pPlayer->PostThink();
@@ -841,7 +841,7 @@ void ParmsNewLevel(void)
 void ParmsChangeLevel(void)
 {
     // retrieve the pointer to the save data
-    SAVERESTOREDATA* pSaveData = (SAVERESTOREDATA*)gpGlobals->pSaveData;
+    auto pSaveData = (SAVERESTOREDATA*)gpGlobals->pSaveData;
 
     if (pSaveData)
         pSaveData->connectionCount = BuildChangeList(pSaveData->levelList, MAX_LEVEL_CONNECTIONS);
@@ -1021,7 +1021,7 @@ animation right now.
 void PlayerCustomization(edict_t* pEntity, customization_t* pCust)
 {
     entvars_t* pev = &pEntity->v;
-    CBasePlayer* pPlayer = (CBasePlayer*)GET_PRIVATE(pEntity);
+    auto pPlayer = (CBasePlayer*)GET_PRIVATE(pEntity);
 
     if (!pPlayer)
     {
@@ -1061,7 +1061,7 @@ A spectator has joined the game
 void SpectatorConnect(edict_t* pEntity)
 {
     entvars_t* pev = &pEntity->v;
-    CBaseSpectator* pPlayer = (CBaseSpectator*)GET_PRIVATE(pEntity);
+    auto pPlayer = (CBaseSpectator*)GET_PRIVATE(pEntity);
 
     if (pPlayer)
         pPlayer->SpectatorConnect();
@@ -1077,7 +1077,7 @@ A spectator has left the game
 void SpectatorDisconnect(edict_t* pEntity)
 {
     entvars_t* pev = &pEntity->v;
-    CBaseSpectator* pPlayer = (CBaseSpectator*)GET_PRIVATE(pEntity);
+    auto pPlayer = (CBaseSpectator*)GET_PRIVATE(pEntity);
 
     if (pPlayer)
         pPlayer->SpectatorDisconnect();
@@ -1093,7 +1093,7 @@ A spectator has sent a usercmd
 void SpectatorThink(edict_t* pEntity)
 {
     entvars_t* pev = &pEntity->v;
-    CBaseSpectator* pPlayer = (CBaseSpectator*)GET_PRIVATE(pEntity);
+    auto pPlayer = (CBaseSpectator*)GET_PRIVATE(pEntity);
 
     if (pPlayer)
         pPlayer->SpectatorThink();
@@ -1409,11 +1409,11 @@ void CreateBaseline(int player, int eindex, struct entity_state_s* baseline, str
     }
 }
 
-typedef struct
+using entity_field_alias_t = struct
 {
     char name[32];
     int field;
-} entity_field_alias_t;
+};
 
 #define FIELD_ORIGIN0			0
 #define FIELD_ORIGIN1			1
@@ -1678,7 +1678,7 @@ int GetWeaponData(struct edict_s* player, struct weapon_data_s* info)
     int i;
     weapon_data_t* item;
     entvars_t* pev = &player->v;
-    CBasePlayer* pl = dynamic_cast<CBasePlayer*>(CBasePlayer::Instance(pev));
+    auto pl = dynamic_cast<CBasePlayer*>(CBasePlayer::Instance(pev));
     CBasePlayerWeapon* gun;
 
     ItemInfo II;
@@ -1750,8 +1750,8 @@ void UpdateClientData(const edict_t* ent, int sendweapons, struct clientdata_s* 
 {
     if (!ent || !ent->pvPrivateData)
         return;
-    entvars_t* pev = (entvars_t*)&ent->v;
-    CBasePlayer* pl = dynamic_cast<CBasePlayer*>(CBasePlayer::Instance(pev));
+    auto pev = (entvars_t*)&ent->v;
+    auto pl = dynamic_cast<CBasePlayer*>(CBasePlayer::Instance(pev));
     entvars_t* pevOrg = NULL;
 
     // if user is spectating different player in First person, override some vars
@@ -1863,8 +1863,8 @@ This is the time to examine the usercmd for anything extra.  This call happens e
 */
 void CmdStart(const edict_t* player, const struct usercmd_s* cmd, unsigned int random_seed)
 {
-    entvars_t* pev = (entvars_t*)&player->v;
-    CBasePlayer* pl = dynamic_cast<CBasePlayer*>(CBasePlayer::Instance(pev));
+    auto pev = (entvars_t*)&player->v;
+    auto pl = dynamic_cast<CBasePlayer*>(CBasePlayer::Instance(pev));
 
     if (!pl)
         return;
@@ -1886,8 +1886,8 @@ Each cmdstart is exactly matched with a cmd end, clean up any group trace flags,
 */
 void CmdEnd(const edict_t* player)
 {
-    entvars_t* pev = (entvars_t*)&player->v;
-    CBasePlayer* pl = dynamic_cast<CBasePlayer*>(CBasePlayer::Instance(pev));
+    auto pev = (entvars_t*)&player->v;
+    auto pl = dynamic_cast<CBasePlayer*>(CBasePlayer::Instance(pev));
 
     if (!pl)
         return;

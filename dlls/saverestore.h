@@ -79,12 +79,12 @@ private:
     void BufferHeader(const char* pname, int size);
 };
 
-typedef struct
+using HEADER = struct
 {
     unsigned short size;
     unsigned short token;
     char* pData;
-} HEADER;
+};
 
 class CRestore : public CSaveRestoreBuffer
 {
@@ -144,9 +144,9 @@ private:
 	}
 
 
-typedef enum { GLOBAL_OFF = 0, GLOBAL_ON = 1, GLOBAL_DEAD = 2 } GLOBALESTATE;
+using GLOBALESTATE = enum { GLOBAL_OFF = 0, GLOBAL_ON = 1, GLOBAL_DEAD = 2 };
 
-typedef struct globalentity_s globalentity_t;
+using globalentity_t = struct globalentity_s;
 
 struct globalentity_s
 {

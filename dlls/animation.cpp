@@ -16,8 +16,8 @@
 #include "Platform.h"
 
 // hack into header files that we can ship
-typedef int qboolean;
-typedef unsigned char byte;
+using qboolean = int;
+using byte = unsigned char;
 #include "../utils/common/mathlib.h"
 #include "const.h"
 #include "progdefs.h"
@@ -51,7 +51,7 @@ extern globalvars_t* gpGlobals;
 
 int ExtractBbox(void* pmodel, int sequence, float* mins, float* maxs)
 {
-    studiohdr_t* pstudiohdr = (studiohdr_t*)pmodel;
+    auto pstudiohdr = (studiohdr_t*)pmodel;
     if (!pstudiohdr)
         return 0;
 
@@ -73,7 +73,7 @@ int ExtractBbox(void* pmodel, int sequence, float* mins, float* maxs)
 
 int LookupActivity(void* pmodel, entvars_t* pev, int activity)
 {
-    studiohdr_t* pstudiohdr = (studiohdr_t*)pmodel;
+    auto pstudiohdr = (studiohdr_t*)pmodel;
     if (!pstudiohdr)
         return 0;
 
@@ -99,7 +99,7 @@ int LookupActivity(void* pmodel, entvars_t* pev, int activity)
 
 int LookupActivityHeaviest(void* pmodel, entvars_t* pev, int activity)
 {
-    studiohdr_t* pstudiohdr = (studiohdr_t*)pmodel;
+    auto pstudiohdr = (studiohdr_t*)pmodel;
     if (!pstudiohdr)
         return 0;
 
@@ -126,7 +126,7 @@ int LookupActivityHeaviest(void* pmodel, entvars_t* pev, int activity)
 
 void GetEyePosition(void* pmodel, float* vecEyePosition)
 {
-    studiohdr_t* pstudiohdr = (studiohdr_t*)pmodel;
+    auto pstudiohdr = (studiohdr_t*)pmodel;
 
     if (!pstudiohdr)
     {
@@ -139,7 +139,7 @@ void GetEyePosition(void* pmodel, float* vecEyePosition)
 
 int LookupSequence(void* pmodel, const char* label)
 {
-    studiohdr_t* pstudiohdr = (studiohdr_t*)pmodel;
+    auto pstudiohdr = (studiohdr_t*)pmodel;
     if (!pstudiohdr)
         return 0;
 
@@ -207,7 +207,7 @@ void SequencePrecache(void* pmodel, const char* pSequenceName)
 
 void GetSequenceInfo(void* pmodel, entvars_t* pev, float* pflFrameRate, float* pflGroundSpeed)
 {
-    studiohdr_t* pstudiohdr = (studiohdr_t*)pmodel;
+    auto pstudiohdr = (studiohdr_t*)pmodel;
     if (!pstudiohdr)
         return;
 
@@ -240,7 +240,7 @@ void GetSequenceInfo(void* pmodel, entvars_t* pev, float* pflFrameRate, float* p
 
 int GetSequenceFlags(void* pmodel, entvars_t* pev)
 {
-    studiohdr_t* pstudiohdr = (studiohdr_t*)pmodel;
+    auto pstudiohdr = (studiohdr_t*)pmodel;
     if (!pstudiohdr || pev->sequence < 0 || pev->sequence >= pstudiohdr->numseq)
         return 0;
 
@@ -254,7 +254,7 @@ int GetSequenceFlags(void* pmodel, entvars_t* pev)
 int GetAnimationEvent(void* pmodel, entvars_t* pev, MonsterEvent_t* pMonsterEvent, float flStart, float flEnd,
                       int index)
 {
-    studiohdr_t* pstudiohdr = (studiohdr_t*)pmodel;
+    auto pstudiohdr = (studiohdr_t*)pmodel;
     if (!pstudiohdr || pev->sequence < 0 || pev->sequence >= pstudiohdr->numseq || !pMonsterEvent)
         return 0;
 
@@ -302,11 +302,11 @@ float SetController(void* pmodel, entvars_t* pev, int iController, float flValue
 {
     int i;
 
-    studiohdr_t* pstudiohdr = (studiohdr_t*)pmodel;
+    auto pstudiohdr = (studiohdr_t*)pmodel;
     if (!pstudiohdr)
         return flValue;
 
-    mstudiobonecontroller_t* pbonecontroller = (mstudiobonecontroller_t*)((byte*)pstudiohdr + pstudiohdr->
+    auto pbonecontroller = (mstudiobonecontroller_t*)((byte*)pstudiohdr + pstudiohdr->
         bonecontrollerindex);
 
     // find first controller that matches the index
@@ -355,7 +355,7 @@ float SetController(void* pmodel, entvars_t* pev, int iController, float flValue
 
 float SetBlending(void* pmodel, entvars_t* pev, int iBlender, float flValue)
 {
-    studiohdr_t* pstudiohdr = (studiohdr_t*)pmodel;
+    auto pstudiohdr = (studiohdr_t*)pmodel;
     if (!pstudiohdr || pev->sequence < 0 || pev->sequence >= pstudiohdr->numseq)
         return flValue;
 
@@ -536,7 +536,7 @@ void SetBones(void* pmodel, float (*data)[3], int datasize)
         return;
     }
 
-    mstudiobone_t* pbone = (mstudiobone_t*)((byte*)pstudiohdr + pstudiohdr->boneindex);
+    auto pbone = (mstudiobone_t*)((byte*)pstudiohdr + pstudiohdr->boneindex);
 
     //	ALERT(at_console, "List begins:\n");
     int j;

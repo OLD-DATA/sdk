@@ -13,7 +13,7 @@ class CAmbient2D : public CBaseEntity
 public:
     void Spawn() override;
     void KeyValue(KeyValueData* pkvd) override;
-    void Use(CBaseEntity* activator, CBaseEntity* caller, USE_TYPE useType, float value);
+    void Use(CBaseEntity* activator, CBaseEntity* caller, USE_TYPE useType, float value) override;
 
 private:
     string_t soundName;

@@ -38,10 +38,10 @@
 class CSprite : public CPointEntity
 {
 public:
-    void Spawn(void);
-    void Precache(void);
+    void Spawn(void) override;
+    void Precache(void) override;
 
-    int ObjectCaps(void)
+    int ObjectCaps(void) override
     {
         int flags = 0;
         if (pev->spawnflags & SF_SPRITE_TEMPORARY)
@@ -51,12 +51,12 @@ public:
 
     void EXPORT AnimateThink(void);
     void EXPORT ExpandThink(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
     void Animate(float frames);
     void Expand(float scaleSpeed, float fadeSpeed);
     void SpriteInit(const char* pSpriteName, const Vector& origin);
 
-    virtual STATE GetState(void) { return (pev->effects & EF_NODRAW) ? STATE_OFF : STATE_ON; };
+    STATE GetState(void) override { return (pev->effects & EF_NODRAW) ? STATE_OFF : STATE_ON; };
 
     inline void SetAttachment(edict_t* pEntity, int attachment)
     {
@@ -105,8 +105,8 @@ public:
 
     void EXPORT AnimateUntilDead(void);
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
     static CSprite* SpriteCreate(const char* pSpriteName, const Vector& origin, BOOL animate);
 
@@ -120,10 +120,10 @@ public:
 class CBeam : public CBaseEntity
 {
 public:
-    void Spawn(void);
-    void Precache(void);
+    void Spawn(void) override;
+    void Precache(void) override;
 
-    int ObjectCaps(void)
+    int ObjectCaps(void) override
     {
         int flags = 0;
         if (pev->spawnflags & SF_BEAM_TEMPORARY)
@@ -172,7 +172,7 @@ public:
     const Vector& GetStartPos(void);
     const Vector& GetEndPos(void);
 
-    Vector Center(void) { return (GetStartPos() + GetEndPos()) * 0.5; }; // center point of beam
+    Vector Center(void) override { return (GetStartPos() + GetEndPos()) * 0.5; }; // center point of beam
 
     inline int GetTexture(void) { return pev->modelindex; }
     inline int GetWidth(void) { return pev->scale; }
@@ -222,21 +222,21 @@ public:
 class CLaser : public CBeam
 {
 public:
-    void Spawn(void);
-    void PostSpawn(void);
-    void Precache(void);
-    void KeyValue(KeyValueData* pkvd);
+    void Spawn(void) override;
+    void PostSpawn(void) override;
+    void Precache(void) override;
+    void KeyValue(KeyValueData* pkvd) override;
 
     void TurnOn(void);
     void TurnOff(void);
-    virtual STATE GetState(void) { return (pev->effects & EF_NODRAW) ? STATE_OFF : STATE_ON; };
+    STATE GetState(void) override { return (pev->effects & EF_NODRAW) ? STATE_OFF : STATE_ON; };
 
     void FireAtPoint(Vector startpos, TraceResult& point);
 
     void EXPORT StrikeThink(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
     CSprite* m_pStartSprite;

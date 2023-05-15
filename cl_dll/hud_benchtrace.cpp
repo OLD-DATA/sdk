@@ -12,7 +12,7 @@
 #endif
 
 // For tracking the trace threads
-typedef struct
+using trace_params_t = struct
 {
     // Inputs
     char server[256];
@@ -25,7 +25,7 @@ typedef struct
     DWORD hThreadId;
     HANDLE hThread;
     HANDLE hEventDone;
-} trace_params_t;
+};
 
 // Static forces it to be zeroed out
 static trace_params_t tp;

@@ -2369,7 +2369,7 @@ void CSave::WriteString(const char* pname, const int* stringId, int count)
     BufferHeader(pname, size);
     for (i = 0; i < count; i++)
     {
-        const char* pString = STRING(stringId[i]);
+        auto pString = STRING(stringId[i]);
         BufferData(pString, strlen(pString) + 1);
     }
 #endif

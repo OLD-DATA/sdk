@@ -297,7 +297,7 @@ int CVoiceStatus::VidInit()
 
     // Figure out the voice head model height.
     m_VoiceHeadModelHeight = 45;
-    char* pFile = (char*)gEngfuncs.COM_LoadFile("scripts/voicemodel.txt", 5, NULL);
+    auto pFile = (char*)gEngfuncs.COM_LoadFile("scripts/voicemodel.txt", 5, NULL);
     if (pFile)
     {
         char token[4096];
@@ -506,7 +506,7 @@ void CVoiceStatus::UpdateSpeakerStatus(int entindex, qboolean bTalking)
 void CVoiceStatus::UpdateServerState(bool bForce)
 {
     // Can't do anything when we're not in a level.
-    char const* pLevelName = gEngfuncs.pfnGetLevelName();
+    const char* pLevelName = gEngfuncs.pfnGetLevelName();
     if (pLevelName[0] == 0)
     {
         if (gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))

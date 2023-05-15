@@ -44,7 +44,7 @@
 #endif
 */
 
-typedef enum
+using ALERT_TYPE = enum
 {
     at_notice,
     at_console,
@@ -54,21 +54,21 @@ typedef enum
     at_warning,
     at_error,
     at_logged // Server print to console ( only in multiplayer games ).
-} ALERT_TYPE;
+};
 
 //LRC- identifies the ALERT statements which don't need removing before release
 #define at_debug at_console
 //#define at_aiconsole at_console
 // 4-22-98  JOHN: added for use in pfnClientPrintf
-typedef enum
+using PRINT_TYPE = enum
 {
     print_console,
     print_center,
     print_chat,
-} PRINT_TYPE;
+};
 
 // For integrity checking of content on clients
-typedef enum
+using FORCE_TYPE = enum
 {
     force_exactfile,
     // File on client must exactly match server's file
@@ -78,10 +78,10 @@ typedef enum
     // For model files only, the geometry must fit in the specified bbox
     force_model_specifybounds_if_avail,
     // For Steam model files only, the geometry must fit in the specified bbox (if the file is available)
-} FORCE_TYPE;
+};
 
 // Returned by TraceLine
-typedef struct
+using TraceResult = struct
 {
     int fAllSolid; // if true, plane is not valid
     int fStartSolid; // if true, the initial point was in a solid area
@@ -93,10 +93,10 @@ typedef struct
     vec3_t vecPlaneNormal; // surface normal at impact
     edict_t* pHit; // entity the surface is on
     int iHitgroup; // 0 == generic, non zero is specific body part
-} TraceResult;
+};
 
 // CD audio status
-typedef struct
+using CDStatus = struct
 {
     int fPlaying; // is sound playing right now?
     int fWasPlaying; // if not, CD is paused if WasPlaying is true.
@@ -107,13 +107,13 @@ typedef struct
     //BYTE 	remap[100];
     int fCDRom;
     int fPlayTrack;
-} CDStatus;
+};
 
 #include "../common/crc.h"
 
 
 // Engine hands this to DLLs for functionality callbacks
-typedef struct enginefuncs_s
+using enginefuncs_t = struct enginefuncs_s
 {
     int (*pfnPrecacheModel)(const char* s);
     int (*pfnPrecacheSound)(const char* s);
@@ -320,32 +320,32 @@ typedef struct enginefuncs_s
     void (*pfnQueryClientCvarValue)(const edict_t* player, const char* cvarName);
     void (*pfnQueryClientCvarValue2)(const edict_t* player, const char* cvarName, int requestID);
     int (*pfnCheckParm)(const char* pchCmdLineToken, char** ppnext);
-} enginefuncs_t;
+};
 
 
 // ONLY ADD NEW FUNCTIONS TO THE END OF THIS STRUCT.  INTERFACE VERSION IS FROZEN AT 138
 
 // Passed to pfnKeyValue
-typedef struct KeyValueData_s
+using KeyValueData = struct KeyValueData_s
 {
     const char* szClassName; // in: entity classname
     const char* szKeyName; // in: name of key
     const char* szValue; // in: value of key
     int32 fHandled; // out: DLL sets to true if key-value pair was understood
-} KeyValueData;
+};
 
 
-typedef struct
+using LEVELLIST = struct
 {
     char mapName[32];
     char landmarkName[32];
     edict_t* pentLandmark;
     vec3_t vecLandmarkOrigin;
-} LEVELLIST;
+};
 
 #define MAX_LEVEL_CONNECTIONS	16		// These are encoded in the lower 16bits of ENTITYTABLE->flags
 
-typedef struct
+using ENTITYTABLE = struct
 {
     int id; // Ordinal ID of this entity (used for entity <--> pointer conversions)
     edict_t* pent; // Pointer to the in-game entity
@@ -354,17 +354,17 @@ typedef struct
     int size; // Byte size of this entity's data
     int flags; // This could be a short -- bit mask of transitions that this entity is in the PVS of
     string_t classname; // entity class name
-} ENTITYTABLE;
+};
 
 #define FENTTABLE_PLAYER		0x80000000
 #define FENTTABLE_REMOVED		0x40000000
 #define FENTTABLE_MOVEABLE		0x20000000
 #define FENTTABLE_GLOBAL		0x10000000
 
-typedef struct saverestore_s SAVERESTOREDATA;
+using SAVERESTOREDATA = struct saverestore_s;
 
 #ifdef _WIN32
-typedef
+using SAVERESTOREDATA =
 #endif
 struct saverestore_s
 {
@@ -387,13 +387,9 @@ struct saverestore_s
     vec3_t vecLandmarkOffset; // for landmark transitions
     float time;
     char szCurrentMapName[32]; // To check global entities
-}
-#ifdef _WIN32
-SAVERESTOREDATA
-#endif
-;
+};
 
-typedef enum _fieldtypes
+using FIELDTYPE = enum _fieldtypes
 {
     FIELD_FLOAT = 0,
     // Any floating point value
@@ -434,7 +430,7 @@ typedef enum _fieldtypes
 
     FIELD_TYPECOUNT,
     // MUST BE LAST
-} FIELDTYPE;
+};
 
 #if !defined(offsetof)  && !defined(GNUC)
 #define offsetof(s,m)	(size_t)&(((s *)0)->m)
@@ -451,18 +447,18 @@ typedef enum _fieldtypes
 
 #define FTYPEDESC_GLOBAL			0x0001		// This field is masked for global entity save/restore
 
-typedef struct
+using TYPEDESCRIPTION = struct
 {
     FIELDTYPE fieldType;
     const char* fieldName;
     int fieldOffset;
     short fieldSize;
     short flags;
-} TYPEDESCRIPTION;
+};
 
 #define ARRAYSIZE(p)		(sizeof(p)/sizeof(p[0]))
 
-typedef struct
+using DLL_FUNCTIONS = struct
 {
     // Initialize/shutdown the game (one-time call after loading of game .dll )
     void (*pfnGameInit)(void);
@@ -552,14 +548,14 @@ typedef struct
     // Most games right now should return 0, until client-side weapon prediction code is written
     //  and tested for them.
     int (*pfnAllowLagCompensation)(void);
-} DLL_FUNCTIONS;
+};
 
 extern DLL_FUNCTIONS gEntityInterface;
 
 // Current version.
 #define NEW_DLL_FUNCTIONS_VERSION	1
 
-typedef struct
+using NEW_DLL_FUNCTIONS = struct
 {
     // Called right before the object's memory is freed. 
     // Calls its destructor.
@@ -568,14 +564,14 @@ typedef struct
     int (*pfnShouldCollide)(edict_t* pentTouched, edict_t* pentOther);
     void (*pfnCvarValue)(const edict_t* pEnt, const char* value);
     void (*pfnCvarValue2)(const edict_t* pEnt, int requestID, const char* cvarName, const char* value);
-} NEW_DLL_FUNCTIONS;
+};
 
-typedef int (*NEW_DLL_FUNCTIONS_FN)(NEW_DLL_FUNCTIONS* pFunctionTable, int* interfaceVersion);
+using NEW_DLL_FUNCTIONS_FN = int(*)(NEW_DLL_FUNCTIONS* pFunctionTable, int* interfaceVersion);
 
 // Pointers will be null if the game DLL doesn't support this API.
 extern NEW_DLL_FUNCTIONS gNewDLLFunctions;
 
-typedef int (*APIFUNCTION)(DLL_FUNCTIONS* pFunctionTable, int interfaceVersion);
-typedef int (*APIFUNCTION2)(DLL_FUNCTIONS* pFunctionTable, int* interfaceVersion);
+using APIFUNCTION = int(*)(DLL_FUNCTIONS* pFunctionTable, int interfaceVersion);
+using APIFUNCTION2 = int(*)(DLL_FUNCTIONS* pFunctionTable, int* interfaceVersion);
 
 #endif //EIFACE_H

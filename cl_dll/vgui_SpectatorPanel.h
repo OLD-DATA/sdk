@@ -96,7 +96,7 @@ public:
         m_cmd = cmd;
     }
 
-    virtual void actionPerformed(Panel* panel)
+    void actionPerformed(Panel* panel) override
     {
         m_pFather->ActionSignal(m_cmd);
     }

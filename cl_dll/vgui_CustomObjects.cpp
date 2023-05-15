@@ -390,7 +390,7 @@ void CImageLabel::LoadImage(const char* pImageName)
 
         char sz[256];
         sprintf(sz, "%s/%s", gEngfuncs.pfnGetGameDirectory(), pImageName);
-        FileInputStream* fis = new FileInputStream(sz, false);
+        auto fis = new FileInputStream(sz, false);
         m_pTGA = new BitmapTGA(fis, true);
         fis->close();
     }

@@ -44,7 +44,7 @@ void CPointEntity::Spawn(void)
 class CNullEntity : public CBaseEntity
 {
 public:
-    void Spawn(void);
+    void Spawn(void) override;
 };
 
 
@@ -61,8 +61,8 @@ LINK_ENTITY_TO_CLASS(info_compile_parameters, CNullEntity);
 class CBaseDMStart : public CPointEntity
 {
 public:
-    void KeyValue(KeyValueData* pkvd);
-    STATE GetState(CBaseEntity* pEntity);
+    void KeyValue(KeyValueData* pkvd) override;
+    STATE GetState(CBaseEntity* pEntity) override;
 
 private:
 };
@@ -854,11 +854,11 @@ FEntIsVisible(
 class CInfoMoveWith : public CBaseEntity
 {
 public:
-    void Spawn(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    virtual int ObjectCaps(void) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+    void Spawn(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
-    STATE GetState() { return (pev->spawnflags & SF_IMW_INACTIVE) ? STATE_OFF : STATE_ON; }
+    STATE GetState() override { return (pev->spawnflags & SF_IMW_INACTIVE) ? STATE_OFF : STATE_ON; }
 };
 
 LINK_ENTITY_TO_CLASS(info_movewith, CInfoMoveWith);

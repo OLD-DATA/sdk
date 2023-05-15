@@ -17,7 +17,7 @@
 #define	ACTIVITY_H
 
 
-typedef enum
+using Activity = enum
 {
     ACT_RESET = 0,
     // Set m_Activity to this invalid value to force a reset to m_IdealActivity
@@ -136,14 +136,14 @@ typedef enum
     ACT_FLINCH_RIGHTARM,
     ACT_FLINCH_LEFTLEG,
     ACT_FLINCH_RIGHTLEG,
-} Activity;
+};
 
 
-typedef struct
+using activity_map_t = struct
 {
     int type;
     const char* name;
-} activity_map_t;
+};
 
 extern activity_map_t activity_map[];
 

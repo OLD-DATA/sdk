@@ -42,33 +42,33 @@
 class CController : public CSquadMonster
 {
 public:
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
-    void Spawn(void);
-    void Precache(void);
-    void SetYawSpeed(void);
-    int Classify(void);
-    void HandleAnimEvent(MonsterEvent_t* pEvent);
+    void Spawn(void) override;
+    void Precache(void) override;
+    void SetYawSpeed(void) override;
+    int Classify(void) override;
+    void HandleAnimEvent(MonsterEvent_t* pEvent) override;
     void UpdateOnRemove() override;
 
-    void RunAI(void);
-    BOOL CheckRangeAttack1(float flDot, float flDist); // balls
-    BOOL CheckRangeAttack2(float flDot, float flDist); // head
-    BOOL CheckMeleeAttack1(float flDot, float flDist); // block, throw
-    Schedule_t* GetSchedule(void);
-    Schedule_t* GetScheduleOfType(int Type);
-    void StartTask(Task_t* pTask);
-    void RunTask(Task_t* pTask);
+    void RunAI(void) override;
+    BOOL CheckRangeAttack1(float flDot, float flDist) override; // balls
+    BOOL CheckRangeAttack2(float flDot, float flDist) override; // head
+    BOOL CheckMeleeAttack1(float flDot, float flDist) override; // block, throw
+    Schedule_t* GetSchedule(void) override;
+    Schedule_t* GetScheduleOfType(int Type) override;
+    void StartTask(Task_t* pTask) override;
+    void RunTask(Task_t* pTask) override;
     CUSTOM_SCHEDULES;
 
-    void Stop(void);
-    void Move(float flInterval);
-    int CheckLocalMove(const Vector& vecStart, const Vector& vecEnd, CBaseEntity* pTarget, float* pflDist);
-    void MoveExecute(CBaseEntity* pTargetEnt, const Vector& vecDir, float flInterval);
-    void SetActivity(Activity NewActivity);
-    BOOL ShouldAdvanceRoute(float flWaypointDist);
+    void Stop(void) override;
+    void Move(float flInterval) override;
+    int CheckLocalMove(const Vector& vecStart, const Vector& vecEnd, CBaseEntity* pTarget, float* pflDist) override;
+    void MoveExecute(CBaseEntity* pTargetEnt, const Vector& vecDir, float flInterval) override;
+    void SetActivity(Activity NewActivity) override;
+    BOOL ShouldAdvanceRoute(float flWaypointDist) override;
     int LookupFloat();
 
     float m_flNextFlinch;
@@ -76,11 +76,11 @@ public:
     float m_flShootTime;
     float m_flShootEnd;
 
-    void PainSound(void);
-    void AlertSound(void);
-    void IdleSound(void);
+    void PainSound(void) override;
+    void AlertSound(void) override;
+    void IdleSound(void) override;
     void AttackSound(void);
-    void DeathSound(void);
+    void DeathSound(void) override;
 
     static const char* pAttackSounds[];
     static const char* pIdleSounds[];
@@ -88,9 +88,9 @@ public:
     static const char* pPainSounds[];
     static const char* pDeathSounds[];
 
-    int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-    void Killed(entvars_t* pevAttacker, int iGib);
-    void GibMonster(void);
+    int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+    void Killed(entvars_t* pevAttacker, int iGib) override;
+    void GibMonster(void) override;
 
     CSprite* m_pBall[2]; // hand balls
     int m_iBall[2]; // how bright it should be
@@ -314,7 +314,7 @@ void CController::HandleAnimEvent(MonsterEvent_t* pEvent)
             WRITE_COORD(32); // decay
             MESSAGE_END();
 
-            CBaseMonster* pBall = (CBaseMonster*)Create("controller_head_ball", vecStart, pev->angles, edict());
+            auto pBall = (CBaseMonster*)Create("controller_head_ball", vecStart, pev->angles, edict());
 
             pBall->pev->velocity = Vector(0, 0, 32);
             if (m_pCine)
@@ -701,7 +701,7 @@ void CController::RunTask(Task_t* pTask)
                                          RANDOM_FLOAT(-delta, delta)) * gSkillData.controllerSpeedBall;
 
                 vecSrc = vecSrc + vecDir * (gpGlobals->time - m_flShootTime);
-                CBaseMonster* pBall = (CBaseMonster*)Create("controller_energy_ball", vecSrc, pev->angles, edict());
+                auto pBall = (CBaseMonster*)Create("controller_energy_ball", vecSrc, pev->angles, edict());
                 pBall->pev->velocity = vecDir;
             }
             m_flShootTime += 0.2;
@@ -1181,8 +1181,8 @@ void CController::MoveExecute(CBaseEntity* pTargetEnt, const Vector& vecDir, flo
 //=========================================================
 class CControllerHeadBall : public CBaseMonster
 {
-    void Spawn(void);
-    void Precache(void);
+    void Spawn(void) override;
+    void Precache(void) override;
     void EXPORT HuntThink(void);
     void EXPORT DieThink(void);
     void EXPORT BounceTouch(CBaseEntity* pOther);
@@ -1379,8 +1379,8 @@ void CControllerHeadBall::BounceTouch(CBaseEntity* pOther)
 
 class CControllerZapBall : public CBaseMonster
 {
-    void Spawn(void);
-    void Precache(void);
+    void Spawn(void) override;
+    void Precache(void) override;
     void EXPORT AnimateThink(void);
     void EXPORT ExplodeTouch(CBaseEntity* pOther);
 

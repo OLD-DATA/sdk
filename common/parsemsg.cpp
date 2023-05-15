@@ -19,7 +19,7 @@
 #include "parsemsg.h"
 #include <port.h>
 
-typedef unsigned char byte;
+using byte = unsigned char;
 #define true 1
 
 static byte* gpBuf;

@@ -151,7 +151,7 @@ void CBasePlayer::Observer_CheckTarget()
         }
     }
 
-    CBasePlayer* target = (CBasePlayer*)(UTIL_PlayerByIndex(ENTINDEX(m_hObserverTarget->edict())));
+    auto target = (CBasePlayer*)(UTIL_PlayerByIndex(ENTINDEX(m_hObserverTarget->edict())));
 
     if (!target)
     {
@@ -176,7 +176,7 @@ void CBasePlayer::Observer_CheckProperties()
     // try to find a traget if we have no current one
     if (pev->iuser1 == OBS_IN_EYE && m_hObserverTarget != NULL)
     {
-        CBasePlayer* target = (CBasePlayer*)(UTIL_PlayerByIndex(ENTINDEX(m_hObserverTarget->edict())));
+        auto target = (CBasePlayer*)(UTIL_PlayerByIndex(ENTINDEX(m_hObserverTarget->edict())));
 
         if (!target)
             return;

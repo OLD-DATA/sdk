@@ -207,7 +207,7 @@ void CHud::MsgFunc_AddShine(const char* pszName, int iSize, void* pbuf)
 
     //	gEngfuncs.Con_Printf("minx %f, maxx %f, miny %f, maxy %f\n", fMinX, fMaxX, fMinY, fMaxY);
 
-    CShinySurface* pSurface = new CShinySurface(fScale, fAlpha, fMinX, fMaxX, fMinY, fMaxY, fZ, szSprite);
+    auto pSurface = new CShinySurface(fScale, fAlpha, fMinX, fMaxX, fMinY, fMaxY, fZ, szSprite);
     pSurface->m_pNext = m_pShinySurface;
     m_pShinySurface = pSurface;
 }

@@ -36,8 +36,8 @@
 class CInfoTarget : public CPointEntity
 {
 public:
-    void Spawn(void);
-    void Precache(void);
+    void Spawn(void) override;
+    void Precache(void) override;
 };
 
 LINK_ENTITY_TO_CLASS(info_target, CInfoTarget);
@@ -68,16 +68,16 @@ void CInfoTarget::Precache(void)
 class CBubbling : public CBaseEntity
 {
 public:
-    void Spawn(void);
-    void Precache(void);
-    void KeyValue(KeyValueData* pkvd);
+    void Spawn(void) override;
+    void Precache(void) override;
+    void KeyValue(KeyValueData* pkvd) override;
 
     void EXPORT FizzThink(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
-    virtual int ObjectCaps(void) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
+    int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
     static TYPEDESCRIPTION m_SaveData[];
 
     int m_density;
@@ -85,7 +85,7 @@ public:
     int m_bubbleModel;
     int m_state;
 
-    virtual STATE GetState(void) { return m_state ? STATE_ON : STATE_OFF; };
+    STATE GetState(void) override { return m_state ? STATE_ON : STATE_OFF; };
 };
 
 LINK_ENTITY_TO_CLASS(env_bubbles, CBubbling);
@@ -406,10 +406,10 @@ void CBeam::DoSparks(const Vector& start, const Vector& end)
 class CLightning : public CBeam
 {
 public:
-    void Spawn(void);
-    void Precache(void);
-    void KeyValue(KeyValueData* pkvd);
-    void Activate(void);
+    void Spawn(void) override;
+    void Precache(void) override;
+    void KeyValue(KeyValueData* pkvd) override;
+    void Activate(void) override;
 
     void EXPORT StrikeThink(void);
     void EXPORT TripThink(void);
@@ -426,14 +426,14 @@ public:
         return FALSE;
     }
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
     void BeamUpdatePoints(void); //LRC
     void BeamUpdateVars(void);
 
-    virtual STATE GetState(void) { return m_active ? STATE_OFF : STATE_ON; };
+    STATE GetState(void) override { return m_active ? STATE_OFF : STATE_ON; };
 
     int m_active;
     int m_iszStartEntity;
@@ -458,7 +458,7 @@ LINK_ENTITY_TO_CLASS(env_beam, CLightning);
 #if _DEBUG
 class CTripBeam : public CLightning
 {
-    void Spawn(void);
+    void Spawn(void) override;
 };
 
 LINK_ENTITY_TO_CLASS(trip_beam, CTripBeam);
@@ -944,7 +944,7 @@ void CLightning::RandomArea(void)
     {
         Vector vecSrc = pev->origin;
 
-        Vector vecDir1 = Vector(RANDOM_FLOAT(-1.0, 1.0), RANDOM_FLOAT(-1.0, 1.0),RANDOM_FLOAT(-1.0, 1.0));
+        auto vecDir1 = Vector(RANDOM_FLOAT(-1.0, 1.0), RANDOM_FLOAT(-1.0, 1.0),RANDOM_FLOAT(-1.0, 1.0));
         vecDir1 = vecDir1.Normalize();
         TraceResult tr1;
         UTIL_TraceLine(vecSrc, vecSrc + vecDir1 * m_radius, ignore_monsters, ENT(pev), &tr1);
@@ -986,7 +986,7 @@ void CLightning::RandomPoint(Vector& vecSrc)
 
     for (iLoops = 0; iLoops < 10; iLoops++)
     {
-        Vector vecDir1 = Vector(RANDOM_FLOAT(-1.0, 1.0), RANDOM_FLOAT(-1.0, 1.0),RANDOM_FLOAT(-1.0, 1.0));
+        auto vecDir1 = Vector(RANDOM_FLOAT(-1.0, 1.0), RANDOM_FLOAT(-1.0, 1.0),RANDOM_FLOAT(-1.0, 1.0));
         vecDir1 = vecDir1.Normalize();
         TraceResult tr1;
         UTIL_TraceLine(vecSrc, vecSrc + vecDir1 * m_radius, ignore_monsters, ENT(pev), &tr1);
@@ -1190,7 +1190,7 @@ void CLaser::Precache(void)
     if (m_iszStartSpriteName)
     {
         // UGLY HACK to check whether this is a filename: does it contain a dot?
-        const char* c = STRING(m_iszStartSpriteName);
+        auto c = STRING(m_iszStartSpriteName);
         while (*c)
         {
             if (*c == '.')
@@ -1204,7 +1204,7 @@ void CLaser::Precache(void)
 
     if (m_iszEndSpriteName)
     {
-        const char* c = STRING(m_iszEndSpriteName);
+        auto c = STRING(m_iszEndSpriteName);
         while (*c)
         {
             if (*c == '.')
@@ -1444,11 +1444,11 @@ void CLaser::StrikeThink(void)
 class CGlow : public CPointEntity
 {
 public:
-    void Spawn(void);
-    void Think(void);
+    void Spawn(void) override;
+    void Think(void) override;
     void Animate(float frames);
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
     float m_lastTime;
@@ -1692,16 +1692,16 @@ void CSprite::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useTyp
 
 class CEnvModel : public CBaseAnimating
 {
-    void Spawn(void);
-    void Precache(void);
-    void EXPORT Think(void);
-    void KeyValue(KeyValueData* pkvd);
-    STATE GetState(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    virtual int ObjectCaps(void) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+    void Spawn(void) override;
+    void Precache(void) override;
+    void EXPORT Think(void) override;
+    void KeyValue(KeyValueData* pkvd) override;
+    STATE GetState(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
     void SetSequence(void);
@@ -1894,16 +1894,16 @@ void CEnvModel::SetSequence(void)
 class CGibShooter : public CBaseDelay
 {
 public:
-    virtual void Spawn(void);
-    void Precache(void);
-    void KeyValue(KeyValueData* pkvd);
+    void Spawn(void) override;
+    void Precache(void) override;
+    void KeyValue(KeyValueData* pkvd) override;
     void EXPORT ShootThink(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
     virtual CBaseEntity* CreateGib(Vector vecPos, Vector vecVel);
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
     int m_iGibs;
@@ -2182,7 +2182,7 @@ void CGibShooter::ShootThink(void)
 class CShot : public CSprite
 {
 public:
-    void Touch(CBaseEntity* pOther);
+    void Touch(CBaseEntity* pOther) override;
 };
 
 void CShot::Touch(CBaseEntity* pOther)
@@ -2201,15 +2201,15 @@ void CShot::Touch(CBaseEntity* pOther)
 
 class CEnvShooter : public CGibShooter
 {
-    void Precache(void);
-    void KeyValue(KeyValueData* pkvd);
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
-    void Spawn(void);
+    void Precache(void) override;
+    void KeyValue(KeyValueData* pkvd) override;
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
+    void Spawn(void) override;
 
     static TYPEDESCRIPTION m_SaveData[];
 
-    CBaseEntity* CreateGib(Vector vecPos, Vector vecVel);
+    CBaseEntity* CreateGib(Vector vecPos, Vector vecVel) override;
 
     int m_iszTouch;
     int m_iszTouchOther;
@@ -2429,11 +2429,11 @@ CBaseEntity* CEnvShooter::CreateGib(Vector vecPos, Vector vecVel)
 class CTestEffect : public CBaseDelay
 {
 public:
-    void Spawn(void);
-    void Precache(void);
+    void Spawn(void) override;
+    void Precache(void) override;
     // void	KeyValue( KeyValueData *pkvd );
     void EXPORT TestThink(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
     int m_iLoop;
     int m_iBeam;
@@ -2467,7 +2467,7 @@ void CTestEffect::TestThink(void)
         TraceResult tr;
 
         Vector vecSrc = pev->origin;
-        Vector vecDir = Vector(RANDOM_FLOAT(-1.0, 1.0), RANDOM_FLOAT(-1.0, 1.0),RANDOM_FLOAT(-1.0, 1.0));
+        auto vecDir = Vector(RANDOM_FLOAT(-1.0, 1.0), RANDOM_FLOAT(-1.0, 1.0),RANDOM_FLOAT(-1.0, 1.0));
         vecDir = vecDir.Normalize();
         UTIL_TraceLine(vecSrc, vecSrc + vecDir * 128, ignore_monsters, ENT(pev), &tr);
 
@@ -2534,9 +2534,9 @@ void CTestEffect::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE us
 class CBlood : public CPointEntity
 {
 public:
-    void Spawn(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    void KeyValue(KeyValueData* pkvd);
+    void Spawn(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    void KeyValue(KeyValueData* pkvd) override;
 
     inline int Color(void) { return pev->impulse; }
     inline float BloodAmount(void) { return pev->dmg; }
@@ -2659,9 +2659,9 @@ void CBlood::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType
 class CShake : public CPointEntity
 {
 public:
-    void Spawn(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    void KeyValue(KeyValueData* pkvd);
+    void Spawn(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    void KeyValue(KeyValueData* pkvd) override;
 
     inline float Amplitude(void) { return pev->scale; }
     inline float Frequency(void) { return pev->dmg_save; }
@@ -2674,8 +2674,8 @@ public:
     inline void SetRadius(float radius) { pev->dmg = radius; }
 
     STATE m_iState; //LRC
-    virtual STATE GetState(void) { return m_iState; }; //LRC
-    void Think(void) { m_iState = STATE_OFF; }; //LRC
+    STATE GetState(void) override { return m_iState; }; //LRC
+    void Think(void) override { m_iState = STATE_OFF; }; //LRC
 private:
 };
 
@@ -2745,12 +2745,12 @@ void CShake::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType
 class CFade : public CPointEntity
 {
 public:
-    void Spawn(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    void KeyValue(KeyValueData* pkvd);
+    void Spawn(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    void KeyValue(KeyValueData* pkvd) override;
 
-    virtual STATE GetState(void) { return m_iState; }; // LRC
-    void Think(void); //LRC
+    STATE GetState(void) override { return m_iState; }; // LRC
+    void Think(void) override; //LRC
 
     inline float Duration(void) { return pev->dmg_take; }
     inline float HoldTime(void) { return pev->dmg_save; }
@@ -2867,10 +2867,10 @@ void CFade::Think(void)
 class CMessage : public CPointEntity
 {
 public:
-    void Spawn(void);
-    void Precache(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    void KeyValue(KeyValueData* pkvd);
+    void Spawn(void) override;
+    void Precache(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    void KeyValue(KeyValueData* pkvd) override;
 
 private:
 };
@@ -2974,9 +2974,9 @@ void CMessage::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useTy
 class CEnvFunnel : public CBaseDelay
 {
 public:
-    void Spawn(void);
-    void Precache(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+    void Spawn(void) override;
+    void Precache(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
     int m_iSprite; // Don't save, precache
 };
@@ -3043,7 +3043,7 @@ void CEnvFunnel::Spawn(void)
 class CEnvQuakeFx : public CPointEntity
 {
 public:
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 };
 
 LINK_ENTITY_TO_CLASS(env_quakefx, CEnvQuakeFx);
@@ -3092,10 +3092,10 @@ void CEnvQuakeFx::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE us
 class CEnvBeamTrail : public CPointEntity
 {
 public:
-    void Spawn(void);
-    void Precache(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    STATE GetState(void);
+    void Spawn(void) override;
+    void Precache(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    STATE GetState(void) override;
     void EXPORT StartTrailThink(void);
     void Affect(CBaseEntity* pTarget, USE_TYPE useType);
 
@@ -3206,12 +3206,12 @@ void CEnvBeamTrail::Spawn(void)
 class CEnvFootsteps : public CBaseEntity
 {
 public:
-    void Spawn(void);
-    void Precache(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    virtual int ObjectCaps(void) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
-    STATE GetState(void);
-    STATE GetState(CBaseEntity* pEnt);
+    void Spawn(void) override;
+    void Precache(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+    STATE GetState(void) override;
+    STATE GetState(CBaseEntity* pEnt) override;
     void PrecacheNoise(const char* szNoise);
 };
 
@@ -3378,15 +3378,15 @@ void CEnvFootsteps::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 class CEnvRain : public CBaseEntity
 {
 public:
-    void Spawn(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    void Think(void);
-    void Precache(void);
-    void KeyValue(KeyValueData* pkvd);
-    virtual int ObjectCaps(void) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+    void Spawn(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    void Think(void) override;
+    void Precache(void) override;
+    void KeyValue(KeyValueData* pkvd) override;
+    int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
     STATE m_iState;
@@ -3406,7 +3406,7 @@ public:
     float m_fLifeTime;
     int m_iNoise;
 
-    virtual STATE GetState(void) { return m_iState; };
+    STATE GetState(void) override { return m_iState; };
 };
 
 LINK_ENTITY_TO_CLASS(env_rain, CEnvRain);
@@ -3671,11 +3671,11 @@ void CEnvRain::Think(void)
 class CEnvWarpBall : public CBaseEntity
 {
 public:
-    void Precache(void);
-    void Spawn(void) { Precache(); }
-    void Think(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    virtual int ObjectCaps(void) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+    void Precache(void) override;
+    void Spawn(void) override { Precache(); }
+    void Think(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 };
 
 LINK_ENTITY_TO_CLASS(env_warpball, CEnvWarpBall);
@@ -3745,12 +3745,12 @@ void CEnvWarpBall::Think(void)
 class CEnvShockwave : public CPointEntity
 {
 public:
-    void Precache(void);
-    void Spawn(void) { Precache(); }
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    void KeyValue(KeyValueData* pkvd);
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    void Precache(void) override;
+    void Spawn(void) override { Precache(); }
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    void KeyValue(KeyValueData* pkvd) override;
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
     void DoEffect(Vector vecPos);
@@ -3893,16 +3893,16 @@ void CEnvShockwave::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 class CEnvDLight : public CPointEntity
 {
 public:
-    void PostSpawn(void);
-    virtual void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    void Think(void);
-    void DesiredAction(void);
+    void PostSpawn(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    void Think(void) override;
+    void DesiredAction(void) override;
     virtual void MakeLight(int iTime);
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
-    STATE GetState(void)
+    STATE GetState(void) override
     {
         if (pev->spawnflags & SF_DLIGHT_STARTON)
             return STATE_ON;
@@ -4026,10 +4026,10 @@ void CEnvDLight::Think(void)
 class CEnvELight : public CEnvDLight
 {
 public:
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    void MakeLight(int iTime);
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    void MakeLight(int iTime) override;
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
     EHANDLE m_hAttach;
@@ -4094,8 +4094,8 @@ void CEnvELight::MakeLight(int iTime)
 class CEnvDecal : public CPointEntity
 {
 public:
-    void Spawn(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+    void Spawn(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 };
 
 LINK_ENTITY_TO_CLASS(env_decal, CEnvDecal);
@@ -4190,12 +4190,12 @@ void CEnvDecal::Spawn(void)
 class CEnvBeverage : public CBaseDelay
 {
 public:
-    void Spawn(void);
-    void Precache(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+    void Spawn(void) override;
+    void Precache(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
     // it's 'on' while there are cans left
-    virtual STATE GetState(void) { return (pev->health > 0) ? STATE_ON : STATE_OFF; };
+    STATE GetState(void) override { return (pev->health > 0) ? STATE_ON : STATE_OFF; };
 };
 
 void CEnvBeverage::Precache(void)
@@ -4258,8 +4258,8 @@ void CEnvBeverage::Spawn(void)
 class CItemSoda : public CBaseEntity
 {
 public:
-    void Spawn(void);
-    void Precache(void);
+    void Spawn(void) override;
+    void Precache(void) override;
     void EXPORT CanThink(void);
     void EXPORT CanTouch(CBaseEntity* pOther);
 };
@@ -4330,8 +4330,8 @@ void CItemSoda::CanTouch(CBaseEntity* pOther)
 class CEnvFog : public CBaseEntity
 {
 public:
-    void Spawn(void);
-    void Precache(void);
+    void Spawn(void) override;
+    void Precache(void) override;
     void EXPORT ResumeThink(void);
     void EXPORT Resume2Think(void);
     void EXPORT TurnOn(void);
@@ -4339,13 +4339,13 @@ public:
     void EXPORT FadeInDone(void);
     void EXPORT FadeOutDone(void);
     void SendData(Vector col, int fFadeTime, int StartDist, int iEndDist);
-    void KeyValue(KeyValueData* pkvd);
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    void KeyValue(KeyValueData* pkvd) override;
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
-    STATE GetState(void);
+    STATE GetState(void) override;
 
     int m_iStartDist;
     int m_iEndDist;
@@ -4541,7 +4541,7 @@ void CEnvFog::SendData(Vector col, int iFadeTime, int iStartDist, int iEndDist)
     //	ALERT(at_console, "Fog send (%d %d %d), %d - %d\n", col.x, col.y, col.z, iStartDist, iEndDist);
     for (int i = 1; i <= gpGlobals->maxClients; i++)
     {
-        CBasePlayer* pPlayer = (CBasePlayer*)UTIL_PlayerByIndex(i);
+        auto pPlayer = (CBasePlayer*)UTIL_PlayerByIndex(i);
         if (pPlayer)
         {
             MESSAGE_BEGIN(MSG_ONE, gmsgSetFog, NULL, pPlayer->pev);
@@ -4569,9 +4569,9 @@ LINK_ENTITY_TO_CLASS(env_fog, CEnvFog);
 class CEnvSky : public CBaseEntity
 {
 public:
-    void Activate(void);
-    void Think(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value); // Windawz
+    void Activate(void) override;
+    void Think(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override; // Windawz
 };
 
 void CEnvSky::Activate(void)
@@ -4610,13 +4610,13 @@ LINK_ENTITY_TO_CLASS(env_sky, CEnvSky);
 class CParticle : public CPointEntity
 {
 public:
-    void Spawn(void);
-    void Activate(void);
-    void Precache(void);
-    void DesiredAction(void);
-    void EXPORT Think(void);
+    void Spawn(void) override;
+    void Activate(void) override;
+    void Precache(void) override;
+    void DesiredAction(void) override;
+    void EXPORT Think(void) override;
 
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 };
 
 LINK_ENTITY_TO_CLASS(env_particle, CParticle);

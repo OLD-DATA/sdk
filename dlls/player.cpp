@@ -794,7 +794,7 @@ void CBasePlayer::PackDeadPlayerItems(void)
     }
 
     // create a box to pack the stuff into.
-    CWeaponBox* pWeaponBox = (CWeaponBox*)CBaseEntity::Create("weaponbox", pev->origin, pev->angles, edict());
+    auto pWeaponBox = (CWeaponBox*)CBaseEntity::Create("weaponbox", pev->origin, pev->angles, edict());
 
     pWeaponBox->pev->angles.x = 0; // don't let weaponbox tilt.
     pWeaponBox->pev->angles.z = 0;
@@ -3228,7 +3228,7 @@ int CBasePlayer::Restore(CRestore& restore)
 
     int status = restore.ReadFields("PLAYER", this, m_playerSaveData, ARRAYSIZE(m_playerSaveData));
 
-    SAVERESTOREDATA* pSaveData = (SAVERESTOREDATA*)gpGlobals->pSaveData;
+    auto pSaveData = (SAVERESTOREDATA*)gpGlobals->pSaveData;
     // landmark isn't present.
     if (!pSaveData->fUseLandmark)
     {
@@ -3473,9 +3473,9 @@ class CSprayCan : public CBaseEntity
 {
 public:
     void Spawn(entvars_t* pevOwner);
-    void Think(void);
+    void Think(void) override;
 
-    virtual int ObjectCaps(void) { return FCAP_DONT_SAVE; }
+    int ObjectCaps(void) override { return FCAP_DONT_SAVE; }
 };
 
 void CSprayCan::Spawn(entvars_t* pevOwner)
@@ -3778,21 +3778,21 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 
     case 90: //LRC - send USE_TOGGLE
         {
-            char* impulsetarget = (char*)CVAR_GET_STRING("sohl_impulsetarget");
+            auto impulsetarget = (char*)CVAR_GET_STRING("sohl_impulsetarget");
             if (impulsetarget)
                 FireTargets(impulsetarget, this, this, USE_TOGGLE, 0);
             break;
         }
     case 91: //LRC - send USE_ON
         {
-            char* impulsetarget = (char*)CVAR_GET_STRING("sohl_impulsetarget");
+            auto impulsetarget = (char*)CVAR_GET_STRING("sohl_impulsetarget");
             if (impulsetarget)
                 FireTargets(impulsetarget, this, this, USE_ON, 0);
             break;
         }
     case 92: //LRC - send USE_OFF
         {
-            char* impulsetarget = (char*)CVAR_GET_STRING("sohl_impulsetarget");
+            auto impulsetarget = (char*)CVAR_GET_STRING("sohl_impulsetarget");
             if (impulsetarget)
                 FireTargets(impulsetarget, this, this, USE_OFF, 0);
             break;
@@ -4876,9 +4876,9 @@ void CBasePlayer::DropPlayerItem(char* pszItemName)
 
             pev->weapons &= ~(1 << pWeapon->m_iId); // take item off hud
 
-            CWeaponBox* pWeaponBox = (CWeaponBox*)CBaseEntity::Create("weaponbox",
-                                                                      pev->origin + gpGlobals->v_forward * 10,
-                                                                      pev->angles, edict());
+            auto pWeaponBox = (CWeaponBox*)CBaseEntity::Create("weaponbox",
+                                                               pev->origin + gpGlobals->v_forward * 10,
+                                                               pev->angles, edict());
             pWeaponBox->pev->angles.x = 0;
             pWeaponBox->pev->angles.z = 0;
             pWeaponBox->PackWeapon(pWeapon);
@@ -5024,10 +5024,10 @@ void CBasePlayer::SetPrefsFromUserinfo(char* infobuffer)
 class CDeadHEV : public CBaseMonster
 {
 public:
-    void Spawn(void);
-    int Classify(void) { return CLASS_HUMAN_MILITARY; }
+    void Spawn(void) override;
+    int Classify(void) override { return CLASS_HUMAN_MILITARY; }
 
-    void KeyValue(KeyValueData* pkvd);
+    void KeyValue(KeyValueData* pkvd) override;
 
     int m_iPose; // which sequence to display	-- temporary, don't need to save
     static const char* m_szPoses[4];
@@ -5081,11 +5081,11 @@ void CDeadHEV::Spawn(void)
 class CStripWeapons : public CPointEntity
 {
 public:
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    void KeyValue(KeyValueData* pkvd);
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    void KeyValue(KeyValueData* pkvd) override;
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
 private:
@@ -5215,13 +5215,13 @@ void CStripWeapons::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE 
 class CRevertSaved : public CPointEntity
 {
 public:
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
     void EXPORT MessageThink(void);
     void EXPORT LoadThink(void);
-    void KeyValue(KeyValueData* pkvd);
+    void KeyValue(KeyValueData* pkvd) override;
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
     inline float Duration(void) { return pev->dmg_take; }
@@ -5313,9 +5313,9 @@ void CRevertSaved::LoadThink(void)
 
 class CPlayerFreeze : public CBaseDelay
 {
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    void Think(void);
-    STATE GetState(void) { return m_hActivator == NULL ? STATE_OFF : STATE_ON; }
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    void Think(void) override;
+    STATE GetState(void) override { return m_hActivator == NULL ? STATE_OFF : STATE_ON; }
 };
 
 void CPlayerFreeze::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
@@ -5363,8 +5363,8 @@ LINK_ENTITY_TO_CLASS(player_freeze, CPlayerFreeze);
 //=========================================================
 class CInfoIntermission : public CPointEntity
 {
-    void Spawn(void);
-    void Think(void);
+    void Spawn(void) override;
+    void Think(void) override;
 };
 
 void CInfoIntermission::Spawn(void)
@@ -5401,10 +5401,10 @@ LINK_ENTITY_TO_CLASS(info_intermission, CInfoIntermission);
 
 class CHudSprite : public CBaseEntity
 {
-    void Spawn(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    STATE GetState(void) { return pev->spawnflags & SF_HUDSPR_ACTIVE ? STATE_ON : STATE_OFF; }
-    void Think(void);
+    void Spawn(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    STATE GetState(void) override { return pev->spawnflags & SF_HUDSPR_ACTIVE ? STATE_ON : STATE_OFF; }
+    void Think(void) override;
 };
 
 void CHudSprite::Spawn(void)

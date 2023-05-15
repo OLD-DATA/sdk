@@ -12,11 +12,11 @@
 
 
 #define BANMGR_FILEVERSION	1
-char const* g_pBanMgrFilename = "voice_ban.dt";
+const char* g_pBanMgrFilename = "voice_ban.dt";
 
 
 // Hash a player ID to a byte.
-unsigned char HashPlayerID(char const playerID[16])
+unsigned char HashPlayerID(const char playerID[16])
 {
     unsigned char curHash = 0;
 
@@ -39,7 +39,7 @@ CVoiceBanMgr::~CVoiceBanMgr()
 }
 
 
-bool CVoiceBanMgr::Init(char const* pGameDir)
+bool CVoiceBanMgr::Init(const char* pGameDir)
 {
     Term();
 
@@ -95,7 +95,7 @@ void CVoiceBanMgr::Term()
 }
 
 
-void CVoiceBanMgr::SaveState(char const* pGameDir)
+void CVoiceBanMgr::SaveState(const char* pGameDir)
 {
     // Save the file out.
     char filename[512];
@@ -121,13 +121,13 @@ void CVoiceBanMgr::SaveState(char const* pGameDir)
 }
 
 
-bool CVoiceBanMgr::GetPlayerBan(char const playerID[16])
+bool CVoiceBanMgr::GetPlayerBan(const char playerID[16])
 {
     return !!InternalFindPlayerSquelch(playerID);
 }
 
 
-void CVoiceBanMgr::SetPlayerBan(char const playerID[16], bool bSquelch)
+void CVoiceBanMgr::SetPlayerBan(const char playerID[16], bool bSquelch)
 {
     if (bSquelch)
     {
@@ -170,7 +170,7 @@ void CVoiceBanMgr::Clear()
 }
 
 
-CVoiceBanMgr::BannedPlayer* CVoiceBanMgr::InternalFindPlayerSquelch(char const playerID[16])
+CVoiceBanMgr::BannedPlayer* CVoiceBanMgr::InternalFindPlayerSquelch(const char playerID[16])
 {
     int index = HashPlayerID(playerID);
     BannedPlayer* pListHead = &m_PlayerHash[index];
@@ -184,9 +184,9 @@ CVoiceBanMgr::BannedPlayer* CVoiceBanMgr::InternalFindPlayerSquelch(char const p
 }
 
 
-CVoiceBanMgr::BannedPlayer* CVoiceBanMgr::AddBannedPlayer(char const playerID[16])
+CVoiceBanMgr::BannedPlayer* CVoiceBanMgr::AddBannedPlayer(const char playerID[16])
 {
-    BannedPlayer* pNew = new BannedPlayer;
+    auto pNew = new BannedPlayer;
     if (!pNew)
         return NULL;
 

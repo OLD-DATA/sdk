@@ -388,7 +388,7 @@ cldll_func_dst_t* g_pcldstAddrs;
 
 extern "C" void DLLEXPORT F(void* pv)
 {
-    cldll_func_t* pcldll_func = (cldll_func_t*)pv;
+    auto pcldll_func = (cldll_func_t*)pv;
 
     // Hack!
     g_pcldstAddrs = ((cldll_func_dst_t*)pcldll_func->pHudVidInitFunc);
@@ -450,7 +450,7 @@ class CClientExports : public IGameClientExports
 {
 public:
     // returns the name of the server the user is connected to, if any
-    virtual const char* GetServerHostName()
+    const char* GetServerHostName() override
     {
         /*if (gViewPortInterface)
         {
@@ -460,14 +460,14 @@ public:
     }
 
     // ingame voice manipulation
-    virtual bool IsPlayerGameVoiceMuted(int playerIndex)
+    bool IsPlayerGameVoiceMuted(int playerIndex) override
     {
         if (GetClientVoiceMgr())
             return GetClientVoiceMgr()->IsPlayerBlocked(playerIndex);
         return false;
     }
 
-    virtual void MutePlayerGameVoice(int playerIndex)
+    void MutePlayerGameVoice(int playerIndex) override
     {
         if (GetClientVoiceMgr())
         {
@@ -475,7 +475,7 @@ public:
         }
     }
 
-    virtual void UnmutePlayerGameVoice(int playerIndex)
+    void UnmutePlayerGameVoice(int playerIndex) override
     {
         if (GetClientVoiceMgr())
         {

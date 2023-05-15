@@ -28,6 +28,7 @@
 #define bits_SOUND_MEAT		( 1 << 4 )// gib or pork chop
 #define bits_SOUND_DANGER	( 1 << 5 )// pending danger. Grenade that is about to explode, explosive barrel that is damaged, falling crate
 
+
 #define bits_SOUND_GARBAGE	( 1 << 6 )// trash cans, banana peels, old fast food bags.
 
 #define bits_ALL_SOUNDS 0xFFFFFFFF
@@ -35,6 +36,7 @@
 #define SOUNDLIST_EMPTY	-1
 
 #define SOUNDLISTTYPE_FREE	1// identifiers passed to functions that can operate on either list, to indicate which list to operate on.
+
 
 #define SOUNDLISTTYPE_ACTIVE 2
 
@@ -68,9 +70,9 @@ public:
 class CSoundEnt : public CBaseEntity
 {
 public:
-    void Precache(void);
-    void Spawn(void);
-    void Think(void);
+    void Precache(void) override;
+    void Spawn(void) override;
+    void Think(void) override;
     void Initialize(void);
 
     static void InsertSound(int iType, const Vector& vecOrigin, int iVolume, float flDuration);
@@ -83,7 +85,7 @@ public:
     BOOL IsEmpty(void) { return m_iActiveSound == SOUNDLIST_EMPTY; }
     int ISoundsInList(int iListType);
     int IAllocSound(void);
-    virtual int ObjectCaps(void) { return FCAP_DONT_SAVE; }
+    int ObjectCaps(void) override { return FCAP_DONT_SAVE; }
 
     int m_iFreeSound; // index of the first sound in the free sound list
     int m_iActiveSound; // indes of the first sound in the active sound list

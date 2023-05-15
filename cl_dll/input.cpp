@@ -113,12 +113,12 @@ kbutton_t in_score;
 kbutton_t in_break;
 kbutton_t in_graph; // Display the netgraph
 
-typedef struct kblist_s
+using kblist_t = struct kblist_s
 {
     struct kblist_s* next;
     kbutton_t* pkey;
     char name[32];
-} kblist_t;
+};
 
 kblist_t* g_kbkeys = NULL;
 

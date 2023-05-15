@@ -28,25 +28,25 @@
 class CNihilanth : public CBaseMonster
 {
 public:
-    int Save(CSave& save);
-    int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
-    void Spawn(void);
-    void Precache(void);
+    void Spawn(void) override;
+    void Precache(void) override;
     void UpdateOnRemove() override;
-    int Classify(void) { return CLASS_ALIEN_MILITARY; };
-    int BloodColor(void) { return BLOOD_COLOR_YELLOW; }
-    void Killed(entvars_t* pevAttacker, int iGib);
-    void GibMonster(void);
+    int Classify(void) override { return CLASS_ALIEN_MILITARY; };
+    int BloodColor(void) override { return BLOOD_COLOR_YELLOW; }
+    void Killed(entvars_t* pevAttacker, int iGib) override;
+    void GibMonster(void) override;
 
-    void SetObjectCollisionBox(void)
+    void SetObjectCollisionBox(void) override
     {
         pev->absmin = pev->origin + Vector(-16 * N_SCALE, -16 * N_SCALE, -48 * N_SCALE);
         pev->absmax = pev->origin + Vector(16 * N_SCALE, 16 * N_SCALE, 28 * N_SCALE);
     }
 
-    void HandleAnimEvent(MonsterEvent_t* pEvent);
+    void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
     void EXPORT StartupThink(void);
     void EXPORT HuntThink(void);
@@ -68,11 +68,12 @@ public:
     void ShootBalls(void);
     void MakeFriend(Vector vecPos);
 
-    int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-    void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType);
+    int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+    void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr,
+                     int bitsDamageType) override;
 
-    void PainSound(void);
-    void DeathSound(void);
+    void PainSound(void) override;
+    void DeathSound(void) override;
 
     static const char* pAttackSounds[]; // vocalization: play sometimes when he launches an attack
     static const char* pBallSounds[]; // the sound of the lightening ball launch
@@ -174,12 +175,12 @@ IMPLEMENT_SAVERESTORE(CNihilanth, CBaseMonster);
 class CNihilanthHVR : public CBaseMonster
 {
 public:
-    int Save(CSave& save);
-    int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
-    void Spawn(void);
-    void Precache(void);
+    void Spawn(void) override;
+    void Precache(void) override;
 
     void CircleInit(CBaseEntity* pTarget);
     void AbsorbInit(void);
@@ -559,7 +560,7 @@ void CNihilanth::DyingThink(void)
     MESSAGE_END();
 
     GetAttachment(0, vecSrc, vecAngles);
-    CNihilanthHVR* pEntity = (CNihilanthHVR*)Create("nihilanth_energy_ball", vecSrc, pev->angles, edict());
+    auto pEntity = (CNihilanthHVR*)Create("nihilanth_energy_ball", vecSrc, pev->angles, edict());
     pEntity->pev->velocity = Vector(RANDOM_FLOAT(-0.7, 0.7), RANDOM_FLOAT(-0.7, 0.7), 1.0) * 600.0;
     pEntity->GreenBallInit();
 
@@ -1004,7 +1005,7 @@ BOOL CNihilanth::AbsorbSphere(void)
     {
         if (m_hSphere[i] != NULL)
         {
-            CNihilanthHVR* pSphere = (CNihilanthHVR*)((CBaseEntity*)m_hSphere[i]);
+            auto pSphere = (CNihilanthHVR*)((CBaseEntity*)m_hSphere[i]);
             pSphere->AbsorbInit();
             m_hSphere[i] = NULL;
             m_iActiveSpheres--;
@@ -1036,7 +1037,7 @@ BOOL CNihilanth::EmitSphere(void)
         return FALSE;
 
     Vector vecSrc = m_hRecharger->pev->origin;
-    CNihilanthHVR* pEntity = (CNihilanthHVR*)Create("nihilanth_energy_ball", vecSrc, pev->angles, edict());
+    auto pEntity = (CNihilanthHVR*)Create("nihilanth_energy_ball", vecSrc, pev->angles, edict());
     pEntity->pev->velocity = pev->origin - vecSrc;
     pEntity->CircleInit(this);
 
@@ -1135,7 +1136,7 @@ void CNihilanth::HandleAnimEvent(MonsterEvent_t* pEvent)
 
                 Vector vecSrc, vecAngles;
                 GetAttachment(2, vecSrc, vecAngles);
-                CNihilanthHVR* pEntity = (CNihilanthHVR*)Create("nihilanth_energy_ball", vecSrc, pev->angles, edict());
+                auto pEntity = (CNihilanthHVR*)Create("nihilanth_energy_ball", vecSrc, pev->angles, edict());
                 pEntity->pev->velocity = pev->origin - vecSrc;
                 pEntity->TeleportInit(this, m_hEnemy, pTrigger, pTouch);
             }
@@ -1201,7 +1202,7 @@ void CNihilanth::HandleAnimEvent(MonsterEvent_t* pEvent)
         {
             Vector vecSrc, vecAngles;
             GetAttachment(2, vecSrc, vecAngles);
-            CNihilanthHVR* pEntity = (CNihilanthHVR*)Create("nihilanth_energy_ball", vecSrc, pev->angles, edict());
+            auto pEntity = (CNihilanthHVR*)Create("nihilanth_energy_ball", vecSrc, pev->angles, edict());
             pEntity->pev->velocity = pev->origin - vecSrc;
             pEntity->ZapInit(m_hEnemy);
         }

@@ -111,7 +111,7 @@ ScorePanel::ScorePanel(int x, int y, int wide, int tall) : Panel(x, y, wide, tal
     m_TitleLabel.setFgColor(Scheme::sc_primary1);
     m_TitleLabel.setContentAlignment(vgui::Label::a_west);
 
-    LineBorder* border = new LineBorder(Color(60, 60, 60, 128));
+    auto border = new LineBorder(Color(60, 60, 60, 128));
     setBorder(border);
     setPaintBorderEnabled(true);
 

@@ -39,7 +39,7 @@
 
 #define TLK_CFRIENDS		3
 
-typedef enum
+using TALKGROUPNAMES = enum
 {
     TLK_ANSWER = 0,
     TLK_QUESTION,
@@ -64,7 +64,7 @@ typedef enum
 
     TLK_CGROUPS,
     // MUST be last entry
-} TALKGROUPNAMES;
+};
 
 
 enum
@@ -123,28 +123,28 @@ public:
     void StopTalking(void) { SentenceStop(); }
 
     // Base Monster functions
-    void Precache(void);
-    int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-    void Touch(CBaseEntity* pOther);
-    void Killed(entvars_t* pevAttacker, int iGib);
-    int IRelationship(CBaseEntity* pTarget);
-    virtual int CanPlaySentence(BOOL fDisregardState);
+    void Precache(void) override;
+    int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+    void Touch(CBaseEntity* pOther) override;
+    void Killed(entvars_t* pevAttacker, int iGib) override;
+    int IRelationship(CBaseEntity* pTarget) override;
+    int CanPlaySentence(BOOL fDisregardState) override;
 
 protected:
     void PlaySentenceCore(const char* pszSentence, float duration, float volume, float attenuation) override;
 
 public:
     void PlayScriptedSentence(const char* pszSentence, float duration, float volume, float attenuation,
-                              BOOL bConcurrent, CBaseEntity* pListener);
-    void KeyValue(KeyValueData* pkvd);
+                              BOOL bConcurrent, CBaseEntity* pListener) override;
+    void KeyValue(KeyValueData* pkvd) override;
 
     // AI functions
-    void SetActivity(Activity newActivity);
-    Schedule_t* GetScheduleOfType(int Type);
-    void StartTask(Task_t* pTask);
-    void RunTask(Task_t* pTask);
-    void HandleAnimEvent(MonsterEvent_t* pEvent);
-    void PrescheduleThink(void);
+    void SetActivity(Activity newActivity) override;
+    Schedule_t* GetScheduleOfType(int Type) override;
+    void StartTask(Task_t* pTask) override;
+    void RunTask(Task_t* pTask) override;
+    void HandleAnimEvent(MonsterEvent_t* pEvent) override;
+    void PrescheduleThink(void) override;
 
 
     // Conversations / communication
@@ -164,7 +164,7 @@ public:
     // For following
     BOOL CanFollow(void);
     BOOL IsFollowing(void) { return m_hTargetEnt != NULL && m_hTargetEnt->IsPlayer(); }
-    void StopFollowing(BOOL clearSchedule);
+    void StopFollowing(BOOL clearSchedule) override;
     void StartFollowing(CBaseEntity* pLeader);
 
     virtual void DeclineFollowing(void)
@@ -178,8 +178,8 @@ public:
     virtual void SetAnswerQuestion(CTalkMonster* pSpeaker);
     virtual int FriendNumber(int arrayNumber) { return arrayNumber; }
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
 

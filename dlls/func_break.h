@@ -15,9 +15,9 @@
 #ifndef FUNC_BREAK_H
 #define FUNC_BREAK_H
 
-typedef enum { expRandom, expDirected } Explosions;
+using Explosions = enum { expRandom, expDirected };
 
-typedef enum
+using Materials = enum
 {
     matGlass = 0,
     matWood,
@@ -30,7 +30,7 @@ typedef enum
     matRocks,
     matNone,
     matLastMaterial
-} Materials;
+};
 
 #define	NUM_SHARDS 6 // this many shards spawned when breakable objects break;
 
@@ -38,33 +38,34 @@ class CBreakable : public CBaseDelay
 {
 public:
     // basic functions
-    void Spawn(void);
-    void Precache(void);
-    void KeyValue(KeyValueData* pkvd);
+    void Spawn(void) override;
+    void Precache(void) override;
+    void KeyValue(KeyValueData* pkvd) override;
     void EXPORT BreakTouch(CBaseEntity* pOther);
     void EXPORT BreakUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
     void EXPORT RespawnUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
     void EXPORT RespawnThink(void);
     void EXPORT RespawnFadeThink(void);
     void DamageSound(void);
-    virtual int Classify(void) { return m_iClass; }
+    int Classify(void) override { return m_iClass; }
 
     // breakables use an overridden takedamage
-    virtual int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+    int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
     // To spark when hit
-    void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType);
+    void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr,
+                     int bitsDamageType) override;
 
     BOOL IsBreakable(void);
     BOOL SparkWhenHit(void);
 
-    STATE GetState(void);
+    STATE GetState(void) override;
 
-    int DamageDecal(int bitsDamageType);
+    int DamageDecal(int bitsDamageType) override;
 
     void EXPORT Die(void);
-    virtual int ObjectCaps(void) { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int ObjectCaps(void) override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
 
     inline BOOL Explodable(void) { return ExplosionMagnitude() > 0; }
     inline int ExplosionMagnitude(void) { return pev->impulse; }

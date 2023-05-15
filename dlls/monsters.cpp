@@ -323,7 +323,7 @@ void CBaseMonster::Look(int iDistance)
     {
         CBaseEntity* pList[100];
 
-        Vector delta = Vector(iDistance, iDistance, iDistance);
+        auto delta = Vector(iDistance, iDistance, iDistance);
 
         // Find only monsters/clients in box, NOT limited to PVS
         int count = UTIL_EntitiesInBox(pList, 100, pev->origin - delta, pev->origin + delta, FL_CLIENT | FL_MONSTER);
@@ -3573,11 +3573,11 @@ BOOL CBaseMonster::ShouldFadeOnDeath(void)
 class CMonsterTarget : public CBaseEntity
 {
 public:
-    void Spawn(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    int Classify(void) { return pev->frags; };
+    void Spawn(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    int Classify(void) override { return pev->frags; };
 
-    STATE GetState(void)
+    STATE GetState(void) override
     {
         return pev->health ? STATE_ON : STATE_OFF;
     };

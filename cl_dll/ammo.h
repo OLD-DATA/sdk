@@ -56,7 +56,7 @@ struct WEAPON
     wrect_t rcZoomedAutoaim;
 };
 
-typedef int AMMO;
+using AMMO = int;
 
 
 #endif

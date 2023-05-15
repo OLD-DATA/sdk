@@ -105,8 +105,8 @@ BODY QUE
 class CDecal : public CBaseEntity
 {
 public:
-    void Spawn(void);
-    void KeyValue(KeyValueData* pkvd);
+    void Spawn(void) override;
+    void KeyValue(KeyValueData* pkvd) override;
     void EXPORT StaticDecal(void);
     void EXPORT TriggerDecal(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 };
@@ -200,7 +200,7 @@ void CDecal::KeyValue(KeyValueData* pkvd)
 // Body queue class here.... It's really just CBaseEntity
 class CCorpse : public CBaseEntity
 {
-    virtual int ObjectCaps(void) { return FCAP_DONT_SAVE; }
+    int ObjectCaps(void) override { return FCAP_DONT_SAVE; }
 };
 
 LINK_ENTITY_TO_CLASS(bodyque, CCorpse);
@@ -278,7 +278,7 @@ globalentity_t* CGlobalState::Find(string_t globalname)
         return NULL;
 
     globalentity_t* pTest;
-    const char* pEntityName = STRING(globalname);
+    auto pEntityName = STRING(globalname);
 
 
     pTest = m_pList;
@@ -317,7 +317,7 @@ void CGlobalState::EntityAdd(string_t globalname, string_t mapName, GLOBALESTATE
 {
     ASSERT(!Find(globalname));
 
-    globalentity_t* pNewEntity = (globalentity_t*)calloc(sizeof(globalentity_t), 1);
+    auto pNewEntity = (globalentity_t*)calloc(sizeof(globalentity_t), 1);
     ASSERT(pNewEntity != NULL);
     pNewEntity->pNext = m_pList;
     m_pList = pNewEntity;

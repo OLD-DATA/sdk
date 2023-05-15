@@ -19,11 +19,11 @@ using namespace vgui;
 
 
 CCheckButton2::CCheckButton2() :
-    m_Label(""),
-    m_pChecked(NULL),
-    m_pUnchecked(NULL),
     m_pHandler(NULL),
-    m_CheckboxPanel(NULL)
+    m_Label(""),
+    m_CheckboxPanel(NULL),
+    m_pChecked(NULL),
+    m_pUnchecked(NULL)
 {
     m_bOwnImages = false;
     m_bChecked = false;
@@ -48,7 +48,7 @@ CCheckButton2::~CCheckButton2()
 }
 
 
-void CCheckButton2::SetImages(char const* pChecked, char const* pUnchecked)
+void CCheckButton2::SetImages(const char* pChecked, const char* pUnchecked)
 {
     DeleteImages();
 
@@ -101,7 +101,7 @@ bool CCheckButton2::GetCheckboxLeft()
 }
 
 
-void CCheckButton2::SetText(char const* pText, ...)
+void CCheckButton2::SetText(const char* pText, ...)
 {
     char str[512];
 

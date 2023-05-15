@@ -32,15 +32,15 @@ extern void SetMovedir(entvars_t* ev);
 class CBaseDoor : public CBaseToggle
 {
 public:
-    void Spawn(void);
-    void Precache(void);
-    virtual void PostSpawn(void);
-    virtual void KeyValue(KeyValueData* pkvd);
-    virtual void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    virtual void Blocked(CBaseEntity* pOther);
+    void Spawn(void) override;
+    void Precache(void) override;
+    void PostSpawn(void) override;
+    void KeyValue(KeyValueData* pkvd) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    void Blocked(CBaseEntity* pOther) override;
 
 
-    virtual int ObjectCaps(void)
+    int ObjectCaps(void) override
     {
         if (pev->spawnflags & SF_ITEM_USE_ONLY)
         {
@@ -50,12 +50,12 @@ public:
         else
             return (CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION);
     };
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
 
     static TYPEDESCRIPTION m_SaveData[];
 
-    virtual void SetToggleState(int state);
+    void SetToggleState(int state) override;
 
     // used to selectivly override defaults
     void EXPORT DoorTouch(CBaseEntity* pOther);
@@ -1090,13 +1090,13 @@ button or trigger field activates the door.
 class CRotDoor : public CBaseDoor
 {
 public:
-    void Spawn(void);
-    void KeyValue(KeyValueData* pkvd);
+    void Spawn(void) override;
+    void KeyValue(KeyValueData* pkvd) override;
 
-    virtual void PostSpawn(void)
+    void PostSpawn(void) override
     {
     } // don't use the moveWith fix from CBaseDoor
-    virtual void SetToggleState(int state);
+    void SetToggleState(int state) override;
 };
 
 LINK_ENTITY_TO_CLASS(func_door_rotating, CRotDoor);
@@ -1179,25 +1179,25 @@ void CRotDoor::SetToggleState(int state)
 class CMomentaryDoor : public CBaseToggle
 {
 public:
-    void Spawn(void);
-    void Precache(void);
+    void Spawn(void) override;
+    void Precache(void) override;
     void EXPORT MomentaryMoveDone();
     void EXPORT StopMoveSound();
 
-    void KeyValue(KeyValueData* pkvd);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    virtual int ObjectCaps(void) { return CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+    void KeyValue(KeyValueData* pkvd) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    int ObjectCaps(void) override { return CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
     BYTE m_bMoveSnd; // sound a door makes while moving	
     STATE m_iState;
     float m_fLastPos;
 
-    STATE GetState(void) { return m_iState; }
-    float CalcRatio(CBaseEntity* pLocus) { return m_fLastPos; }
+    STATE GetState(void) override { return m_iState; }
+    float CalcRatio(CBaseEntity* pLocus) override { return m_fLastPos; }
 };
 
 LINK_ENTITY_TO_CLASS(momentary_door, CMomentaryDoor);

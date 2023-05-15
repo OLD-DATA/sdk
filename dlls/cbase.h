@@ -99,7 +99,7 @@ extern void ResetGlobalState(void);
 //extern CBaseEntity *g_pDesiredList; //LRC- handles DesiredVel, for movewith
 
 //LRC- added USE_SAME, USE_NOT, and USE_KILL
-typedef enum
+using USE_TYPE = enum
 {
     USE_OFF = 0,
     USE_ON = 1,
@@ -109,16 +109,16 @@ typedef enum
     // special signals, never actually get sent:
     USE_SAME = 5,
     USE_NOT = 6,
-} USE_TYPE;
+};
 
 extern char* GetStringForUseType(USE_TYPE useType);
 
 extern void FireTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType,
                         float value);
 
-typedef void (CBaseEntity::*BASEPTR)(void);
-typedef void (CBaseEntity::*ENTITYFUNCPTR)(CBaseEntity* pOther);
-typedef void (CBaseEntity::*USEPTR)(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+using BASEPTR = void(CBaseEntity::*)(void);
+using ENTITYFUNCPTR = void(CBaseEntity::*)(CBaseEntity* pOther);
+using USEPTR = void(CBaseEntity::*)(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
 // For CLASSIFY
 #define	CLASS_NONE				0
@@ -139,6 +139,7 @@ typedef void (CBaseEntity::*USEPTR)(CBaseEntity* pActivator, CBaseEntity* pCalle
 #define CLASS_FACTION_B			15
 #define CLASS_FACTION_C			16
 #define	CLASS_BARNACLE			99 // special because no one pays attention to it, and it eats a wide cross-section of creatures.
+
 
 
 class CBaseEntity;
@@ -576,14 +577,14 @@ inline BOOL FNullEnt(CBaseEntity* ent) { return ent == NULL || FNullEnt(ent->edi
 class CPointEntity : public CBaseEntity
 {
 public:
-    void Spawn(void);
-    virtual int ObjectCaps(void) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+    void Spawn(void) override;
+    int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
 private:
 };
 
 
-typedef struct locksounds // sounds that doors and buttons make when locked/unlocked
+using locksound_t = struct locksounds // sounds that doors and buttons make when locked/unlocked
 {
     string_t sLockedSound; // sound a door makes when it's locked
     string_t sLockedSentence; // sentence group played when door is locked
@@ -597,7 +598,7 @@ typedef struct locksounds // sounds that doors and buttons make when locked/unlo
     float flwaitSentence; // time delay between playing consecutive sentences
     BYTE bEOFLocked; // true if hit end of list of locked sentences
     BYTE bEOFUnlocked; // true if hit end of list of unlocked sentences
-} locksound_t;
+};
 
 void PlayLockSounds(entvars_t* pev, locksound_t* pls, int flocked, int fbutton);
 
@@ -611,13 +612,13 @@ void PlayLockSounds(entvars_t* pev, locksound_t* pls, int flocked, int fbutton);
 class CMultiSource : public CPointEntity
 {
 public:
-    void Spawn();
-    void KeyValue(KeyValueData* pkvd);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    STATE GetState(void);
+    void Spawn() override;
+    void KeyValue(KeyValueData* pkvd) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    STATE GetState(void) override;
     void EXPORT Register(void);
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
 
     static TYPEDESCRIPTION m_SaveData[];
 
@@ -639,9 +640,9 @@ public:
     int m_iszKillTarget;
     EHANDLE m_hActivator; //LRC - moved here from CBaseToggle
 
-    virtual void KeyValue(KeyValueData* pkvd);
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    void KeyValue(KeyValueData* pkvd) override;
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
 
     static TYPEDESCRIPTION m_SaveData[];
     // common member functions
@@ -653,8 +654,8 @@ public:
 class CBaseAnimating : public CBaseDelay
 {
 public:
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
 
     static TYPEDESCRIPTION m_SaveData[];
 
@@ -702,7 +703,7 @@ public:
 class CBaseToggle : public CBaseAnimating
 {
 public:
-    void KeyValue(KeyValueData* pkvd);
+    void KeyValue(KeyValueData* pkvd) override;
 
     TOGGLE_STATE m_toggle_state;
     float m_flActivateFinished; //like attack_finished, but for doors
@@ -727,17 +728,17 @@ public:
 
     int m_bitsDamageInflict; // DMG_ damage type that the door or tigger does
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
 
     static TYPEDESCRIPTION m_SaveData[];
 
-    virtual int GetToggleState(void) { return m_toggle_state; }
+    int GetToggleState(void) override { return m_toggle_state; }
 
     // LRC- overridden because toggling entities have general rules governing their states.
-    virtual STATE GetState(void);
+    STATE GetState(void) override;
 
-    virtual float GetDelay(void) { return m_flWait; }
+    float GetDelay(void) override { return m_flWait; }
 
     // common member functions
     void LinearMove(Vector vecInput, float flSpeed);
@@ -887,11 +888,11 @@ const char* ButtonSound(int sound); // get string of button sound number
 class CBaseButton : public CBaseToggle
 {
 public:
-    void Spawn(void);
-    virtual void PostSpawn(void); //LRC
-    virtual void Precache(void);
+    void Spawn(void) override;
+    void PostSpawn(void) override; //LRC
+    void Precache(void) override;
     void RotSpawn(void);
-    virtual void KeyValue(KeyValueData* pkvd);
+    void KeyValue(KeyValueData* pkvd) override;
 
     void ButtonActivate();
 
@@ -902,16 +903,16 @@ public:
     void EXPORT ButtonBackHome(void);
     void EXPORT ButtonUse_IgnorePlayer(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
     void EXPORT ButtonUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    virtual int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
 
     enum BUTTON_CODE { BUTTON_NOTHING, BUTTON_ACTIVATE, BUTTON_RETURN };
 
     BUTTON_CODE ButtonResponseToTouch(void);
 
     static TYPEDESCRIPTION m_SaveData[];
-    virtual int ObjectCaps(void);
+    int ObjectCaps(void) override;
 
     BOOL m_fStayPushed; // button stays pushed in until touched again?
     BOOL m_fRotating; // a rotating button?  default is a sliding button.
@@ -942,7 +943,7 @@ public:
 template <class T>
 T* GetClassPtr(T* a)
 {
-    entvars_t* pev = (entvars_t*)a;
+    auto pev = (entvars_t*)a;
 
     // allocate entity if necessary
     if (pev == NULL)
@@ -986,13 +987,13 @@ push_trigger_data
 
 #define TRACER_FREQ		4			// Tracers fire every 4 bullets
 
-typedef struct _SelAmmo
+using SelAmmo = struct _SelAmmo
 {
     BYTE Ammo1Type;
     BYTE Ammo1;
     BYTE Ammo2Type;
     BYTE Ammo2;
-} SelAmmo;
+};
 
 //LRC- much as I hate to add new globals, I can't see how to read data from the World entity.
 extern BOOL g_startSuit;
@@ -1001,7 +1002,7 @@ extern BOOL g_startSuit;
 class CBaseAlias : public CPointEntity
 {
 public:
-    BOOL IsAlias(void) { return TRUE; };
+    BOOL IsAlias(void) override { return TRUE; };
     virtual CBaseEntity* FollowAlias(CBaseEntity* pFrom) { return NULL; };
 
     virtual void ChangeValue(int iszValue)
@@ -1015,8 +1016,8 @@ public:
     {
     };
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
     CBaseAlias* m_pNextAlias;
@@ -1025,12 +1026,12 @@ public:
 class CInfoGroup : public CPointEntity
 {
 public:
-    void KeyValue(KeyValueData* pkvd);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+    void KeyValue(KeyValueData* pkvd) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
     int GetMember(const char* szMemberName);
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
 
     static TYPEDESCRIPTION m_SaveData[];
 
@@ -1043,14 +1044,14 @@ public:
 class CMultiAlias : public CBaseAlias
 {
 public:
-    void KeyValue(KeyValueData* pkvd);
+    void KeyValue(KeyValueData* pkvd) override;
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
 
     static TYPEDESCRIPTION m_SaveData[];
 
-    CBaseEntity* FollowAlias(CBaseEntity* pFrom);
+    CBaseEntity* FollowAlias(CBaseEntity* pFrom) override;
 
     int m_cTargets;
     int m_iszTargets[MAX_MULTI_TARGETS];
@@ -1070,11 +1071,11 @@ class CWorld : public CBaseEntity
 {
 public:
     CWorld();
-    ~CWorld();
+    ~CWorld() override;
 
-    void Spawn(void);
-    void Precache(void);
-    void KeyValue(KeyValueData* pkvd);
+    void Spawn(void) override;
+    void Precache(void) override;
+    void KeyValue(KeyValueData* pkvd) override;
 
     static inline CWorld* Instance = nullptr;
 

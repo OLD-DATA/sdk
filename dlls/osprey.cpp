@@ -22,13 +22,13 @@
 #include "effects.h"
 #include "customentity.h"
 
-typedef struct
+using t_ospreygrunt = struct
 {
     int isValid;
     EHANDLE hGrunt;
     Vector vecOrigin;
     Vector vecAngles;
-} t_ospreygrunt;
+};
 
 
 #define SF_WAITFORTRIGGER	0x40
@@ -39,17 +39,17 @@ typedef struct
 class COsprey : public CBaseMonster
 {
 public:
-    int Save(CSave& save);
-    int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
-    int ObjectCaps(void) { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+    int ObjectCaps(void) override { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
     int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
 
-    void Spawn(void);
-    void Precache(void);
-    int Classify(void) { return CLASS_MACHINE; };
-    int BloodColor(void) { return DONT_BLEED; }
-    void Killed(entvars_t* pevAttacker, int iGib);
+    void Spawn(void) override;
+    void Precache(void) override;
+    int Classify(void) override { return CLASS_MACHINE; };
+    int BloodColor(void) override { return DONT_BLEED; }
+    void Killed(entvars_t* pevAttacker, int iGib) override;
     void Update();
 
     void UpdateGoal(void);
@@ -66,7 +66,8 @@ public:
     void EXPORT CommandUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
     // int  TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType );
-    void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType);
+    void TraceAttack(entvars_t* pevAttacker, float flDamage, Vector vecDir, TraceResult* ptr,
+                     int bitsDamageType) override;
     void ShowDamage(void);
 
     CBaseEntity* m_pGoalEnt;

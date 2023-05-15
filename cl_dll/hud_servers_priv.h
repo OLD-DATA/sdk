@@ -14,20 +14,20 @@
 class CHudServers
 {
 public:
-    typedef struct request_s
+    using request_t = struct request_s
     {
         struct request_s* next;
         netadr_t remote_address;
         int context;
-    } request_t;
+    };
 
-    typedef struct server_s
+    using server_t = struct server_s
     {
         struct server_s* next;
         netadr_t remote_address;
         char* info;
         int ping;
-    } server_t;
+    };
 
     CHudServers();
     ~CHudServers();

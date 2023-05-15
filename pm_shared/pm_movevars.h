@@ -10,7 +10,7 @@
 #define PM_MOVEVARSH
 
 // movevars_t                  // Physics variables.
-typedef struct movevars_s movevars_t;
+using movevars_t = struct movevars_s;
 
 struct movevars_s
 {

@@ -9,7 +9,7 @@
 
 
 // handle to an individual scheme
-typedef int SchemeHandle_t;
+using SchemeHandle_t = int;
 
 
 // Register console variables, etc..

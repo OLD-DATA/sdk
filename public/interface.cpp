@@ -199,7 +199,7 @@ void Sys_UnloadModule(CSysModule* pModule)
     if (!pModule)
         return;
 
-    HMODULE hDLL = reinterpret_cast<HMODULE>(pModule);
+    auto hDLL = reinterpret_cast<HMODULE>(pModule);
 #if defined ( _WIN32 )
     FreeLibrary(hDLL);
 #else
@@ -218,7 +218,7 @@ CreateInterfaceFn Sys_GetFactory(CSysModule* pModule)
     if (!pModule)
         return NULL;
 
-    HMODULE hDLL = reinterpret_cast<HMODULE>(pModule);
+    auto hDLL = reinterpret_cast<HMODULE>(pModule);
 #if defined ( _WIN32 )
     return reinterpret_cast<CreateInterfaceFn>(GetProcAddress(hDLL, CREATEINTERFACE_PROCNAME));
 #else

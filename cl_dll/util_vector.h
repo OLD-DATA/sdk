@@ -22,9 +22,9 @@
 #include "math.h"
 
 // Header file containing definition of globalvars_t and entvars_t
-typedef unsigned int func_t; //
-typedef unsigned int string_t; // from engine's pr_comp.h;
-typedef float vec_t; // needed before including progdefs.h
+using func_t = unsigned int; //
+using string_t = unsigned int; // from engine's pr_comp.h;
+using vec_t = float; // needed before including progdefs.h
 
 //=========================================================
 // 2DVector - used for many pathfinding and many other 

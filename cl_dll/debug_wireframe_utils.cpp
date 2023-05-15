@@ -84,15 +84,15 @@ void RenderBoxCorners(Vector min, Vector max)
     // X = front-back
     // Y = left-right
     // Z = top-bottom
-    Vector bottomLeftBack = Vector(min.x, min.y, min.z);
-    Vector bottomLeftFront = Vector(max.x, min.y, min.z);
-    Vector bottomRightFront = Vector(max.x, max.y, min.z);
-    Vector bottomRightBack = Vector(min.x, max.y, min.z);
+    auto bottomLeftBack = Vector(min.x, min.y, min.z);
+    auto bottomLeftFront = Vector(max.x, min.y, min.z);
+    auto bottomRightFront = Vector(max.x, max.y, min.z);
+    auto bottomRightBack = Vector(min.x, max.y, min.z);
 
-    Vector topLeftBack = Vector(min.x, min.y, max.z);
-    Vector topLeftFront = Vector(max.x, min.y, max.z);
-    Vector topRightFront = Vector(max.x, max.y, max.z);
-    Vector topRightBack = Vector(min.x, max.y, max.z);
+    auto topLeftBack = Vector(min.x, min.y, max.z);
+    auto topLeftFront = Vector(max.x, min.y, max.z);
+    auto topRightFront = Vector(max.x, max.y, max.z);
+    auto topRightBack = Vector(min.x, max.y, max.z);
 
     // For each corner, 3 lines are required
 

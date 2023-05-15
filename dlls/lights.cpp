@@ -99,14 +99,14 @@ int GetStdLightStyle(int iStyle)
 class CLight : public CPointEntity
 {
 public:
-    virtual void KeyValue(KeyValueData* pkvd);
-    virtual void Spawn(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    void Think(void);
+    void KeyValue(KeyValueData* pkvd) override;
+    void Spawn(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    void Think(void) override;
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
-    virtual STATE GetState(void) { return m_iState; }; //LRC
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
+    STATE GetState(void) override { return m_iState; }; //LRC
 
     static TYPEDESCRIPTION m_SaveData[];
 
@@ -430,8 +430,8 @@ void CLightFading::Think()
 class CEnvLight : public CLight
 {
 public:
-    void KeyValue(KeyValueData* pkvd);
-    void Spawn(void);
+    void KeyValue(KeyValueData* pkvd) override;
+    void Spawn(void) override;
 };
 
 LINK_ENTITY_TO_CLASS(light_environment, CEnvLight);
@@ -499,12 +499,12 @@ void CEnvLight::Spawn(void)
 class CLightDynamic : public CBaseEntity
 {
 public:
-    void Spawn(void);
-    void Precache(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    int ObjectCaps(void) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+    void Spawn(void) override;
+    void Precache(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
     void SetEffects(void);
-    STATE GetState(void);
+    STATE GetState(void) override;
 };
 
 LINK_ENTITY_TO_CLASS(light_glow, CLightDynamic);
@@ -575,8 +575,8 @@ class CLightFader : public CPointEntity
 public:
     void EXPORT FadeThink(void);
     void EXPORT WaitThink(void);
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
 
     static TYPEDESCRIPTION m_SaveData[];
 
@@ -647,10 +647,10 @@ void CLightFader::WaitThink(void)
 class CTriggerLightstyle : public CPointEntity
 {
 public:
-    void KeyValue(KeyValueData* pkvd);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    void KeyValue(KeyValueData* pkvd) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
 private:
@@ -720,7 +720,7 @@ void CTriggerLightstyle::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_
         }
         else
         {
-            CLight* pLight = (CLight*)pTarget;
+            auto pLight = (CLight*)pTarget;
 
             if (m_iFade)
             {

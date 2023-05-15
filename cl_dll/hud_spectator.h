@@ -31,7 +31,7 @@ void NormalizeAngles(float* angles);
 // Purpose: Handles the drawing of the spectator stuff (camera & top-down map and all the things on it )
 //-----------------------------------------------------------------------------
 
-typedef struct overviewInfo_s
+using overviewInfo_t = struct overviewInfo_s
 {
     char map[64]; // cl.levelname or empty
     vec3_t origin; // center of map
@@ -45,23 +45,23 @@ typedef struct overviewInfo_s
     int insetWindowY;
     int insetWindowHeight;
     int insetWindowWidth;
-} overviewInfo_t;
+};
 
-typedef struct overviewEntity_s
+using overviewEntity_t = struct overviewEntity_s
 {
     HSPRITE hSprite;
     struct cl_entity_s* entity;
     double killTime;
-} overviewEntity_t;
+};
 
-typedef struct cameraWayPoint_s
+using cameraWayPoint_t = struct cameraWayPoint_s
 {
     float time;
     vec3_t position;
     vec3_t angle;
     float fov;
     int flags;
-} cameraWayPoint_t;
+};
 
 #define	 MAX_OVERVIEW_ENTITIES		128
 #define	 MAX_CAM_WAYPOINTS			32
@@ -69,10 +69,10 @@ typedef struct cameraWayPoint_s
 class CHudSpectator : public CHudBase
 {
 public:
-    void Reset();
+    void Reset() override;
     int ToggleInset(bool allowOff);
     void CheckSettings();
-    void InitHUDData(void);
+    void InitHUDData(void) override;
     bool AddOverviewEntityToList(HSPRITE sprite, cl_entity_t* ent, double killTime);
     void DeathMessage(int victim);
     bool AddOverviewEntity(int type, struct cl_entity_s* ent, const char* modelname);
@@ -91,10 +91,10 @@ public:
     void FindPlayer(const char* name);
     void DirectorMessage(int iSize, void* pbuf);
     void SetSpectatorStartPosition();
-    int Init();
-    int VidInit();
+    int Init() override;
+    int VidInit() override;
 
-    int Draw(float flTime);
+    int Draw(float flTime) override;
 
     void AddWaypoint(float time, vec3_t pos, vec3_t angle, float fov, int flags);
     void SetCameraView(vec3_t pos, vec3_t angle, float fov);

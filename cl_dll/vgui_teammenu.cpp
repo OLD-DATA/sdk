@@ -62,7 +62,7 @@ CTeamMenuPanel::CTeamMenuPanel(int iTrans, int iRemoveMe, int x, int y, int wide
     int r, g, b, a;
 
     // Create the title
-    Label* pLabel = new Label("", TEAMMENU_TITLE_X, TEAMMENU_TITLE_Y);
+    auto pLabel = new Label("", TEAMMENU_TITLE_X, TEAMMENU_TITLE_Y);
     pLabel->setParent(this);
     pLabel->setFont(pTitleFont);
     pSchemes->getFgColor(hTitleScheme, r, g, b, a);
@@ -306,7 +306,7 @@ void CTeamMenuPanel::Update(void)
             ch = strchr(sz, '.');
             *ch = '\0';
             strcat(sz, ".txt");
-            char* pfile = (char*)gEngfuncs.COM_LoadFile(sz, 5, NULL);
+            auto pfile = (char*)gEngfuncs.COM_LoadFile(sz, 5, NULL);
             if (pfile)
             {
                 m_pBriefing->setText(pfile);

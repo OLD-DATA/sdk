@@ -609,7 +609,7 @@ void CBasePlayerItem::DefaultTouch(CBaseEntity* pOther)
     if (!pOther->IsPlayer())
         return;
 
-    CBasePlayer* pPlayer = (CBasePlayer*)pOther;
+    auto pPlayer = (CBasePlayer*)pOther;
 
     // can I have this?
     if (!g_pGameRules->CanHavePlayerItem(pPlayer, this))
@@ -1422,7 +1422,7 @@ void CWeaponBox::Touch(CBaseEntity* pOther)
         return;
     }
 
-    CBasePlayer* pPlayer = (CBasePlayer*)pOther;
+    auto pPlayer = (CBasePlayer*)pOther;
     int i;
 
     // dole out ammo

@@ -43,7 +43,7 @@ public:
     ServerBrowser(int x, int y, int wide, int tall);
 
 public:
-    virtual void setSize(int wide, int tall);
+    void setSize(int wide, int tall) override;
 };
 
 

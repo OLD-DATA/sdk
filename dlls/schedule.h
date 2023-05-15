@@ -29,7 +29,7 @@
 //=========================================================
 // These are the schedule types
 //=========================================================
-typedef enum
+using SCHEDULE_TYPE = enum
 {
     SCHED_NONE = 0,
     SCHED_IDLE_STAND,
@@ -76,12 +76,12 @@ typedef enum
     SCHED_FAIL,
 
     LAST_COMMON_SCHEDULE // Leave this at the bottom
-} SCHEDULE_TYPE;
+};
 
 //=========================================================
 // These are the shared tasks
 //=========================================================
-typedef enum
+using SHARED_TASKS = enum
 {
     TASK_INVALID = 0,
     TASK_WAIT,
@@ -183,7 +183,7 @@ typedef enum
     // wait until MovementIsComplete()
     LAST_COMMON_TASK,
     // LEAVE THIS AT THE BOTTOM!! (sjb)
-} SHARED_TASKS;
+};
 
 
 // These go in the flData member of the TASK_WALK_TO_TARGET, TASK_RUN_TO_TARGET
@@ -281,6 +281,7 @@ struct WayPoint_t
 #define bits_COND_SMELL					( 1 << 18) // there is an interesting scent
 #define bits_COND_ENEMY_FACING_ME		( 1 << 19) // enemy is facing me
 #define bits_COND_ENEMY_DEAD			( 1 << 20) // enemy was killed. If you get this in combat, try to find another enemy. If you get it in alert, victory dance.
+
 
 #define bits_COND_SEE_CLIENT			( 1 << 21) // see a client
 #define bits_COND_SEE_NEMESIS			( 1 << 22) // see my nemesis

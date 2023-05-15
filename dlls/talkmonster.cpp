@@ -1154,7 +1154,7 @@ int CTalkMonster::FIdleSpeak(void)
         //SENTENCEG_PlayRndSz( ENT(pev), szQuestionGroup, 1.0, ATTN_IDLE, 0, pitch );
 
         // force friend to answer
-        CTalkMonster* pTalkMonster = (CTalkMonster*)pFriend;
+        auto pTalkMonster = (CTalkMonster*)pFriend;
         m_hTalkTarget = pFriend;
         pTalkMonster->SetAnswerQuestion(this); // UNDONE: This is EVIL!!!
         pTalkMonster->m_flStopTalkTime = m_flStopTalkTime;
@@ -1248,7 +1248,7 @@ int CTalkMonster::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, fl
             if (pFriend && pFriend->IsAlive())
             {
                 // only if not dead or dying!
-                CTalkMonster* pTalkMonster = (CTalkMonster*)pFriend;
+                auto pTalkMonster = (CTalkMonster*)pFriend;
                 pTalkMonster->ChangeSchedule(slIdleStopShooting);
             }
         }

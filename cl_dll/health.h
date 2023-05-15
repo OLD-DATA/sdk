@@ -87,12 +87,12 @@
 #define DMG_CONCUSS				DMG_SONIC
 
 
-typedef struct
+using DAMAGE_IMAGE = struct
 {
     float fExpire;
     float fBaseline;
     int x, y;
-} DAMAGE_IMAGE;
+};
 
 //
 //-----------------------------------------------------
@@ -100,10 +100,10 @@ typedef struct
 class CHudHealth : public CHudBase
 {
 public:
-    virtual int Init(void);
-    virtual int VidInit(void);
-    virtual int Draw(float fTime);
-    virtual void Reset(void);
+    int Init(void) override;
+    int VidInit(void) override;
+    int Draw(float fTime) override;
+    void Reset(void) override;
     int MsgFunc_Health(const char* pszName, int iSize, void* pbuf);
     int MsgFunc_Damage(const char* pszName, int iSize, void* pbuf);
     int m_iHealth;

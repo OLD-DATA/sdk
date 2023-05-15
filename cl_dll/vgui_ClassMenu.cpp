@@ -76,7 +76,7 @@ CClassMenuPanel::CClassMenuPanel(int iTrans, int iRemoveMe, int x, int y, int wi
     int r, g, b, a;
 
     // Create the title
-    Label* pLabel = new Label("", CLASSMENU_TITLE_X, CLASSMENU_TITLE_Y);
+    auto pLabel = new Label("", CLASSMENU_TITLE_X, CLASSMENU_TITLE_Y);
     pLabel->setParent(this);
     pLabel->setFont(pSchemes->getFont(hTitleScheme));
     pSchemes->getFgColor(hTitleScheme, r, g, b, a);

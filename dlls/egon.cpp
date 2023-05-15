@@ -530,20 +530,20 @@ void CEgon::EndAttack(void)
 
 class CEgonAmmo : public CBasePlayerAmmo
 {
-    void Spawn(void)
+    void Spawn(void) override
     {
         Precache();
         SET_MODEL(ENT(pev), "models/w_chainammo.mdl");
         CBasePlayerAmmo::Spawn();
     }
 
-    void Precache(void)
+    void Precache(void) override
     {
         PRECACHE_MODEL("models/w_chainammo.mdl");
         PRECACHE_SOUND("items/9mmclip1.wav");
     }
 
-    BOOL AddAmmo(CBaseEntity* pOther)
+    BOOL AddAmmo(CBaseEntity* pOther) override
     {
         if (pOther->GiveAmmo(AMMO_URANIUMBOX_GIVE, "uranium", URANIUM_MAX_CARRY) != -1)
         {

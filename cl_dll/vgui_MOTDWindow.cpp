@@ -92,7 +92,7 @@ CMessageWindowPanel::CMessageWindowPanel(const char* szMOTD, const char* szTitle
     m_pBackgroundPanel->getSize(iXSize, iYSize);
 
     // Create the title
-    Label* pLabel = new Label("", iXPos + MOTD_TITLE_X, iYPos + MOTD_TITLE_Y);
+    auto pLabel = new Label("", iXPos + MOTD_TITLE_X, iYPos + MOTD_TITLE_Y);
     pLabel->setParent(this);
     pLabel->setFont(pSchemes->getFont(hTitleScheme));
     pLabel->setFont(Scheme::sf_primary1);
@@ -116,7 +116,7 @@ CMessageWindowPanel::CMessageWindowPanel(const char* szMOTD, const char* szTitle
     pScrollPanel->validate();
 
     // Create the text panel
-    TextPanel* pText = new TextPanel("", 0, 0, 64, 64);
+    auto pText = new TextPanel("", 0, 0, 64, 64);
     pText->setParent(pScrollPanel->getClient());
 
     // get the font and colors from the scheme
@@ -146,9 +146,9 @@ CMessageWindowPanel::CMessageWindowPanel(const char* szMOTD, const char* szTitle
 
     pScrollPanel->validate();
 
-    CommandButton* pButton = new CommandButton(CHudTextMessage::BufferedLocaliseTextString("#Menu_OK"),
-                                               iXPos + XRES(16), iYPos + iYSize - YRES(16) - BUTTON_SIZE_Y,
-                                               CMENU_SIZE_X, BUTTON_SIZE_Y);
+    auto pButton = new CommandButton(CHudTextMessage::BufferedLocaliseTextString("#Menu_OK"),
+                                     iXPos + XRES(16), iYPos + iYSize - YRES(16) - BUTTON_SIZE_Y,
+                                     CMENU_SIZE_X, BUTTON_SIZE_Y);
     pButton->addActionSignal(new CMenuHandler_TextWindow(HIDE_TEXTWINDOW));
     pButton->setParent(this);
 }

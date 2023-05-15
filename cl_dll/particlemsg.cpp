@@ -54,7 +54,7 @@ int CHudParticle::MsgFunc_Particle(const char* pszName, int iSize, void* pbuf)
     //	gEngfuncs.Con_Printf("Message received\n");
     //char sz[255];
 
-    ParticleSystem* pSystem = new ParticleSystem(entindex, sz); //"aurora/smoke.aur");
+    auto pSystem = new ParticleSystem(entindex, sz); //"aurora/smoke.aur");
 
     g_pParticleSystems->AddSystem(pSystem);
 

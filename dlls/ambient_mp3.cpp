@@ -14,10 +14,10 @@
 class CAmbientMP3 : public CBaseEntity
 {
 public:
-    void Spawn();
-    void KeyValue(KeyValueData* pkvd);
-    void Use(CBaseEntity* activator, CBaseEntity* caller, USE_TYPE useType, float value);
-    void Think();
+    void Spawn() override;
+    void KeyValue(KeyValueData* pkvd) override;
+    void Use(CBaseEntity* activator, CBaseEntity* caller, USE_TYPE useType, float value) override;
+    void Think() override;
 
     void SetVolume(); // Sets the MP3 volume in the console
     void Stop(); // stops the MP3

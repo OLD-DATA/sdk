@@ -81,13 +81,13 @@ float CalcLocus_Ratio(CBaseEntity* pLocus, const char* szText)
 class CLocusAlias : public CBaseAlias
 {
 public:
-    void PostSpawn(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    CBaseEntity* FollowAlias(CBaseEntity* pFrom);
-    void FlushChanges(void);
+    void PostSpawn(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    CBaseEntity* FollowAlias(CBaseEntity* pFrom) override;
+    void FlushChanges(void) override;
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
     EHANDLE m_hValue;
@@ -148,13 +148,13 @@ CBaseEntity* CLocusAlias::FollowAlias(CBaseEntity* pFrom)
 class CLocusBeam : public CPointEntity
 {
 public:
-    void Spawn(void);
-    void Precache(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+    void Spawn(void) override;
+    void Precache(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
-    void KeyValue(KeyValueData* pkvd);
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    void KeyValue(KeyValueData* pkvd) override;
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
 
     static TYPEDESCRIPTION m_SaveData[];
 
@@ -346,7 +346,7 @@ void CLocusBeam::Spawn(void)
 class CCalcPosition : public CPointEntity
 {
 public:
-    Vector CalcPosition(CBaseEntity* pLocus);
+    Vector CalcPosition(CBaseEntity* pLocus) override;
 };
 
 LINK_ENTITY_TO_CLASS(calc_position, CCalcPosition);
@@ -416,7 +416,7 @@ Vector CCalcPosition::CalcPosition(CBaseEntity* pLocus)
 class CCalcRatio : public CPointEntity
 {
 public:
-    float CalcRatio(CBaseEntity* pLocus);
+    float CalcRatio(CBaseEntity* pLocus) override;
 };
 
 LINK_ENTITY_TO_CLASS(calc_ratio, CCalcRatio);
@@ -502,7 +502,7 @@ class CCalcSubVelocity : public CPointEntity
     Vector ConvertAngles(CBaseEntity* pLocus, Vector vecAngles);
 
 public:
-    Vector CalcVelocity(CBaseEntity* pLocus);
+    Vector CalcVelocity(CBaseEntity* pLocus) override;
 };
 
 LINK_ENTITY_TO_CLASS(calc_subvelocity, CCalcSubVelocity);
@@ -566,7 +566,7 @@ Vector CCalcSubVelocity::ConvertAngles(CBaseEntity* pLocus, Vector vecAngles)
 class CCalcVelocityPath : public CPointEntity
 {
 public:
-    Vector CalcVelocity(CBaseEntity* pLocus);
+    Vector CalcVelocity(CBaseEntity* pLocus) override;
 };
 
 LINK_ENTITY_TO_CLASS(calc_velocity_path, CCalcVelocityPath);
@@ -643,7 +643,7 @@ Vector CCalcVelocityPath::CalcVelocity(CBaseEntity* pLocus)
 class CCalcVelocityPolar : public CPointEntity
 {
 public:
-    Vector CalcVelocity(CBaseEntity* pLocus);
+    Vector CalcVelocity(CBaseEntity* pLocus) override;
 };
 
 LINK_ENTITY_TO_CLASS(calc_velocity_polar, CCalcVelocityPolar);
@@ -669,22 +669,22 @@ Vector CCalcVelocityPolar::CalcVelocity(CBaseEntity* pLocus)
 class CMark : public CPointEntity
 {
 public:
-    Vector CalcVelocity(CBaseEntity* pLocus) { return pev->movedir; }
-    float CalcRatio(CBaseEntity* pLocus) { return pev->frags; }
-    void Think(void) { SUB_Remove(); }
+    Vector CalcVelocity(CBaseEntity* pLocus) override { return pev->movedir; }
+    float CalcRatio(CBaseEntity* pLocus) override { return pev->frags; }
+    void Think(void) override { SUB_Remove(); }
 };
 
 class CLocusVariable : public CPointEntity
 {
 public:
-    void Spawn(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    Vector CalcVelocity(CBaseEntity* pLocus) { return pev->movedir; }
-    float CalcRatio(CBaseEntity* pLocus) { return pev->frags; }
+    void Spawn(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    Vector CalcVelocity(CBaseEntity* pLocus) override { return pev->movedir; }
+    float CalcRatio(CBaseEntity* pLocus) override { return pev->frags; }
 
-    void KeyValue(KeyValueData* pkvd);
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    void KeyValue(KeyValueData* pkvd) override;
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
 
     static TYPEDESCRIPTION m_SaveData[];
 

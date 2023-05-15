@@ -66,18 +66,18 @@ class CFuncTrain;
 class CTrainSequence : public CBaseEntity
 {
 public:
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
     void EndThink(void);
     void TimeOutThink(void);
-    void KeyValue(KeyValueData* pkvd);
-    STATE GetState(void) { return (m_pTrain || m_pTrackTrain) ? STATE_ON : STATE_OFF; }
-    virtual int ObjectCaps(void);
+    void KeyValue(KeyValueData* pkvd) override;
+    STATE GetState(void) override { return (m_pTrain || m_pTrackTrain) ? STATE_ON : STATE_OFF; }
+    int ObjectCaps(void) override;
 
     void StopSequence(void);
     void ArrivalNotify(void);
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
     string_t m_iszEntity;
@@ -99,15 +99,15 @@ public:
 class CBasePlatTrain : public CBaseToggle
 {
 public:
-    virtual int ObjectCaps(void) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
-    void KeyValue(KeyValueData* pkvd);
-    void Precache(void);
+    int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+    void KeyValue(KeyValueData* pkvd) override;
+    void Precache(void) override;
 
     // This is done to fix spawn flag collisions between this class and a derived class
     virtual BOOL IsTogglePlat(void) { return (pev->spawnflags & SF_PLAT_TOGGLE) ? TRUE : FALSE; }
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
     BYTE m_bMoveSnd; // sound a plat makes while moving
@@ -279,11 +279,11 @@ void CBasePlatTrain::Precache(void)
 class CFuncPlat : public CBasePlatTrain
 {
 public:
-    void Spawn(void);
-    void Precache(void);
+    void Spawn(void) override;
+    void Precache(void) override;
     void Setup(void);
 
-    virtual void Blocked(CBaseEntity* pOther);
+    void Blocked(CBaseEntity* pOther) override;
 
     void EXPORT PlatUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 
@@ -305,9 +305,9 @@ LINK_ENTITY_TO_CLASS(func_plat, CFuncPlat);
 class CPlatTrigger : public CBaseEntity
 {
 public:
-    virtual int ObjectCaps(void) { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_DONT_SAVE; }
+    int ObjectCaps(void) override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_DONT_SAVE; }
     void SpawnInsideTrigger(CFuncPlat* pPlatform);
-    void Touch(CBaseEntity* pOther);
+    void Touch(CBaseEntity* pOther) override;
     EHANDLE m_hPlatform;
 };
 
@@ -609,18 +609,18 @@ void CFuncPlat::Blocked(CBaseEntity* pOther)
 class CFuncPlatRot : public CFuncPlat
 {
 public:
-    void Spawn(void);
+    void Spawn(void) override;
     void SetupRotation(void);
-    virtual void KeyValue(KeyValueData* pkvd);
+    void KeyValue(KeyValueData* pkvd) override;
 
-    virtual void GoUp(void);
-    virtual void GoDown(void);
-    virtual void HitTop(void);
-    virtual void HitBottom(void);
+    void GoUp(void) override;
+    void GoDown(void) override;
+    void HitTop(void) override;
+    void HitBottom(void) override;
 
     void RotMove(Vector& destAngle, float time);
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
     Vector m_end, m_start;
@@ -750,14 +750,14 @@ void CFuncPlatRot::RotMove(Vector& destAngle, float time)
 class CFuncTrain : public CBasePlatTrain
 {
 public:
-    void Spawn(void);
-    void Precache(void);
-    void PostSpawn(void);
-    void OverrideReset(void);
+    void Spawn(void) override;
+    void Precache(void) override;
+    void PostSpawn(void) override;
+    void OverrideReset(void) override;
 
-    void Blocked(CBaseEntity* pOther);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    void KeyValue(KeyValueData* pkvd);
+    void Blocked(CBaseEntity* pOther) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    void KeyValue(KeyValueData* pkvd) override;
 
     //LRC
     void StartSequence(CTrainSequence* pSequence);
@@ -769,12 +769,12 @@ public:
     void EXPORT ThinkDoNext(void);
     void EXPORT SoundSetup(void);
 
-    STATE GetState(void) { return m_iState; }
+    STATE GetState(void) override { return m_iState; }
 
-    virtual void ThinkCorrection(void);
+    void ThinkCorrection(void) override;
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
     entvars_t* m_pevCurrentTarget;
@@ -2173,8 +2173,8 @@ void CFuncTrackTrain::StopSequence()
 class CFuncTrainControls : public CBaseEntity
 {
 public:
-    virtual int ObjectCaps(void) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
-    void Spawn(void);
+    int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+    void Spawn(void) override;
     void EXPORT Find(void);
 };
 
@@ -2197,7 +2197,7 @@ void CFuncTrainControls::Find(void)
         return;
     }
 
-    CFuncTrackTrain* ptrain = (CFuncTrackTrain*)pTarget;
+    auto ptrain = (CFuncTrackTrain*)pTarget;
     ptrain->SetControls(pev);
     UTIL_Remove(this);
 }
@@ -2235,38 +2235,38 @@ void CFuncTrainControls::Spawn(void)
 // train within these dimensions in order to operate when the train is near it.
 //
 
-typedef enum { TRAIN_SAFE, TRAIN_BLOCKING, TRAIN_FOLLOWING } TRAIN_CODE;
+using TRAIN_CODE = enum { TRAIN_SAFE, TRAIN_BLOCKING, TRAIN_FOLLOWING };
 
 class CFuncTrackChange : public CFuncPlatRot
 {
 public:
-    void Spawn(void);
-    void Precache(void);
+    void Spawn(void) override;
+    void Precache(void) override;
 
     //	virtual void	Blocked( void );
-    virtual void EXPORT GoUp(void);
-    virtual void EXPORT GoDown(void);
+    void EXPORT GoUp(void) override;
+    void EXPORT GoDown(void) override;
 
-    void KeyValue(KeyValueData* pkvd);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+    void KeyValue(KeyValueData* pkvd) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
     void EXPORT Find(void);
     TRAIN_CODE EvaluateTrain(CPathTrack* pcurrent);
     void UpdateTrain(Vector& dest);
-    virtual void HitBottom(void);
-    virtual void HitTop(void);
-    void Touch(CBaseEntity* pOther);
+    void HitBottom(void) override;
+    void HitTop(void) override;
+    void Touch(CBaseEntity* pOther) override;
     virtual void UpdateAutoTargets(int toggleState);
-    virtual BOOL IsTogglePlat(void) { return TRUE; }
+    BOOL IsTogglePlat(void) override { return TRUE; }
 
     void DisableUse(void) { m_use = 0; }
     void EnableUse(void) { m_use = 1; }
     int UseEnabled(void) { return m_use; }
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
-    virtual void OverrideReset(void);
+    void OverrideReset(void) override;
 
 
     CPathTrack* m_trackTop;
@@ -2660,8 +2660,8 @@ void CFuncTrackChange::HitTop(void)
 class CFuncTrackAuto : public CFuncTrackChange
 {
 public:
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    virtual void UpdateAutoTargets(int toggleState);
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    void UpdateAutoTargets(int toggleState) override;
 };
 
 LINK_ENTITY_TO_CLASS(func_trackautochange, CFuncTrackAuto);
@@ -2752,22 +2752,22 @@ void CFuncTrackAuto::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 class CGunTarget : public CBaseMonster
 {
 public:
-    void Spawn(void);
-    void Activate(void);
+    void Spawn(void) override;
+    void Activate(void) override;
     void EXPORT Next(void);
     void EXPORT Start(void);
     void EXPORT Wait(void);
-    void Stop(void);
+    void Stop(void) override;
 
-    int BloodColor(void) { return DONT_BLEED; }
-    int Classify(void) { return CLASS_MACHINE; }
-    int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    Vector BodyTarget(const Vector& posSrc) { return pev->origin; }
+    int BloodColor(void) override { return DONT_BLEED; }
+    int Classify(void) override { return CLASS_MACHINE; }
+    int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    Vector BodyTarget(const Vector& posSrc) override { return pev->origin; }
 
-    virtual int ObjectCaps(void) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
 
     static TYPEDESCRIPTION m_SaveData[];
 
@@ -3030,7 +3030,7 @@ void CTrainSequence::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 
             if (FStrEq(STRING(pEnt->pev->classname), "func_train"))
             {
-                CFuncTrain* pTrain = (CFuncTrain*)pEnt;
+                auto pTrain = (CFuncTrain*)pEnt;
 
                 // check whether it's being controlled by another sequence
                 if (pTrain->m_pSequence)
@@ -3185,7 +3185,7 @@ void CTrainSequence::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
             }
             else if (FStrEq(STRING(pEnt->pev->classname), "func_tracktrain"))
             {
-                CFuncTrackTrain* pTrackTrain = (CFuncTrackTrain*)pEnt;
+                auto pTrackTrain = (CFuncTrackTrain*)pEnt;
 
                 // check whether it's being controlled by another sequence
                 if (pTrackTrain->m_pSequence)

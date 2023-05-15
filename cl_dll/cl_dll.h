@@ -28,10 +28,10 @@
 
 #include "Platform.h"
 
-typedef unsigned char byte;
-typedef unsigned short word;
-typedef float vec_t;
-typedef int (*pfnUserMsgHook)(const char* pszName, int iSize, void* pbuf);
+using byte = unsigned char;
+using word = unsigned short;
+using vec_t = float;
+using pfnUserMsgHook = int(*)(const char* pszName, int iSize, void* pbuf);
 
 #include "util_vector.h"
 

@@ -152,7 +152,7 @@ float MoveToward(float cur, float goal, float maxspeed)
 
 //-------------------------------------------------- Gobal Functions
 
-typedef struct
+using moveclip_t = struct
 {
     vec3_t boxmins, boxmaxs; // enclose the test object along entire move
     float *mins, *maxs; // size of the moving object
@@ -162,7 +162,7 @@ typedef struct
     int type;
     edict_t* passedict;
     qboolean monsterclip;
-} moveclip_t;
+};
 
 extern trace_t SV_ClipMoveToEntity(edict_t* ent, vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end);
 

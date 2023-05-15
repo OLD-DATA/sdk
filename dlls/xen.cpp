@@ -29,10 +29,10 @@ public:
     void SetActivity(Activity act);
     inline Activity GetActivity(void) { return m_Activity; }
 
-    virtual int ObjectCaps(void) { return CBaseAnimating::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+    int ObjectCaps(void) override { return CBaseAnimating::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
 private:
@@ -62,16 +62,16 @@ void CActAnimating::SetActivity(Activity act)
 class CXenPLight : public CActAnimating
 {
 public:
-    void Spawn(void);
-    void Precache(void);
-    void Touch(CBaseEntity* pOther);
-    void Think(void);
+    void Spawn(void) override;
+    void Precache(void) override;
+    void Touch(CBaseEntity* pOther) override;
+    void Think(void) override;
 
     void LightOn(void);
     void LightOff(void);
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
 private:
@@ -182,9 +182,9 @@ void CXenPLight::LightOff(void)
 class CXenHair : public CActAnimating
 {
 public:
-    void Spawn(void);
-    void Precache(void);
-    void Think(void);
+    void Spawn(void) override;
+    void Precache(void) override;
+    void Think(void) override;
 };
 
 LINK_ENTITY_TO_CLASS(xen_hair, CXenHair);
@@ -227,7 +227,7 @@ void CXenHair::Precache(void)
 class CXenTreeTrigger : public CBaseEntity
 {
 public:
-    void Touch(CBaseEntity* pOther);
+    void Touch(CBaseEntity* pOther) override;
     static CXenTreeTrigger* TriggerCreate(edict_t* pOwner, const Vector& position);
 };
 
@@ -261,23 +261,23 @@ void CXenTreeTrigger::Touch(CBaseEntity* pOther)
 class CXenTree : public CActAnimating
 {
 public:
-    void Spawn(void);
-    void Precache(void);
-    void Touch(CBaseEntity* pOther);
-    void Think(void);
+    void Spawn(void) override;
+    void Precache(void) override;
+    void Touch(CBaseEntity* pOther) override;
+    void Think(void) override;
 
-    int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+    int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override
     {
         Attack();
         return 0;
     }
 
-    void HandleAnimEvent(MonsterEvent_t* pEvent);
+    void HandleAnimEvent(MonsterEvent_t* pEvent) override;
     void Attack(void);
-    int Classify(void) { return CLASS_BARNACLE; }
+    int Classify(void) override { return CLASS_BARNACLE; }
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
     static const char* pAttackHitSounds[];
@@ -434,12 +434,12 @@ void CXenTree::Think(void)
 class CXenSpore : public CActAnimating
 {
 public:
-    void Spawn(void);
-    void Precache(void);
-    void Touch(CBaseEntity* pOther);
-    void Think(void);
+    void Spawn(void) override;
+    void Precache(void) override;
+    void Touch(CBaseEntity* pOther) override;
+    void Think(void) override;
 
-    int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
+    int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override
     {
         Attack();
         return 0;
@@ -455,17 +455,17 @@ public:
 
 class CXenSporeSmall : public CXenSpore
 {
-    void Spawn(void);
+    void Spawn(void) override;
 };
 
 class CXenSporeMed : public CXenSpore
 {
-    void Spawn(void);
+    void Spawn(void) override;
 };
 
 class CXenSporeLarge : public CXenSpore
 {
-    void Spawn(void);
+    void Spawn(void) override;
 
     static const Vector m_hullSizes[];
 };
@@ -475,7 +475,7 @@ class CXenHull : public CPointEntity
 {
 public:
     static CXenHull* CreateHull(CBaseEntity* source, const Vector& mins, const Vector& maxs, const Vector& offset);
-    int Classify(void) { return CLASS_BARNACLE; }
+    int Classify(void) override { return CLASS_BARNACLE; }
 };
 
 CXenHull* CXenHull::CreateHull(CBaseEntity* source, const Vector& mins, const Vector& maxs, const Vector& offset)

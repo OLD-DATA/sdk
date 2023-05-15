@@ -15,11 +15,11 @@
 #ifndef MONSTEREVENT_H
 #define MONSTEREVENT_H
 
-typedef struct
+using MonsterEvent_t = struct
 {
     int event;
     char* options;
-} MonsterEvent_t;
+};
 
 #define EVENT_SPECIFIC			0
 #define EVENT_SCRIPTED			1000

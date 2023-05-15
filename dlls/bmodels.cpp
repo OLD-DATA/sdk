@@ -55,13 +55,13 @@ This is just a solid wall if not inhibited
 class CFuncWall : public CBaseEntity
 {
 public:
-    void Spawn(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+    void Spawn(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
-    virtual STATE GetState(void) { return pev->frame ? STATE_ON : STATE_OFF; };
+    STATE GetState(void) override { return pev->frame ? STATE_ON : STATE_OFF; };
 
     // Bmodels don't go across transitions
-    virtual int ObjectCaps(void) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+    int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
     int m_iStyle;
 };
@@ -115,12 +115,12 @@ void CFuncWall::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useT
 class CFuncWallToggle : public CFuncWall
 {
 public:
-    void Spawn(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+    void Spawn(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
     void TurnOff(void);
     void TurnOn(void);
     BOOL IsOn(void);
-    virtual STATE GetState(void) { return (pev->solid == SOLID_NOT) ? STATE_OFF : STATE_ON; };
+    STATE GetState(void) override { return (pev->solid == SOLID_NOT) ? STATE_OFF : STATE_ON; };
 };
 
 LINK_ENTITY_TO_CLASS(func_wall_toggle, CFuncWallToggle);
@@ -178,8 +178,8 @@ void CFuncWallToggle::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYP
 class CFuncConveyor : public CFuncWall
 {
 public:
-    void Spawn(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+    void Spawn(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
     void UpdateSpeed(float speed);
 };
 
@@ -239,10 +239,10 @@ A simple entity that looks solid but lets you walk through it.
 class CFuncIllusionary : public CBaseToggle
 {
 public:
-    void Spawn(void);
+    void Spawn(void) override;
     void EXPORT SloshTouch(CBaseEntity* pOther);
-    void KeyValue(KeyValueData* pkvd);
-    virtual int ObjectCaps(void) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+    void KeyValue(KeyValueData* pkvd) override;
+    int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 };
 
 LINK_ENTITY_TO_CLASS(func_illusionary, CFuncIllusionary);
@@ -277,12 +277,12 @@ void CFuncIllusionary::Spawn(void)
 class CFuncShine : public CBaseEntity
 {
 public:
-    void Spawn(void);
-    void Activate(void);
-    virtual int ObjectCaps(void) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+    void Spawn(void) override;
+    void Activate(void) override;
+    int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
-    void DesiredAction(void);
-    void EXPORT Think(void);
+    void DesiredAction(void) override;
+    void EXPORT Think(void) override;
 };
 
 LINK_ENTITY_TO_CLASS(func_shine, CFuncShine);
@@ -346,9 +346,9 @@ void CFuncShine::Think(void)
 class CFuncMonsterClip : public CFuncWall
 {
 public:
-    void Spawn(void);
+    void Spawn(void) override;
 
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override
     {
     } // Clear out func_wall's use function
 };
@@ -369,20 +369,20 @@ class CFuncRotating : public CBaseEntity
 {
 public:
     // basic functions
-    void Spawn(void);
-    void Precache(void);
+    void Spawn(void) override;
+    void Precache(void) override;
     void EXPORT SpinUp(void);
     void EXPORT SpinDown(void);
-    void KeyValue(KeyValueData* pkvd);
+    void KeyValue(KeyValueData* pkvd) override;
     void EXPORT HurtTouch(CBaseEntity* pOther);
     void EXPORT RotatingUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
     void EXPORT WaitForStart(); //LRC - get round 1.1.0.8's bizarre behaviour on startup
     void EXPORT Rotate(void);
     void RampPitchVol(int fUp);
-    void Blocked(CBaseEntity* pOther);
-    virtual int ObjectCaps(void) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    void Blocked(CBaseEntity* pOther) override;
+    int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
 
     static TYPEDESCRIPTION m_SaveData[];
 
@@ -398,7 +398,7 @@ public:
     // from pev->avelocity.
 
     STATE m_iState; //LRC
-    virtual STATE GetState(void) { return m_iState; }; //LRC
+    STATE GetState(void) override { return m_iState; }; //LRC
 };
 
 TYPEDESCRIPTION CFuncRotating::m_SaveData[] =
@@ -563,7 +563,7 @@ void CFuncRotating::Spawn()
 
 void CFuncRotating::Precache(void)
 {
-    char* szSoundFile = (char*)STRING(pev->message);
+    auto szSoundFile = (char*)STRING(pev->message);
 
     // set up fan sounds
 
@@ -839,18 +839,18 @@ void CFuncRotating::Blocked(CBaseEntity* pOther)
 class CPendulum : public CBaseEntity
 {
 public:
-    void Spawn(void);
-    void KeyValue(KeyValueData* pkvd);
+    void Spawn(void) override;
+    void KeyValue(KeyValueData* pkvd) override;
     void EXPORT SwingThink(void);
     void EXPORT PendulumUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
     void EXPORT StopThink(void);
-    void Touch(CBaseEntity* pOther);
+    void Touch(CBaseEntity* pOther) override;
     void EXPORT RopeTouch(CBaseEntity* pOther); // this touch func makes the pendulum a rope
-    virtual int ObjectCaps(void) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
-    void Blocked(CBaseEntity* pOther);
-    virtual STATE GetState(void) { return (pev->speed) ? STATE_ON : STATE_OFF; }
+    int ObjectCaps(void) override { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
+    void Blocked(CBaseEntity* pOther) override;
+    STATE GetState(void) override { return (pev->speed) ? STATE_ON : STATE_OFF; }
 
     static TYPEDESCRIPTION m_SaveData[];
 

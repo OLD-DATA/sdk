@@ -79,10 +79,10 @@ inline edict_t* FIND_ENTITY_BY_TARGET(edict_t* entStart, const char* pszName)
 const size_t NUM_STATIC_BUFFERS = 4;
 
 // More explicit than "int"
-typedef int EOFFSET;
+using EOFFSET = int;
 
 // In case it's not alread defined
-typedef int BOOL;
+using BOOL = int;
 
 // In case this ever changes
 #define M_PI			3.14159265358979323846
@@ -179,7 +179,7 @@ inline BOOL FStringNull(int iString) { return iString == iStringNull; }
 #define		BLOOD_COLOR_YELLOW	(BYTE)195
 #define		BLOOD_COLOR_GREEN	BLOOD_COLOR_YELLOW
 
-typedef enum
+using MONSTERSTATE = enum
 {
     MONSTERSTATE_NONE = 0,
     MONSTERSTATE_IDLE,
@@ -190,10 +190,10 @@ typedef enum
     MONSTERSTATE_SCRIPT,
     MONSTERSTATE_PLAYDEAD,
     MONSTERSTATE_DEAD
-} MONSTERSTATE;
+};
 
 //LRC- the values used for the new "global states" mechanism.
-typedef enum
+using STATE = enum
 {
     STATE_OFF = 0,
     // disabled, inactive, invisible, closed, or stateless. Or non-alert monster.
@@ -206,18 +206,18 @@ typedef enum
     STATE_IN_USE,
     // player is in control (train/tank/barney/scientist).
     // In_Use isn't very useful, I'll probably remove it.
-} STATE;
+};
 
 extern char* GetStringForState(STATE state);
 
 // Things that toggle (buttons/triggers/doors) need this
-typedef enum
+using TOGGLE_STATE = enum
 {
     TS_AT_TOP,
     TS_AT_BOTTOM,
     TS_GOING_UP,
     TS_GOING_DOWN
-} TOGGLE_STATE;
+};
 
 // Misc useful
 inline BOOL FStrEq(const char* sz1, const char* sz2)
@@ -294,9 +294,9 @@ extern void UTIL_ScreenFadeAll(const Vector& color, float fadeTime, float holdTi
 extern void UTIL_ScreenFade(CBaseEntity* pEntity, const Vector& color, float fadeTime, float fadeHold, int alpha,
                             int flags);
 
-typedef enum { ignore_monsters = 1, dont_ignore_monsters = 0, missile = 2 } IGNORE_MONSTERS;
+using IGNORE_MONSTERS = enum { ignore_monsters = 1, dont_ignore_monsters = 0, missile = 2 };
 
-typedef enum { ignore_glass = 1, dont_ignore_glass = 0 } IGNORE_GLASS;
+using IGNORE_GLASS = enum { ignore_glass = 1, dont_ignore_glass = 0 };
 
 extern void UTIL_TraceLine(const Vector& vecStart, const Vector& vecEnd, IGNORE_MONSTERS igmon, edict_t* pentIgnore,
                            TraceResult* ptr);
@@ -380,7 +380,7 @@ extern void UTIL_SayText(const char* pText, CBaseEntity* pEntity);
 extern void UTIL_SayTextAll(const char* pText, CBaseEntity* pEntity);
 
 
-typedef struct hudtextparms_s
+using hudtextparms_t = struct hudtextparms_s
 {
     float x;
     float y;
@@ -392,7 +392,7 @@ typedef struct hudtextparms_s
     float holdTime;
     float fxTime;
     int channel;
-} hudtextparms_t;
+};
 
 // prints as transparent 'title' to the HUD
 extern void UTIL_HudMessageAll(const hudtextparms_t& textparms, const char* pMessage);

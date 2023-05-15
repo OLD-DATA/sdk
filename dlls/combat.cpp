@@ -200,11 +200,11 @@ void CGib::SpawnRandomGibs(entvars_t* pevVictim, int cGibs, int notfirst, const 
     pGib->Spawn(szGibModel);
 
     //LRC - check the model itself to find out how many gibs are available
-    studiohdr_t* pstudiohdr = (studiohdr_t*)(GET_MODEL_PTR(ENT(pGib->pev)));
+    auto pstudiohdr = (studiohdr_t*)(GET_MODEL_PTR(ENT(pGib->pev)));
     if (!pstudiohdr)
         return;
 
-    mstudiobodyparts_t* pbodypart = (mstudiobodyparts_t*)((byte*)pstudiohdr + pstudiohdr->bodypartindex);
+    auto pbodypart = (mstudiobodyparts_t*)((byte*)pstudiohdr + pstudiohdr->bodypartindex);
     //ALERT(at_console, "read %d bodyparts, canonical is %d\n", pbodypart->nummodels, HUMAN_GIB_COUNT);
 
     for (int cSplat = 0; cSplat < cGibs; cSplat++)

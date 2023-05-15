@@ -155,7 +155,7 @@ void UTIL_LogPrintf(char*, ...)
 {
 }
 
-void UTIL_ClientPrintAll(int, char const*, char const*, char const*, char const*, char const*)
+void UTIL_ClientPrintAll(int, const char*, const char*, const char*, const char*, const char*)
 {
 }
 

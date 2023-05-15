@@ -45,12 +45,12 @@
 class CEnvGlobal : public CPointEntity
 {
 public:
-    void Spawn(void);
-    void KeyValue(KeyValueData* pkvd);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+    void Spawn(void) override;
+    void KeyValue(KeyValueData* pkvd) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
 
     static TYPEDESCRIPTION m_SaveData[];
 
@@ -145,17 +145,17 @@ void CEnvGlobal::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE use
 class CEnvState : public CPointEntity
 {
 public:
-    void Spawn(void);
-    void Think(void);
-    void KeyValue(KeyValueData* pkvd);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+    void Spawn(void) override;
+    void Think(void) override;
+    void KeyValue(KeyValueData* pkvd) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
     BOOL IsLockedByMaster(void) { return !UTIL_IsMasterTriggered(m_sMaster, NULL); };
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
 
-    virtual STATE GetState() { return m_iState; }
+    STATE GetState() override { return m_iState; }
 
     static TYPEDESCRIPTION m_SaveData[];
 
@@ -1218,12 +1218,12 @@ void CBaseButton::ButtonBackHome(void)
 class CRotButton : public CBaseButton
 {
 public:
-    void Spawn(void);
+    void Spawn(void) override;
 
-    void PostSpawn(void)
+    void PostSpawn(void) override
     {
     } // don't use the moveWith fix from CBaseButton
-    virtual void KeyValue(KeyValueData* pkvd);
+    void KeyValue(KeyValueData* pkvd) override;
 };
 
 LINK_ENTITY_TO_CLASS(func_rot_button, CRotButton);
@@ -1316,10 +1316,10 @@ void CRotButton::Spawn(void)
 class CMomentaryRotButton : public CBaseToggle
 {
 public:
-    void Spawn(void);
-    void KeyValue(KeyValueData* pkvd);
+    void Spawn(void) override;
+    void KeyValue(KeyValueData* pkvd) override;
 
-    virtual int ObjectCaps(void)
+    int ObjectCaps(void) override
     {
         int flags = CBaseToggle::ObjectCaps() & (~FCAP_ACROSS_TRANSITION);
         if (pev->spawnflags & SF_MOMENTARY_DOOR)
@@ -1327,7 +1327,7 @@ public:
         return flags | FCAP_CONTINUOUS_USE;
     }
 
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
     void EXPORT Off(void);
     void EXPORT Return(void);
     void UpdateSelf(float value);
@@ -1338,8 +1338,8 @@ public:
     void UpdateTarget(float value);
 
     static CMomentaryRotButton* Instance(edict_t* pent) { return (CMomentaryRotButton*)GET_PRIVATE(pent); };
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
 
     static TYPEDESCRIPTION m_SaveData[];
 
@@ -1457,7 +1457,7 @@ void CMomentaryRotButton::UpdateAllButtons(float value, int start)
 
         if (FClassnameIs(pTarget->pev, "momentary_rot_button"))
         {
-            CMomentaryRotButton* pEntity = (CMomentaryRotButton*)pTarget;
+            auto pEntity = (CMomentaryRotButton*)pTarget;
             if (start)
                 pEntity->UpdateSelf(value);
             else
@@ -1574,23 +1574,23 @@ void CMomentaryRotButton::UpdateSelfReturn(float value)
 class CEnvSpark : public CPointEntity
 {
 public:
-    void Spawn(void);
-    void Precache(void);
+    void Spawn(void) override;
+    void Precache(void) override;
     void EXPORT SparkThink(void);
     void EXPORT SparkWait(void);
     void EXPORT SparkCyclic(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
     void EXPORT SparkStart(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
     void EXPORT SparkStop(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    void KeyValue(KeyValueData* pkvd);
+    void KeyValue(KeyValueData* pkvd) override;
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
 
     static TYPEDESCRIPTION m_SaveData[];
 
     float m_flDelay;
     STATE m_iState; //LRC
-    virtual STATE GetState(void) { return m_iState; };
+    STATE GetState(void) override { return m_iState; };
 };
 
 
@@ -1721,10 +1721,10 @@ void EXPORT CEnvSpark::SparkStop(CBaseEntity* pActivator, CBaseEntity* pCaller, 
 class CButtonTarget : public CBaseEntity
 {
 public:
-    void Spawn(void);
-    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-    int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-    int ObjectCaps(void);
+    void Spawn(void) override;
+    void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+    int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;
+    int ObjectCaps(void) override;
 };
 
 LINK_ENTITY_TO_CLASS(button_target, CButtonTarget);

@@ -43,13 +43,13 @@ namespace
         }
 
     public:
-        virtual bool isWithin(int x, int y)
+        bool isWithin(int x, int y) override
         {
             return _textEntry->isWithin(x, y);
         }
 
     public:
-        virtual void actionPerformed(Panel* panel)
+        void actionPerformed(Panel* panel) override
         {
             char buf[256];
             _textEntry->getText(0, buf, 256);
@@ -57,7 +57,7 @@ namespace
         }
 
     protected:
-        virtual void paintBackground()
+        void paintBackground() override
         {
             Panel::paintBackground();
 
@@ -85,7 +85,7 @@ void* VGui_GetPanel()
 
 void VGui_Startup()
 {
-    Panel* root = (Panel*)VGui_GetPanel();
+    auto root = (Panel*)VGui_GetPanel();
     root->setBgColor(128, 128, 0, 0);
     //root->setNonPainted(false);
     //root->setBorder(new LineBorder());

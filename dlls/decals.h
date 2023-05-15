@@ -70,11 +70,11 @@ enum decal_e
     DECAL_MOMMASPLAT,
 };
 
-typedef struct
+using DLL_DECALLIST = struct
 {
     const char* name;
     int index;
-} DLL_DECALLIST;
+};
 
 extern DLL_DECALLIST gDecals[];
 

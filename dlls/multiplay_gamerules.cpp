@@ -52,7 +52,7 @@ CVoiceGameMgr g_VoiceGameMgr;
 class CMultiplayGameMgrHelper : public IVoiceGameMgrHelper
 {
 public:
-    virtual bool CanPlayerHearPlayer(CBasePlayer* pListener, CBasePlayer* pTalker)
+    bool CanPlayerHearPlayer(CBasePlayer* pListener, CBasePlayer* pTalker) override
     {
         if (g_teamplay)
         {
@@ -96,7 +96,7 @@ CHalfLifeMultiplay::CHalfLifeMultiplay()
     else
     {
         // listen server
-        char* lservercfgfile = (char*)CVAR_GET_STRING("lservercfgfile");
+        auto lservercfgfile = (char*)CVAR_GET_STRING("lservercfgfile");
 
         if (lservercfgfile && lservercfgfile[0])
         {
@@ -401,7 +401,7 @@ void CHalfLifeMultiplay::InitHUD(CBasePlayer* pl)
     for (int i = 1; i <= gpGlobals->maxClients; i++)
     {
         // FIXME:  Probably don't need to cast this just to read m_iDeaths
-        CBasePlayer* plr = (CBasePlayer*)UTIL_PlayerByIndex(i);
+        auto plr = (CBasePlayer*)UTIL_PlayerByIndex(i);
 
         if (plr)
         {
@@ -428,7 +428,7 @@ void CHalfLifeMultiplay::ClientDisconnected(edict_t* pClient)
 {
     if (pClient)
     {
-        CBasePlayer* pPlayer = (CBasePlayer*)CBaseEntity::Instance(pClient);
+        auto pPlayer = (CBasePlayer*)CBaseEntity::Instance(pClient);
 
         if (pPlayer)
         {
@@ -610,7 +610,7 @@ void CHalfLifeMultiplay::PlayerKilled(CBasePlayer* pVictim, entvars_t* pKiller, 
     CBaseEntity* ep = CBaseEntity::Instance(pKiller);
     if (ep && ep->Classify() == CLASS_PLAYER)
     {
-        CBasePlayer* PK = (CBasePlayer*)ep;
+        auto PK = (CBasePlayer*)ep;
 
         MESSAGE_BEGIN(MSG_ALL, gmsgScoreInfo);
         WRITE_BYTE(ENTINDEX(PK->edict()));
@@ -639,12 +639,12 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, e
     // Work out what killed the player, and send a message to all clients about it
     CBaseEntity* Killer = CBaseEntity::Instance(pKiller);
 
-    const char* killer_weapon_name = "world"; // by default, the player is killed by the world
+    auto killer_weapon_name = "world"; // by default, the player is killed by the world
     int killer_index = 0;
 
     // Hack to fix name change
-    const char* tau = "tau_cannon";
-    const char* gluon = "gluon gun";
+    auto tau = "tau_cannon";
+    auto gluon = "gluon gun";
 
     if (pKiller->flags & FL_CLIENT)
     {
@@ -655,7 +655,7 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, e
             if (pevInflictor == pKiller)
             {
                 // If the inflictor is the killer,  then it must be their current weapon doing the damage
-                CBasePlayer* pPlayer = (CBasePlayer*)CBaseEntity::Instance(pKiller);
+                auto pPlayer = (CBasePlayer*)CBaseEntity::Instance(pKiller);
 
                 if (pPlayer->m_pActiveItem)
                 {
@@ -1119,20 +1119,20 @@ void CHalfLifeMultiplay::GoToIntermission(void)
 
 #define MAX_RULE_BUFFER 1024
 
-typedef struct mapcycle_item_s
+using mapcycle_item_t = struct mapcycle_item_s
 {
     struct mapcycle_item_s* next;
 
     char mapname[32];
     int minplayers, maxplayers;
     char rulebuffer[MAX_RULE_BUFFER];
-} mapcycle_item_t;
+};
 
-typedef struct mapcycle_s
+using mapcycle_t = struct mapcycle_s
 {
     struct mapcycle_item_s* items;
     struct mapcycle_item_s* next_item;
-} mapcycle_t;
+};
 
 /*
 ==============
@@ -1494,7 +1494,7 @@ void CHalfLifeMultiplay::ChangeLevel(void)
     BOOL do_cycle = TRUE;
 
     // find the map to change to
-    char* mapcfile = (char*)CVAR_GET_STRING("mapcyclefile");
+    auto mapcfile = (char*)CVAR_GET_STRING("mapcyclefile");
     ASSERT(mapcfile != NULL);
 
     szCommands[0] = '\0';

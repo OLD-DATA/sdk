@@ -50,7 +50,7 @@ CHalfLifeTeamplay::CHalfLifeTeamplay()
     {
         if (teamoverride.value)
         {
-            const char* pTeamList = STRING(pWorld->v.team);
+            auto pTeamList = STRING(pWorld->v.team);
             if (pTeamList && strlen(pTeamList))
             {
                 strncpy(m_szTeamList, pTeamList, TEAMPLAY_TEAMLISTLENGTH);
@@ -374,7 +374,7 @@ void CHalfLifeTeamplay::DeathNotice(CBasePlayer* pVictim, entvars_t* pKiller, en
 
     if (pVictim && pKiller && pKiller->flags & FL_CLIENT)
     {
-        CBasePlayer* pk = (CBasePlayer*)CBaseEntity::Instance(pKiller);
+        auto pk = (CBasePlayer*)CBaseEntity::Instance(pKiller);
 
         if (pk)
         {

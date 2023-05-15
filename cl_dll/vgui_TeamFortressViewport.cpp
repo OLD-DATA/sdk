@@ -463,7 +463,7 @@ CCommandMenu* TeamFortressViewport::CreateSubMenu(CommandButton* pButton, CComma
         iDirection = pParentMenu->GetDirection();
     }
 
-    CCommandMenu* pMenu = new CCommandMenu(pParentMenu, iDirection, iXPos, iYPos, iWide, iTall);
+    auto pMenu = new CCommandMenu(pParentMenu, iDirection, iXPos, iYPos, iWide, iTall);
     pMenu->setParent(this);
     pButton->AddSubMenu(pMenu);
     pButton->setFont(Scheme::sf_primary3);
@@ -474,7 +474,7 @@ CCommandMenu* TeamFortressViewport::CreateSubMenu(CommandButton* pButton, CComma
     pButton->addInputSignal(pISignal);
 
     // Put a > to show it's a submenu
-    CImageLabel* pLabel = new CImageLabel("arrowright", XRES(CMENU_SIZE_X - SUBMENU_SIZE_X), YRES(SUBMENU_SIZE_Y));
+    auto pLabel = new CImageLabel("arrowright", XRES(CMENU_SIZE_X - SUBMENU_SIZE_X), YRES(SUBMENU_SIZE_Y));
     pLabel->setParent(pButton);
     pLabel->addInputSignal(pISignal);
 
@@ -514,19 +514,19 @@ public:
     {
     }
 
-    virtual void cursorMoved(int x, int y, Panel* panel)
+    void cursorMoved(int x, int y, Panel* panel) override
     {
     }
 
-    virtual void cursorEntered(Panel* panel)
+    void cursorEntered(Panel* panel) override
     {
     }
 
-    virtual void cursorExited(Panel* panel)
+    void cursorExited(Panel* panel) override
     {
     }
 
-    virtual void mousePressed(MouseCode code, Panel* panel)
+    void mousePressed(MouseCode code, Panel* panel) override
     {
         if (code != MOUSE_LEFT)
         {
@@ -536,31 +536,31 @@ public:
         }
     }
 
-    virtual void mouseReleased(MouseCode code, Panel* panel)
+    void mouseReleased(MouseCode code, Panel* panel) override
     {
     }
 
-    virtual void mouseDoublePressed(MouseCode code, Panel* panel)
+    void mouseDoublePressed(MouseCode code, Panel* panel) override
     {
     }
 
-    virtual void mouseWheeled(int delta, Panel* panel)
+    void mouseWheeled(int delta, Panel* panel) override
     {
     }
 
-    virtual void keyPressed(KeyCode code, Panel* panel)
+    void keyPressed(KeyCode code, Panel* panel) override
     {
     }
 
-    virtual void keyTyped(KeyCode code, Panel* panel)
+    void keyTyped(KeyCode code, Panel* panel) override
     {
     }
 
-    virtual void keyReleased(KeyCode code, Panel* panel)
+    void keyReleased(KeyCode code, Panel* panel) override
     {
     }
 
-    virtual void keyFocusTicked(Panel* panel)
+    void keyFocusTicked(Panel* panel) override
     {
     }
 };
@@ -739,7 +739,7 @@ int TeamFortressViewport::CreateCommandMenu(const char* menuFile, int direction,
 
     // Read Command Menu from the txt file
     char token[1024];
-    char* pfile = (char*)gEngfuncs.COM_LoadFile(menuFile, 5, NULL);
+    auto pfile = (char*)gEngfuncs.COM_LoadFile(menuFile, 5, NULL);
     if (!pfile)
     {
         gEngfuncs.Con_DPrintf("Unable to open %s\n", menuFile);
@@ -1550,9 +1550,9 @@ void TeamFortressViewport::UpdatePlayerMenu(int menuIndex)
         //if ( g_PlayerExtraInfo[i].teamname[0] == 0 )
         //	continue; // skip over players who are not in a team
 
-        SpectButton* pButton = new SpectButton(1, g_PlayerInfoList[pEnt->index].name,
-                                               XRES(( 15 + OPTIONS_BUTTON_X + 15 ) + 31),
-                                               PANEL_HEIGHT + (i - 1) * CMENU_SIZE_X, flLabelSize, BUTTON_SIZE_Y / 2);
+        auto pButton = new SpectButton(1, g_PlayerInfoList[pEnt->index].name,
+                                       XRES(( 15 + OPTIONS_BUTTON_X + 15 ) + 31),
+                                       PANEL_HEIGHT + (i - 1) * CMENU_SIZE_X, flLabelSize, BUTTON_SIZE_Y / 2);
 
         pButton->setBoundKey((char)255);
         pButton->setContentAlignment(vgui::Label::a_center);

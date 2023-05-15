@@ -39,7 +39,7 @@ static char* memfgets(byte* pMemFile, int fileSize, int& filePos, char* pBuffer,
 
 // NOTE: IF YOU CHANGE THIS STRUCT YOU MUST CHANGE THE SAVE/RESTORE VERSION NUMBER
 // SEE BELOW (in the typedescription for the class)
-typedef struct dynpitchvol
+using dynpitchvol_t = struct dynpitchvol
 {
     // NOTE: do not change the order of these parameters 
     // NOTE: unless you also change order of rgdpvpreset array elements!
@@ -79,7 +79,7 @@ typedef struct dynpitchvol
 
     int lfofrac;
     int lfomult;
-} dynpitchvol_t;
+};
 
 #define CDPVPRESETMAX 27
 
@@ -120,19 +120,19 @@ dynpitchvol_t rgdpvpreset[CDPVPRESETMAX] =
 class CAmbientGeneric : public CBaseEntity
 {
 public:
-    void KeyValue(KeyValueData* pkvd);
-    void Spawn(void);
+    void KeyValue(KeyValueData* pkvd) override;
+    void Spawn(void) override;
     //	void PostSpawn( void );
-    void Precache(void);
+    void Precache(void) override;
     void EXPORT ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
     void EXPORT StartPlayFrom(void);
     void EXPORT RampThink(void);
     void InitModulationParms(void);
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
-    virtual int ObjectCaps(void) { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
+    int ObjectCaps(void) override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 
     float m_flAttenuation; // attenuation value
     dynpitchvol_t m_dpv;
@@ -197,7 +197,7 @@ void CAmbientGeneric::Spawn(void)
         m_flAttenuation = ATTN_STATIC;
     }
 
-    char* szSoundFile = (char*)STRING(pev->message);
+    auto szSoundFile = (char*)STRING(pev->message);
 
     if (FStringNull(pev->message) || strlen(szSoundFile) < 1)
     {
@@ -234,7 +234,7 @@ void CAmbientGeneric::Spawn(void)
 // Don't make this a PostSpawn function.
 void CAmbientGeneric::Precache(void)
 {
-    char* szSoundFile = (char*)STRING(pev->message);
+    auto szSoundFile = (char*)STRING(pev->message);
 
     if (!FStringNull(pev->message) && strlen(szSoundFile) > 1)
     {
@@ -286,7 +286,7 @@ void CAmbientGeneric::Precache(void)
 // this function is used to delay the effect until the first Think, which seems to fix the problem.
 void CAmbientGeneric::StartPlayFrom(void)
 {
-    char* szSoundFile = (char*)STRING(pev->message);
+    auto szSoundFile = (char*)STRING(pev->message);
 
     EMIT_SOUND_DYN(m_pPlayFrom, m_iChannel, szSoundFile, //LRC
                    (m_dpv.vol * 0.01), m_flAttenuation, SND_SPAWNING, m_dpv.pitch);
@@ -302,7 +302,7 @@ void CAmbientGeneric::StartPlayFrom(void)
 
 void CAmbientGeneric::RampThink(void)
 {
-    char* szSoundFile = (char*)STRING(pev->message);
+    auto szSoundFile = (char*)STRING(pev->message);
     int pitch = m_dpv.pitch;
     int vol = m_dpv.vol;
     int flags = 0;
@@ -600,7 +600,7 @@ void CAmbientGeneric::InitModulationParms(void)
 //
 void CAmbientGeneric::ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-    char* szSoundFile = (char*)STRING(pev->message);
+    auto szSoundFile = (char*)STRING(pev->message);
     float fraction;
 
     if (useType != USE_TOGGLE)
@@ -907,13 +907,13 @@ void CAmbientGeneric::KeyValue(KeyValueData* pkvd)
 class CEnvSound : public CPointEntity
 {
 public:
-    void KeyValue(KeyValueData* pkvd);
-    void Spawn(void);
+    void KeyValue(KeyValueData* pkvd) override;
+    void Spawn(void) override;
 
-    void Think(void);
+    void Think(void) override;
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
     float m_flRadius;
@@ -1066,14 +1066,14 @@ void CEnvSound::Spawn()
 class CTriggerSound : public CBaseDelay
 {
 public:
-    void KeyValue(KeyValueData* pkvd);
-    void Spawn(void);
-    void Touch(CBaseEntity* pOther);
+    void KeyValue(KeyValueData* pkvd) override;
+    void Spawn(void) override;
+    void Touch(CBaseEntity* pOther) override;
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
-    virtual int ObjectCaps(void) { return CBaseDelay::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+    int ObjectCaps(void) override { return CBaseDelay::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
     float m_flRoomtype;
     string_t m_iszMaster;
@@ -1110,7 +1110,7 @@ void CTriggerSound::Touch(CBaseEntity* pOther)
 
     if (pOther->IsPlayer())
     {
-        CBasePlayer* pPlayer = static_cast<CBasePlayer*>(pOther);
+        auto pPlayer = static_cast<CBasePlayer*>(pOther);
         if (!pPlayer->m_SndLast || pPlayer->m_SndLast != this)
         {
             pPlayer->m_SndLast = this;
@@ -1140,12 +1140,12 @@ void CTriggerSound::Spawn()
 
 // group of related sentences
 
-typedef struct sentenceg
+using SENTENCEG = struct sentenceg
 {
     char szgroupname[CBSENTENCENAME_MAX];
     int count;
     unsigned char rgblru[CSENTENCE_LRU_MAX];
-} SENTENCEG;
+};
 
 #define CSENTENCEG_MAX 200					// max number of sentence groups
 // globals
@@ -1950,17 +1950,17 @@ float TEXTURETYPE_PlaySound(TraceResult* ptr, Vector vecSrc, Vector vecEnd, int 
 class CSpeaker : public CBaseEntity
 {
 public:
-    void KeyValue(KeyValueData* pkvd);
-    void Spawn(void);
-    void Precache(void);
+    void KeyValue(KeyValueData* pkvd) override;
+    void Spawn(void) override;
+    void Precache(void) override;
     void EXPORT ToggleUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
     void EXPORT SpeakerThink(void);
 
-    virtual int Save(CSave& save);
-    virtual int Restore(CRestore& restore);
+    int Save(CSave& save) override;
+    int Restore(CRestore& restore) override;
     static TYPEDESCRIPTION m_SaveData[];
 
-    virtual int ObjectCaps(void) { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
+    int ObjectCaps(void) override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 
     int m_preset; // preset number
 };
@@ -1978,7 +1978,7 @@ IMPLEMENT_SAVERESTORE(CSpeaker, CBaseEntity);
 //
 void CSpeaker::Spawn(void)
 {
-    char* szSoundFile = (char*)STRING(pev->message);
+    auto szSoundFile = (char*)STRING(pev->message);
 
     if (!m_preset && (FStringNull(pev->message) || strlen(szSoundFile) < 1))
     {

@@ -40,19 +40,19 @@
 
 #define		HUDELEM_ACTIVE	1
 
-typedef struct
+using POSITION = struct
 {
     int x, y;
-} POSITION;
+};
 
 #include "global_consts.h"
 
-typedef struct
+using RGBA = struct
 {
     unsigned char r, g, b, a;
-} RGBA;
+};
 
-typedef struct cvar_s cvar_t;
+using cvar_t = struct cvar_s;
 
 
 #define HUD_ACTIVE	1
@@ -106,11 +106,11 @@ struct HUDLIST
 class CHudAmmo : public CHudBase
 {
 public:
-    int Init(void);
-    int VidInit(void);
-    int Draw(float flTime);
-    void Think(void);
-    void Reset(void);
+    int Init(void) override;
+    int VidInit(void) override;
+    int Draw(float flTime) override;
+    void Think(void) override;
+    void Reset(void) override;
     int DrawWList(float flTime);
     int MsgFunc_CurWeapon(const char* pszName, int iSize, void* pbuf);
     int MsgFunc_WeaponList(const char* pszName, int iSize, void* pbuf);
@@ -150,10 +150,10 @@ private:
 class CHudAmmoSecondary : public CHudBase
 {
 public:
-    int Init(void);
-    int VidInit(void);
-    void Reset(void);
-    int Draw(float flTime);
+    int Init(void) override;
+    int VidInit(void) override;
+    void Reset(void) override;
+    int Draw(float flTime) override;
 
     int MsgFunc_SecAmmoVal(const char* pszName, int iSize, void* pbuf);
     int MsgFunc_SecAmmoIcon(const char* pszName, int iSize, void* pbuf);
@@ -182,9 +182,9 @@ private:
 class CHudGeiger : public CHudBase
 {
 public:
-    int Init(void);
-    int VidInit(void);
-    int Draw(float flTime);
+    int Init(void) override;
+    int VidInit(void) override;
+    int Draw(float flTime) override;
     int MsgFunc_Geiger(const char* pszName, int iSize, void* pbuf);
 
 private:
@@ -197,9 +197,9 @@ private:
 class CHudTrain : public CHudBase
 {
 public:
-    int Init(void);
-    int VidInit(void);
-    int Draw(float flTime);
+    int Init(void) override;
+    int VidInit(void) override;
+    int Draw(float flTime) override;
     int MsgFunc_Train(const char* pszName, int iSize, void* pbuf);
 
 private:
@@ -213,10 +213,10 @@ private:
 class CHudStatusBar : public CHudBase
 {
 public:
-    int Init(void);
-    int VidInit(void);
-    int Draw(float flTime);
-    void Reset(void);
+    int Init(void) override;
+    int VidInit(void) override;
+    int Draw(float flTime) override;
+    void Reset(void) override;
     void ParseStatusString(int line_num);
 
     int MsgFunc_StatusText(const char* pszName, int iSize, void* pbuf);
@@ -274,10 +274,10 @@ struct team_info_t
 class CHudDeathNotice : public CHudBase
 {
 public:
-    int Init(void);
-    void InitHUDData(void);
-    int VidInit(void);
-    int Draw(float flTime);
+    int Init(void) override;
+    void InitHUDData(void) override;
+    int VidInit(void) override;
+    int Draw(float flTime) override;
     int MsgFunc_DeathMsg(const char* pszName, int iSize, void* pbuf);
 
 private:
@@ -290,11 +290,11 @@ private:
 class CHudMenu : public CHudBase
 {
 public:
-    int Init(void);
-    void InitHUDData(void);
-    int VidInit(void);
-    void Reset(void);
-    int Draw(float flTime);
+    int Init(void) override;
+    void InitHUDData(void) override;
+    int VidInit(void) override;
+    void Reset(void) override;
+    int Draw(float flTime) override;
     int MsgFunc_ShowMenu(const char* pszName, int iSize, void* pbuf);
 
     void SelectMenuItem(int menu_item);
@@ -311,10 +311,10 @@ public:
 class CHudSayText : public CHudBase
 {
 public:
-    int Init(void);
-    void InitHUDData(void);
-    int VidInit(void);
-    int Draw(float flTime);
+    int Init(void) override;
+    void InitHUDData(void) override;
+    int VidInit(void) override;
+    int Draw(float flTime) override;
     int MsgFunc_SayText(const char* pszName, int iSize, void* pbuf);
     void SayTextPrint(const char* pszBuf, int iBufSize, int clientIndex = -1);
     void EnsureTextFitsInOneLineAndWrapIfHaveTo(int line);
@@ -331,9 +331,9 @@ private:
 class CHudBattery : public CHudBase
 {
 public:
-    int Init(void);
-    int VidInit(void);
-    int Draw(float flTime);
+    int Init(void) override;
+    int VidInit(void) override;
+    int Draw(float flTime) override;
     int MsgFunc_Battery(const char* pszName, int iSize, void* pbuf);
 
 private:
@@ -354,10 +354,10 @@ private:
 class CHudFlashlight : public CHudBase
 {
 public:
-    int Init(void);
-    int VidInit(void);
-    int Draw(float flTime);
-    void Reset(void);
+    int Init(void) override;
+    int VidInit(void) override;
+    int Draw(float flTime) override;
+    void Reset(void) override;
     int MsgFunc_Flashlight(const char* pszName, int iSize, void* pbuf);
     int MsgFunc_FlashBat(const char* pszName, int iSize, void* pbuf);
 
@@ -382,9 +382,9 @@ private:
 class CHudParticle : public CHudBase
 {
 public:
-    int Init(void);
-    int VidInit(void);
-    int Draw(float flTime);
+    int Init(void) override;
+    int VidInit(void) override;
+    int Draw(float flTime) override;
     int MsgFunc_Particle(const char* pszName, int iSize, void* pbuf);
 };
 
@@ -417,7 +417,7 @@ struct message_parms_t
 class CHudTextMessage : public CHudBase
 {
 public:
-    int Init(void);
+    int Init(void) override;
     static char* LocaliseTextString(const char* msg, char* dst_buffer, int buffer_size);
     static char* BufferedLocaliseTextString(const char* msg);
     const char* LookupString(const char* msg_name, int* msg_dest = NULL);
@@ -431,9 +431,9 @@ public:
 class CHudMessage : public CHudBase
 {
 public:
-    int Init(void);
-    int VidInit(void);
-    int Draw(float flTime);
+    int Init(void) override;
+    int VidInit(void) override;
+    int Draw(float flTime) override;
     int MsgFunc_HudText(const char* pszName, int iSize, void* pbuf);
     int MsgFunc_HudTextPro(const char* pszName, int iSize, void* pbuf);
     int MsgFunc_GameTitle(const char* pszName, int iSize, void* pbuf);
@@ -447,7 +447,7 @@ public:
     void MessageDrawScan(client_textmessage_t* pMessage, float time);
     void MessageScanStart(void);
     void MessageScanNextChar(void);
-    void Reset(void);
+    void Reset(void) override;
 
 private:
     client_textmessage_t* m_pMessages[maxHUDMessages];
@@ -468,10 +468,10 @@ private:
 class CHudStatusIcons : public CHudBase
 {
 public:
-    int Init(void);
-    int VidInit(void);
-    void Reset(void);
-    int Draw(float flTime);
+    int Init(void) override;
+    int VidInit(void) override;
+    void Reset(void) override;
+    int Draw(float flTime) override;
     int MsgFunc_StatusIcon(const char* pszName, int iSize, void* pbuf);
 
     enum
@@ -487,13 +487,13 @@ public:
     void DisableIcon(const char* pszIconName);
 
 private:
-    typedef struct
+    using icon_sprite_t = struct
     {
         char szSpriteName[MAX_ICONSPRITENAME_LENGTH];
         HSPRITE spr;
         wrect_t rc;
         unsigned char r, g, b;
-    } icon_sprite_t;
+    };
 
     icon_sprite_t m_IconList[MAX_ICONSPRITES];
 };
@@ -504,13 +504,13 @@ private:
 class CHudBenchmark : public CHudBase
 {
 public:
-    int Init(void);
-    int VidInit(void);
-    int Draw(float flTime);
+    int Init(void) override;
+    int VidInit(void) override;
+    int Draw(float flTime) override;
 
     void SetScore(float score);
 
-    void Think(void);
+    void Think(void) override;
 
     void StartNextSection(int section);
 
@@ -677,7 +677,7 @@ public:
     int Redraw(float flTime, int intermission);
     int UpdateClientData(client_data_t* cdata, float time);
 
-    CHud() : m_iSpriteCount(0), m_pHudList(NULL), m_pShinySurface(NULL)
+    CHud() : m_pHudList(NULL), m_iSpriteCount(0), m_pShinySurface(NULL)
     {
     }
 
