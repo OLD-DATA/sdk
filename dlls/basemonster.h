@@ -199,7 +199,7 @@ public:
 		virtual int CanPlaySequence( int interruptFlags );
 //		virtual int CanPlaySequence( BOOL fDisregardState, int interruptLevel );
 		virtual int CanPlaySentence( BOOL fDisregardState ) { return IsAlive(); }
-		virtual bool CanPlaySentence(bool fDisregardState) { return IsAlive() && pev->deadflag == DEAD_NO; }
+		virtual bool CanPlaySentence(bool fDisregardState) { return IsAlive() && (m_MonsterState == MONSTERSTATE_SCRIPT || pev->deadflag == DEAD_NO); }
 		void PlaySentence(const char* pszSentence, float duration, float volume, float attenuation);
 
 	protected:
