@@ -165,11 +165,12 @@ void CShotgun::PrimaryAttack()
 	m_flPumpTime = gpGlobals->time + 0.5;
 
 	m_flNextPrimaryAttack = GetNextAttackDelay(0.75);
-	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.75;
+	m_flNextSecondaryAttack = GetNextAttackDelay(0.75);
 	if (m_iClip != 0)
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 5.0;
+		m_flTimeWeaponIdle = GetNextAttackDelay(5.0);
 	else
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.75;
+		m_flTimeWeaponIdle = GetNextAttackDelay(1.0);
+	
 	m_fInSpecialReload = 0;
 }
 
