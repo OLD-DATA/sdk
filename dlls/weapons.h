@@ -315,8 +315,8 @@ public:
 	virtual int ExtractClipAmmo( CBasePlayerWeapon *pWeapon );// { return TRUE; };			// Return TRUE if you can add ammo to yourself when picked up
 	
 	// generic "shared" ammo handlers
-	BOOL AddPrimaryAmmo( int iCount, char *szName, int iMaxClip, int iMaxCarry );
-	BOOL AddSecondaryAmmo( int iCount, char *szName, int iMaxCarry );
+	BOOL AddPrimaryAmmo(CBasePlayerWeapon* origin, int iCount, char* szName, int iMaxClip, int iMaxCarry);
+	BOOL AddSecondaryAmmo(int iCount, char *szName, int iMaxCarry);
 
 	virtual void UpdateItemInfo( void ) {};	// updates HUD state
 
