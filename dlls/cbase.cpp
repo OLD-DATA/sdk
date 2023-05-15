@@ -27,7 +27,7 @@ void EntvarsKeyvalue( entvars_t *pev, KeyValueData *pkvd );
 
 void PM_Move ( struct playermove_s *ppmove, int server );
 void PM_Init ( struct playermove_s *ppmove  );
-char PM_FindTextureType( char *name );
+char PM_FindTextureType(const char *name );
 
 extern Vector VecBModelOrigin( entvars_t* pevBModel );
 extern DLL_GLOBAL Vector		g_vecAttackDir;
