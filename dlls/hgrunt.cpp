@@ -846,14 +846,11 @@ void CHGrunt :: Shotgun ( void )
 //=========================================================
 void CHGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent )
 {
-	Vector	vecShootDir;
-	Vector	vecShootOrigin;
-
 	switch( pEvent->event )
 	{
-		case HGRUNT_AE_DROP_GUN:
-			{
-			if (pev->spawnflags & SF_MONSTER_NO_WPN_DROP) break; //LRC
+		case HGRUNT_AE_DROP_GUN: {
+			if (GetBodygroup(GUN_GROUP) == GUN_NONE || pev->spawnflags & SF_MONSTER_NO_WPN_DROP)
+				break; //LRC
 
 			Vector	vecGunPos;
 			Vector	vecGunAngles;
