@@ -555,7 +555,7 @@ void CBasePlayerItem::AttemptToMaterialize( void )
 		return;
 	}
 
-	SetNextThink( time );
+	AbsoluteNextThink( time );
 }
 
 //=========================================================
