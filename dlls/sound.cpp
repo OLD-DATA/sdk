@@ -23,6 +23,7 @@
 #include "player.h"
 #include "talkmonster.h"
 #include "gamerules.h"
+#include "pm_materials.h"
 
 #if !defined ( _WIN32 )
 #include <ctype.h>
@@ -1623,8 +1624,6 @@ void EMIT_GROUPNAME_SUIT(edict_t *entity, const char *groupname)
 // on material type.
 
 int fTextureTypeInit = FALSE;
-
-#define CTEXTURESMAX		512			// max number of textures loaded
 
 int gcTextures = 0;
 char grgszTextureName[CTEXTURESMAX][CBTEXTURENAMEMAX];	// texture names

@@ -17,6 +17,7 @@
 #pragma once
 
 #define CBTEXTURENAMEMAX	13			// only load first n chars of name
+#define CTEXTURESMAX        512	        // max number of textures loaded
 
 #define CHAR_TEX_CONCRETE	'C'			// texture types
 #define CHAR_TEX_METAL		'M'
