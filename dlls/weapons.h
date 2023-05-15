@@ -790,7 +790,8 @@ public:
 	void WeaponIdle( void );
 
 	void UpdateSpot( void );
-	BOOL ShouldWeaponIdle( void ) { return TRUE; };
+	BOOL ShouldWeaponIdle( void ) { return TRUE; }
+	BOOL IsUseable() override;
 
 	CLaserSpot *m_pSpot;
 	int m_fSpotActive;

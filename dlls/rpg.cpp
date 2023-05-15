@@ -516,6 +516,12 @@ void CRpg::SecondaryAttack()
 
 void CRpg::WeaponIdle( void )
 {
+	// Reset when the player lets go of the trigger.
+	if ((m_pPlayer->pev->button & (IN_ATTACK | IN_ATTACK2)) == 0)
+	{
+		ResetEmptySound();
+	}
+	
 	UpdateSpot( );
 
 	if ( m_flTimeWeaponIdle > UTIL_WeaponTimeBase() )
@@ -543,8 +549,7 @@ void CRpg::WeaponIdle( void )
 
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 3.0;
 		}
-
-		ResetEmptySound();
+		
 		SendWeaponAnim( iAnim );
 	}
 	else
@@ -553,7 +558,16 @@ void CRpg::WeaponIdle( void )
 	}
 }
 
+BOOL CRpg::IsUseable()
+{
+	// The client needs to fall through to WeaponIdle so check the ammo here.
+	if (m_pPlayer->ammo_rockets <= 0)
+	{
+		return false;
+	}
 
+	return CBasePlayerWeapon::IsUseable();
+}
 
 void CRpg::UpdateSpot( void )
 {
