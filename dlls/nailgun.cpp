@@ -8,18 +8,50 @@
 #include "gamerules.h"
 #include "UserMessages.h"
 
-LINK_ENTITY_TO_CLASS(weapon_mp5, CMP5);
-LINK_ENTITY_TO_CLASS(weapon_9mmAR, CMP5);
+LINK_ENTITY_TO_CLASS(weapon_nailgun, CNailgun);
 
 
 //=========================================================
 //=========================================================
+class CNailgun : public CBasePlayerWeapon
+{
+public:
+    void Spawn(void) override;
+    void Precache(void) override;
+    int iItemSlot(void) override { return 3; }
+    int GetItemInfo(ItemInfo* p) override;
+
+    void PrimaryAttack(void) override;
+    void SecondaryAttack(void) override;
+    BOOL Deploy(void) override;
+    void Reload(void) override;
+    void WeaponIdle(void) override;
+
+    BOOL IsUseable() override;
+
+    float m_flNextAnimTime;
+    int m_iShell;
+
+    BOOL UseDecrement(void) override
+    {
+#if defined( CLIENT_WEAPONS )
+        return TRUE;
+#else
+		return FALSE;
+#endif
+    }
+
+private:
+    unsigned short m_usMP5;
+    unsigned short m_usMP52;
+};
+
 void CMP5::Spawn()
 {
-	pev->classname = MAKE_STRING("weapon_9mmAR"); // hack to allow for old names
+	pev->classname = MAKE_STRING("weapon_nailgun"); // hack to allow for old names
 	Precache();
 	SET_MODEL(ENT(pev), "models/w_9mmAR.mdl");
-	m_iId = WEAPON_MP5;
+	m_iId = WEAPON_NAILGUN;
 
 	m_iDefaultAmmo = MP5_DEFAULT_GIVE;
 
@@ -67,7 +99,7 @@ bool CMP5::GetItemInfo(ItemInfo* p)
 	p->iSlot = 2;
 	p->iPosition = 0;
 	p->iFlags = 0;
-	p->iId = m_iId = WEAPON_MP5;
+	p->iId = m_iId = WEAPON_NAILGUN;
 	p->iWeight = MP5_WEIGHT;
 
 	return true;
